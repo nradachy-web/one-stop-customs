@@ -9,14 +9,11 @@ interface FinishRowProps {
 }
 
 /**
- * Per placement crop hints for the 4:3 box (docs/DESIGN.md 5.11), chosen by
- * eye from the contact sheets. Only the wide files need one: the camo BMW and
- * the orange Camaro lose about a quarter of their width in a 4:3 box, so the
- * crop leans toward the nose; the Cybertruck loses a fifth, so it leans toward
- * the front. Everything else keeps the photo's own position (50% 50%).
- * Written in the same arbitrary-property form SwatchCard uses for its own
- * object-position so tailwind-merge resolves the pair by property name and
- * this placement's crop wins; none of these three photos stores a position.
+ * Per placement crop hints for the 4:3 box, chosen by eye from the contact
+ * sheets (docs/DESIGN.md 8). The wide files lose part of their width in a
+ * 4:3 box, so the crop leans toward the nose. Written in the same
+ * arbitrary-property form SwatchCard uses for its own object-position so
+ * tailwind-merge resolves the pair by property name and this crop wins.
  */
 const CROP_4x3: Readonly<Record<string, string>> = {
   "bmw-camo-blue": "[object-position:40%_50%]",
@@ -25,15 +22,15 @@ const CROP_4x3: Readonly<Record<string, string>> = {
 };
 
 /**
- * The finish row (docs/DESIGN.md 5.11): six swatch cards at 4:3, each a link
- * to the wraps page's finishes anchor. lg: three by two in the passed
- * container; md: two columns; under md: a native scroll snap row of 72vw cards
- * (.snap-row-sm, inert from md so the grid utilities take over). Labels come
- * from each photo's own chip strip and lead with the finish word.
+ * The finish row (docs/DESIGN.md 7.3, city pages only): six cards at 4:3,
+ * each a link to the wraps page's finishes anchor. Stacked under md, two
+ * columns at md, three by two at lg. No snap row. Labels come from each
+ * photo's own colour bar and lead with the finish word; the lime and mint
+ * BMWs are never here.
  */
 export default function FinishRow({ items = FINISHES, className }: FinishRowProps) {
   return (
-    <ul role="list" className={cn("snap-row-sm md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-3", className)}>
+    <ul role="list" className={cn("grid gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3", className)}>
       {items.map((item) => {
         const p = photo(item.photoId);
         return (

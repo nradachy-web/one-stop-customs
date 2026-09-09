@@ -13,29 +13,34 @@ export const metadata: Metadata = pageMeta({
 });
 
 /**
- * Contact (docs/DESIGN.md 7.6): the quote leaf. Title block, the action strip
- * directly under the lede, then the ticket in columns 3 to 8 and the shop
- * sheet with its Book online button in 9 to 12. QuoteForm reads ?service=
- * in its own client effect to pre-check a chip, and renders the honest
- * notice instead of a form when the Web3Forms key is absent at build time.
- * The strip's Get a quote cell points at the ticket on this page. Lane A's
- * mobile action bar stays off this path.
+ * Contact (docs/DESIGN.md 7.6): the quote leaf. A black title section (the
+ * h1 and lede 40px under the header, 56px at lg, then the four doors 32px
+ * below), then the page's one daylight sheet: the ticket in columns 1 to 7
+ * and the black shop panel with its green Book online button in 8 to 12,
+ * aligned to the ticket's top. QuoteForm reads ?service= in its own client
+ * effect to pre-check a chip, and renders the honest notice instead of a
+ * form when the Web3Forms key is absent at build time; the strip still
+ * stands either way. The strip's Get a quote cell points at the sheet on
+ * this page. Lane A's mobile action bar stays off this path.
  */
 export default function ContactPage() {
   return (
-    <section id="quote" className="section pt-10!">
-      <div className="container">
-        <SectionHead as="h1" tab={CONTACT.tab} title={CONTACT.h1} lede={CONTACT.lede} ledeClassName="measure-wide" />
-
-        <div className="grid-12 mt-8">
-          <ActionStrip quoteHref="#ticket" className="lg:col-span-10 lg:col-start-3" />
+    <>
+      <section id="contact" className="section pt-10! lg:pt-14!">
+        <div className="container">
+          <SectionHead as="h1" title={CONTACT.h1} lede={CONTACT.lede} ledeClassName="measure-wide" />
+          <ActionStrip quoteHref="#quote" className="mt-8" />
         </div>
+      </section>
 
-        <div id="ticket" className="grid-12 mt-10 lg:mt-16">
-          <QuoteForm className="lg:col-span-6 lg:col-start-3 lg:self-start" />
-          <ShopSheet withBooking className="mt-10 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-start" />
+      <section id="quote" className="section on-white">
+        <div className="container">
+          <div className="grid-12">
+            <QuoteForm className="lg:col-span-7 lg:col-start-1 lg:self-start" />
+            <ShopSheet onBlack withBooking className="mt-10 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-start" />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

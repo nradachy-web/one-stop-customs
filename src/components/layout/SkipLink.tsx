@@ -1,13 +1,17 @@
 /**
- * "Skip to content": the first thing Tab reaches on every page. Visually
- * hidden until focused, then a 44px paper tab at the top left with the
- * global signal focus ring. Targets <main id="main" tabIndex={-1}>.
+ * "Skip to content": the first thing Tab reaches on every page. Parked above
+ * the viewport by a transform until focused, then a 48px green button with
+ * ink text pinned top left above the fixed header (z-50) and the menu sheet
+ * (z-49). Built from utilities only: the unlayered .btn and .sr-only rules in
+ * globals.css would beat a plain utility, so neither is used here. The text
+ * colour takes the important form because the unlayered `a { color: inherit }`
+ * reset beats a plain layered utility. Targets <main id="main" tabIndex={-1}>.
  */
 export default function SkipLink() {
   return (
     <a
       href="#main"
-      className="t-small sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:inline-flex focus:h-11 focus:items-center focus:border focus:border-ink focus:bg-paper focus:px-4 focus:text-ink"
+      className="fixed left-3 top-3 z-[60] inline-flex h-12 -translate-y-[calc(100%+16px)] items-center rounded-[4px] bg-green px-[22px] text-[15px] font-semibold text-ink! focus:translate-y-0"
     >
       Skip to content
     </a>

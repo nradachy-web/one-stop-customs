@@ -37,7 +37,8 @@ export const FIELD_GROUPS = {
 } as const;
 
 /**
- * The ticket body (docs/DESIGN.md 5.17): the four sections and every field,
+ * The ticket body (docs/DESIGN.md 5.4): the four sections (titles in .t-h3,
+ * field labels and the hint in .t-label) and every field,
  * the hidden Web3Forms fields, the honeypot, and the redirect to the thank-you
  * page for the no-JavaScript path. No hooks and no state, so the whole form
  * is in the static HTML. The Finish or shade rows are revealed by CSS :has()
@@ -61,7 +62,7 @@ export default function QuoteFields({ preset, errors }: QuoteFieldsProps) {
 
       {/* Vehicle */}
       <div className={cn(presetService && "ticket-section")}>
-        <p className="t-label">{FORM.sections.vehicle}</p>
+        <h3 className="t-h3">{FORM.sections.vehicle}</h3>
         <div className="mt-4">
           <label htmlFor="q-vehicle" className="t-label mb-2 block">
             {FORM.fields.vehicle.label}
@@ -80,7 +81,7 @@ export default function QuoteFields({ preset, errors }: QuoteFieldsProps) {
 
       {/* What you want */}
       <fieldset className="ticket-section min-w-0">
-        <legend className="t-label">{FORM.sections.what}</legend>
+        <legend className="t-h3">{FORM.sections.what}</legend>
         <div className="mt-4 flex flex-wrap gap-2">
           {QUOTE_OPTIONS.services.map((s) => (
             <ChipBox
@@ -97,7 +98,7 @@ export default function QuoteFields({ preset, errors }: QuoteFieldsProps) {
 
       {/* Finish or shade: present in the HTML, shown by :has() while Vinyl wrap or Window tint is checked. */}
       <div className="ticket-section [.ticket:not(:has(#svc-wrap:checked)):not(:has(#svc-tint:checked))_&]:hidden">
-        <p className="t-label">{FORM.sections.finish}</p>
+        <h3 className="t-h3">{FORM.sections.finish}</h3>
         <div className="mt-4 grid gap-6">
           <div className="rows-wrap gap-6">
             <fieldset className="min-w-0">
@@ -143,7 +144,7 @@ export default function QuoteFields({ preset, errors }: QuoteFieldsProps) {
 
       {/* How to reach you */}
       <div className="ticket-section">
-        <p className="t-label">{FORM.sections.reach}</p>
+        <h3 className="t-h3">{FORM.sections.reach}</h3>
         <div className="mt-4 grid gap-5">
           <div>
             <label htmlFor="q-name" className="t-label mb-2 block">

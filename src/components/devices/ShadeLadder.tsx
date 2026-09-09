@@ -5,7 +5,7 @@ import { photo, SHADES, SHADE_LEGAL, SHADE_SCENE_ID } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface ShadeLadderProps {
-  /** Adds the sixth pane with the native range input (the tint page). */
+  /** Renders the slider pane above the ladder (the tint page passes false and places its own slider). */
   slider?: boolean;
   /** A WORK id. Defaults to SHADE_SCENE_ID. */
   scenePhotoId?: string;
@@ -13,11 +13,13 @@ interface ShadeLadderProps {
 }
 
 /**
- * The shade ladder (docs/DESIGN.md 5.10): five panes over the same crop with
- * pure black overlays at the opacities in SHADES, labelled in mono. No
- * percentages anywhere until Ricky confirms which shades he stocks. Five
- * across from md (six with the slider), two per row under md. The legal line
- * renders once beneath; sections that use the ladder must not repeat it.
+ * The shade ladder (docs/DESIGN.md 4.3 and 7.2.2): five 4:5 panes over the
+ * same crop with pure black overlays at the opacities in SHADES, labelled in
+ * mono. No percentages anywhere until Ricky confirms which shades he stocks.
+ * Five across from md, three per row under md (globals.css). With `slider`
+ * the slider pane comes first at the full width of its column, 24px above
+ * the ladder. The legal line renders once beneath; a section that places its
+ * own slider and legal line passes `slider={false}` and must not repeat it.
  * Pure markup and CSS: complete at first paint, with or without JavaScript.
  */
 export default function ShadeLadder({ slider = false, scenePhotoId = SHADE_SCENE_ID, className }: ShadeLadderProps) {
@@ -26,7 +28,8 @@ export default function ShadeLadder({ slider = false, scenePhotoId = SHADE_SCENE
 
   return (
     <div className={cn("w-full", className)}>
-      <ul className="ladder" style={{ "--panes": slider ? 6 : 5 } as CSSProperties}>
+      {slider && <ShadeSlider photo={scene} className="mb-6" />}
+      <ul className="ladder" role="list" style={{ "--panes": SHADES.length } as CSSProperties}>
         {SHADES.map((shade, i) => (
           <li key={shade.label}>
             <div className="pane">
@@ -45,11 +48,6 @@ export default function ShadeLadder({ slider = false, scenePhotoId = SHADE_SCENE
             </div>
           </li>
         ))}
-        {slider && (
-          <li>
-            <ShadeSlider photo={scene} />
-          </li>
-        )}
       </ul>
       <p className="t-small muted mt-4">{SHADE_LEGAL}</p>
     </div>

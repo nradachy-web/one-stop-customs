@@ -7,15 +7,16 @@ interface TimeLedgerProps {
 }
 
 /**
- * The time ledger (docs/DESIGN.md 5.13): hairline rows in mono, one duration
- * per row, nothing else. role="list" keeps the list semantics that
+ * The timing rows (docs/DESIGN.md 4.13): hairline rows in body type, one
+ * duration per row, nothing else. The caller wraps it in a `.panel` with a
+ * `.t-label` "Timing" above. role="list" keeps the list semantics that
  * list-style: none would otherwise drop in Safari.
  */
 export default function TimeLedger({ rows, className }: TimeLedgerProps) {
   return (
     <ul role="list" className={cn("ledger", className)}>
       {rows.map((row) => (
-        <li key={row} className="t-mono">
+        <li key={row} className="t-body">
           {row}
         </li>
       ))}

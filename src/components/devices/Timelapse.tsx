@@ -8,11 +8,12 @@ interface TimelapseProps {
 }
 
 /**
- * The one thing on the site that moves on its own (docs/DESIGN.md 3.3): the
- * owner's real timelapse in a 9:16 swatch card. Loop renders the poster as the
- * real content first, mounts the video only on screen, and never mounts it at
- * all under prefers-reduced-motion or data saver. The chip label says driveway
- * because that is where it was shot.
+ * The one living photo (docs/DESIGN.md 3.4): the owner's real timelapse in a
+ * 9:16 card. Loop renders the poster as the real content first, mounts the
+ * video only on screen, and never mounts it at all under
+ * prefers-reduced-motion or data saver. The colour bar and label say
+ * driveway because that is where it was shot; the caption beneath says
+ * 12 seconds, real footage.
  */
 export default function Timelapse({ className }: TimelapseProps) {
   return (
@@ -32,7 +33,7 @@ export default function Timelapse({ className }: TimelapseProps) {
           />
         }
       />
-      <p className="t-small muted mt-3">{TIMELAPSE.caption}</p>
+      <p className="t-label mt-3">{TIMELAPSE.caption}</p>
     </div>
   );
 }

@@ -5,24 +5,29 @@ import { cn } from "@/lib/utils";
 interface FAQProps {
   /** Questions and answers for this page (SERVICE_PAGES[id].faqs, or FAQ). */
   items: readonly { q: string; a: string }[];
+  /** v1 prop, accepted and ignored in v2. */
   tab?: string;
   title?: string;
   className?: string;
 }
 
-/** Two 1px ink rules. Rotates 45 degrees when the row is open (globals.css .faq-plus). */
+/** Two 1.5px rules in green. Rotates 45 degrees when the row is open (globals.css .faq-plus). */
 function Plus() {
   return (
-    <svg className="faq-plus" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
-      <path d="M7 0v14M0 7h14" stroke="currentColor" strokeWidth="1" />
+    <svg className="faq-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 1v14M1 8h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
 
 /**
- * Questions people ask (docs/DESIGN.md 5.16): native details and summary rows
- * in a ledger, so they open with JavaScript off and read complete to a
- * crawler. The glyph is the only thing that moves, and only on an action.
+ * Questions people ask (docs/DESIGN.md 4.10): native details rows in a
+ * ledger, so they open with JavaScript off and read complete to a crawler.
+ * The summary is 60px with the question in white (green on hover) and the
+ * green plus glyph; the answer eases open over 260 ms where the browser can
+ * animate height to auto (::details-content with interpolate-size, Chrome
+ * 129 and later) and opens instantly everywhere else and under reduced
+ * motion. All in globals.css; the component is markup only.
  */
 export default function FAQ({ items, tab = SERVICE_TEMPLATE.faqTab, title = SERVICE_TEMPLATE.faqTitle, className }: FAQProps) {
   return (
@@ -30,7 +35,7 @@ export default function FAQ({ items, tab = SERVICE_TEMPLATE.faqTab, title = SERV
       <div className="container">
         <SectionHead tab={tab} title={title} />
         <div className="grid-12">
-          <div className="ledger mt-8 lg:col-span-7 lg:col-start-3">
+          <div className="ledger mt-10 lg:col-span-8 lg:mt-12">
             {items.map((item) => (
               <details key={item.q} className="faq py-0!">
                 <summary>

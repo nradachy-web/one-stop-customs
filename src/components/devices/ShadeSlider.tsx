@@ -2,11 +2,11 @@
 
 import { useId, useState, type CSSProperties } from "react";
 import Photo from "@/components/ui/Photo";
-import { SHADES, SHADE_SLIDER, type WorkPhoto } from "@/lib/constants";
+import { SHADES, SHADE_SLIDER, SHADE_TICKS, type WorkPhoto } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface ShadeSliderProps {
-  /** The ladder's scene photo, passed by ShadeLadder so both use one crop. */
+  /** The scene photo (SHADE_SCENE_ID through photo()), shared with the ladder so both use one crop. */
   photo: WorkPhoto;
   className?: string;
 }
@@ -22,11 +22,13 @@ function nearestLabel(value: number): string {
 }
 
 /**
- * The sixth pane on the tint page (docs/DESIGN.md 5.10): the same crop under a
- * black overlay whose opacity is --shade, set from a native range input. The
- * overlay has no transition so it tracks the thumb. The server render carries
- * the default value, so with JavaScript off the pane shows the default shade
- * and the input is simply inert.
+ * The tint slider (docs/DESIGN.md 4.3): one 4:3 pane over the scene photo
+ * with a pure black overlay whose opacity is --shade, driven live by a native
+ * range input in the control row beneath (a 2px hairline track, a 22px round
+ * green thumb, five mono ticks). The overlay has no transition so it tracks
+ * the thumb. No percentage is printed anywhere; aria-valuetext reads the
+ * nearest ladder step. The server render carries value 60, so with
+ * JavaScript off the pane shows the default shade and the input is inert.
  */
 export default function ShadeSlider({ photo, className }: ShadeSliderProps) {
   const id = useId();
@@ -34,34 +36,40 @@ export default function ShadeSlider({ photo, className }: ShadeSliderProps) {
   const paneStyle = { "--shade": value / 100, "--pos": photo.position ?? "50% 50%" } as CSSProperties;
 
   return (
-    <div className={cn("flex flex-col", className)}>
-      <div className="pane">
-        <div className="pane-photo" style={paneStyle}>
-          <Photo
-            src={photo.src}
-            alt=""
-            width={photo.width}
-            height={photo.height}
-            className="h-full w-full"
-            imgClassName="[object-position:var(--pos)]"
-          />
-          <span className="pane-overlay" aria-hidden="true" />
-        </div>
-        <label htmlFor={id} className="pane-label">
+    <div className={cn("pane slider-pane", className)}>
+      <div className="pane-photo" style={paneStyle}>
+        <Photo
+          src={photo.src}
+          alt={photo.alt}
+          width={photo.width}
+          height={photo.height}
+          className="h-full w-full"
+          imgClassName="[object-position:var(--pos)]"
+        />
+        <span className="pane-overlay" aria-hidden="true" />
+      </div>
+      <div className="shade-control">
+        <label htmlFor={id} className="t-label mb-3 block">
           {SHADE_SLIDER.label}
         </label>
+        <input
+          id={id}
+          type="range"
+          className="shade-range"
+          min={SHADE_SLIDER.min}
+          max={SHADE_SLIDER.max}
+          step={SHADE_SLIDER.step}
+          value={value}
+          onInput={(e) => setValue(Number(e.currentTarget.value))}
+          onChange={(e) => setValue(Number(e.currentTarget.value))}
+          aria-valuetext={nearestLabel(value)}
+        />
+        <div className="shade-ticks" aria-hidden="true">
+          {SHADE_TICKS.map((tick) => (
+            <span key={tick}>{tick}</span>
+          ))}
+        </div>
       </div>
-      <input
-        id={id}
-        type="range"
-        className="shade-range mt-3 h-11!"
-        min={SHADE_SLIDER.min}
-        max={SHADE_SLIDER.max}
-        step={SHADE_SLIDER.step}
-        value={value}
-        onChange={(e) => setValue(Number(e.currentTarget.value))}
-        aria-valuetext={nearestLabel(value)}
-      />
     </div>
   );
 }

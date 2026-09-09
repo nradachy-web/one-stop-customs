@@ -24,11 +24,11 @@ export interface SwatchCardProps {
    * breakpoint so the label always describes the frame on screen.
    */
   mobilePhoto?: WorkPhoto;
-  /** Eager, sync decode, high fetch priority. The home hero only. */
+  /** Eager, sync decode, high fetch priority. Covers only. */
   priority?: boolean;
-  /** Renders the .peel sheet in the photo box. The home hero only. */
+  /** v1 prop, accepted and ignored (the hero draws its own peel now). */
   peel?: boolean;
-  /** Wraps the chip labels in .print so they print after the peel. The home hero only. */
+  /** v1 prop, accepted and ignored. */
   print?: boolean;
   /** Makes the whole card a link: a route (next/link), a file, an anchor or an external URL. */
   href?: string;
@@ -36,13 +36,14 @@ export interface SwatchCardProps {
   external?: boolean;
   /** Replaces the Photo inside the box (Timelapse drops Loop in here). */
   media?: ReactNode;
+  /** Gallery cells: a 4px bar and no label (.card-quiet). The lightbox shows the full strip. */
+  quiet?: boolean;
+  /** Wide bands: adds .mask-settle so the card settles its edges on scroll where view timelines exist. */
+  mask?: boolean;
   className?: string;
   /** Extra classes for the img (a responsive object-position, for example). */
   imgClassName?: string;
-  /**
-   * Wraps the card in an .on-black ancestor (black face, hairline edge, ash
-   * label). Not needed inside an existing .on-black element such as the lightbox.
-   */
+  /** v1 prop, accepted and ignored (the card is charcoal on every ground). */
   onBlack?: boolean;
 }
 
@@ -66,16 +67,16 @@ function isRoute(href: string): boolean {
 }
 
 /**
- * The swatch card (docs/DESIGN.md 5.4), the site's only photo frame: a white
- * face, a 1px liner edge, the photo in a fixed aspect box, then the chip strip.
- * The box's aspect-ratio is carried by CSS variables so a native ratio from
- * constants and a small-screen override can both be static Tailwind classes;
- * the fixed box is what makes layout shift impossible while the photo loads.
+ * The card (docs/DESIGN.md 5.5): charcoal, a hairline edge, a 6px radius,
+ * the photo in a fixed aspect box, then the colour bar and label. The box's
+ * aspect-ratio is carried by CSS variables so a native ratio from constants
+ * and a small-screen override can both be static Tailwind classes; the fixed
+ * box is what makes layout shift impossible while the photo loads.
  *
- * The hero passes mobilePhoto for the portrait file under lg, peel for the
- * backing sheet and print for the label. Every other card is the finished
- * state at first paint. With JavaScript off or reduced motion the .peel sheet
- * has display none (globals.css) and the card is complete.
+ * Hover and focus-within brighten the edge and the bar (globals.css). Where
+ * the browser supports view timelines the bar grows in from the left as the
+ * card enters the viewport; everywhere else, with reduced motion and with
+ * JavaScript off, the card is simply complete at first paint.
  */
 export default function SwatchCard({
   photo,
@@ -83,14 +84,13 @@ export default function SwatchCard({
   mobileAspect,
   mobilePhoto,
   priority = false,
-  peel = false,
-  print = false,
   href,
   external = false,
   media,
+  quiet = false,
+  mask = false,
   className,
   imgClassName,
-  onBlack = false,
 }: SwatchCardProps) {
   const timelapse = isTimelapse(photo);
   const src = timelapse ? photo.poster : photo.src;
@@ -146,45 +146,36 @@ export default function SwatchCard({
 
   const strip = mobilePhoto ? (
     <>
-      <ChipStrip className="under-lg" chip={mobilePhoto.chip} label={mobilePhoto.label} setting={mobilePhoto.setting} print={print} />
-      <ChipStrip className="only-lg" chip={photo.chip} label={photo.label} setting={photo.setting} print={print} />
+      <ChipStrip className="under-lg" chip={mobilePhoto.chip} label={mobilePhoto.label} setting={mobilePhoto.setting} />
+      <ChipStrip className="only-lg" chip={photo.chip} label={photo.label} setting={photo.setting} />
     </>
   ) : (
-    <ChipStrip chip={photo.chip} label={photo.label} setting={photo.setting} print={print} />
+    <ChipStrip chip={photo.chip} label={photo.label} setting={photo.setting} />
   );
 
   const figure = (
-    <figure className={cn("card", className)}>
+    <figure className={cn("card", quiet && "card-quiet", mask && "mask-settle", className)}>
       <div className={cn("card-photo", boxClass)} style={boxStyle}>
         {picture}
-        {peel && <span className="peel" aria-hidden="true" />}
       </div>
       {strip}
     </figure>
   );
 
-  let card: ReactNode = figure;
-  if (href) {
-    const http = /^https?:\/\//.test(href);
-    if (!external && !http && isRoute(href)) {
-      card = (
-        <Link href={href} className="card-link">
-          {figure}
-        </Link>
-      );
-    } else {
-      const newTab = external || http;
-      card = (
-        <a
-          href={http ? href : asset(href)}
-          className="card-link"
-          {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        >
-          {figure}
-        </a>
-      );
-    }
-  }
+  if (!href) return figure;
 
-  return onBlack ? <div className="on-black">{card}</div> : card;
+  const http = /^https?:\/\//.test(href);
+  if (!external && !http && isRoute(href)) {
+    return (
+      <Link href={href} className="card-link">
+        {figure}
+      </Link>
+    );
+  }
+  const newTab = external || http;
+  return (
+    <a href={http ? href : asset(href)} className="card-link" {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+      {figure}
+    </a>
+  );
 }

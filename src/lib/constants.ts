@@ -247,6 +247,12 @@ export const CTA = {
   seeWork: "See the work",
   seeAll: "See all",
   backToGallery: "Back to the gallery",
+  /** v2 structural words (docs/DESIGN.md 6): the menu button, stepper and lightbox controls. */
+  menu: "Menu",
+  close: "Close",
+  previous: "Previous",
+  next: "Next",
+  directions: "Get directions",
 } as const;
 
 /** The four doors, in this order everywhere: strip, mobile bar, menu, quote section. */
@@ -294,8 +300,16 @@ export const CREDIT = {
 
 export const HERO = {
   headline: "The wrap and tint shop on Eight Mile in Warren.",
-  sub: "One Stop Customs, the shop you know as Ricky Wraps, is a by-appointment vinyl wrap, window tint, paint protection film and powder coating shop at 13417 E Eight Mile Rd in Warren. Avery Dennison and 3M films, XPEL paint protection film, hundreds of colors in stock, quoted per vehicle.",
-  photoId: "trx-yellow-wide",
+  /**
+   * The same headline split where the v2 hero breaks it at lg, one span per
+   * line, so the page-load rise can stagger the lines (docs/DESIGN.md 3.1).
+   * Joined with a space they equal `headline` exactly.
+   */
+  headlineLines: ["The wrap and tint shop", "on Eight Mile in Warren."] as readonly string[],
+  /** Three lines at the desktop measure (v2). The films and hours moved to the facts row beneath the buttons. */
+  sub: "One Stop Customs, the shop you know as Ricky Wraps. Vinyl wraps, window tint, XPEL paint protection film and powder coating at 13417 E Eight Mile Rd in Warren, by appointment and quoted per vehicle.",
+  /** v2 hero photos: the side view fills the right of the screen at lg, the portrait fills the top of a phone. Both are the same truck. */
+  photoId: "trx-yellow-side",
   mobilePhotoId: "trx-yellow-portrait",
   facts: [
     { key: "Films", value: "Avery Dennison and 3M films, XPEL paint protection film" },
@@ -351,7 +365,7 @@ export const WORK: readonly WorkPhoto[] = [
   { id: "porsche-911-black-front", src: `${P}porsche-911-black-front.webp`, width: 1080, height: 810, alt: "Black Porsche 911, front three quarter view by a garage door", chip: "#0F1218", label: "Gloss, black. Porsche 911", setting: "On the lot, 02/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "porsche", index: 2, count: 2 } },
   { id: "denali-black-front", src: `${P}denali-black-front.webp`, width: 1440, height: 1080, alt: "Gloss black GMC Denali pickup, front three quarter view", chip: "#17191C", label: "Gloss, black. GMC Denali", setting: "On the lot, 01/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "denali", index: 1, count: 2 } },
   { id: "denali-black-wide", src: `${P}denali-black-wide.webp`, width: 1440, height: 500, alt: "Gloss black GMC Denali pickup, wide crop on the lot", chip: "#17191C", label: "Gloss, black. GMC Denali", setting: "On the lot, 02/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "denali", index: 2, count: 2 } },
-  { id: "silverado-black", src: `${P}silverado-black.webp`, width: 1440, height: 1082, alt: "Gloss black Chevy Silverado inside the shop", chip: "#0F1218", label: "Gloss, black. Chevy Silverado", setting: "Inside the shop", service: "wraps", finish: "gloss", colour: "black" },
+  { id: "silverado-black", src: `${P}silverado-black.webp`, width: 1440, height: 1082, alt: "Gloss black GMC Denali pickup inside the shop", chip: "#0F1218", label: "Gloss, black. GMC Denali", setting: "Inside the shop", service: "wraps", finish: "gloss", colour: "black" },
   { id: "urus-black-rear", src: `${P}urus-black-rear.webp`, width: 1440, height: 1080, alt: "Satin black Lamborghini Urus, rear view on the street", chip: "#2A2B2C", label: "Satin, black. Lamborghini Urus", setting: "On the street", service: "wraps", finish: "satin", colour: "black" },
   { id: "x6-black-front", src: `${P}x6-black-front.webp`, width: 1440, height: 1083, alt: "Black BMW X6, front view on the lot", chip: "#1B1E20", label: "Gloss, black. BMW X6", setting: "On the lot, 01/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "x6", index: 1, count: 2 } },
   { id: "x6-black-rear", src: `${P}x6-black-rear.webp`, width: 1440, height: 1080, alt: "Black BMW X6, rear view on the street", chip: "#1E2124", label: "Gloss, black. BMW X6", setting: "On the street, 02/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "x6", index: 2, count: 2 } },
@@ -373,7 +387,7 @@ export const WORK: readonly WorkPhoto[] = [
   { id: "commercial-tesla-homes", src: `${P}commercial-tesla-homes.webp`, width: 1600, height: 1200, alt: "Tesla Model 3 in a white and orange Homes.com printed wrap inside the shop", chip: "#CD6117", label: "Printed. Tesla Model 3, Homes.com", setting: "Inside the shop, 02/02", service: "commercial", finish: "printed", colour: "colour", set: { id: "tesla-homes", index: 2, count: 2 } },
   { id: "commercial-blazer-pink", src: `${P}commercial-blazer-pink.webp`, width: 1600, height: 745, alt: "Pink Chevy Blazer EV in a WeDriveFor printed wrap inside the shop", chip: "#E38CD6", label: "Printed. Chevy Blazer EV, WeDriveFor", setting: "Inside the shop", service: "commercial", finish: "printed", colour: "colour" },
   // Tint
-  { id: "escalade-black-window", src: `${P}escalade-black-window.webp`, width: 1440, height: 1082, alt: "Tinted rear door glass on a black Cadillac Escalade, close up", chip: "#23272B", label: "Tinted glass. Cadillac Escalade", setting: "Close up", service: "tint", finish: "none", colour: "black", position: "55% 50%" },
+  { id: "escalade-black-window", src: `${P}escalade-black-window.webp`, width: 1440, height: 1082, alt: "Tinted rear door glass on a black GMC Denali pickup, close up", chip: "#23272B", label: "Tinted glass. GMC Denali", setting: "Close up", service: "tint", finish: "none", colour: "black", position: "55% 50%" },
   { id: "tint-hands", src: `${P}tint-hands.webp`, width: 1600, height: 1053, alt: "Window film being trimmed by hand on a door glass, close up", chip: "#1A1F23", label: "Window film, trimmed by hand. Door glass", setting: "Close up", service: "tint", finish: "none", colour: "black" },
   { id: "home-deck-tint", src: `${P}home-deck-tint.webp`, width: 1248, height: 448, alt: "Sliding glass doors with window film on a back deck", chip: "#5A6B70", label: "Window film. Sliding glass doors", setting: "On a back deck", service: "buildings", finish: "none", colour: "grey" },
   { id: "home-front-tint", src: `${P}home-front-tint.webp`, width: 600, height: 450, alt: "House with film on the front windows", chip: "#6D8A9B", label: "Window film. Front windows", setting: "A house", service: "buildings", finish: "none", colour: "grey" },
@@ -677,6 +691,70 @@ export const RECENT_WORK: readonly string[] = [
   "urus-black-rear",
   "camaro-orange-hood",
 ] as const;
+
+// ---------------- v2 devices (docs/DESIGN.md 4) ----------------
+// Structural words and derived groupings only. No new facts: every photo id
+// below is already in WORK and every label is read from that entry.
+
+/** The logo files (docs/BRIEF_V2.md, Logo). The mark sits in the header at 44px tall; the full lockup is the footer's. */
+export const LOGO = {
+  mark: { src: "/logo-mark.png", width: 897, height: 633, alt: "One Stop Customs mark, two checkered flags over a car" },
+  lockup: { src: "/logo-transparent.png", width: 1024, height: 1024, alt: "One Stop Customs Auto Spa logo" },
+} as const;
+
+/**
+ * The walk-around sets shown in the home "Recent work" steppers, in order.
+ * Frames are WORK ids that share a `set`; the stepper prints its own counter
+ * from the array, so a set may show fewer frames than the photo's own
+ * "NN/NN" setting (the TRX wide frame is left out because it cannot live in
+ * a 1:1 box). Both steppers use the same box so they stand level at lg.
+ */
+export const SETS: readonly { id: string; photoIds: readonly string[]; aspect: CardAspect }[] = [
+  { id: "corvette", photoIds: ["corvette-black-wide", "corvette-black-front", "corvette-black-side", "corvette-black-rear"], aspect: "1/1" },
+  { id: "trx", photoIds: ["trx-yellow-portrait", "trx-yellow-front", "trx-yellow-side"], aspect: "1/1" },
+] as const;
+
+/** Set stepper controls. The counter is "01 / 04" style; the group label is read to assistive tech only. */
+export const STEPPER = {
+  previous: CTA.previous,
+  next: CTA.next,
+  counter: (index: number, count: number) => `${String(index).padStart(2, "0")} / ${String(count).padStart(2, "0")}`,
+  groupLabel: (label: string) => `${label}, walk around`,
+  frameLabel: (index: number, count: number) => `Frame ${index} of ${count}`,
+} as const;
+
+/** Finish picker (home and the wraps page): the rows come from FINISHES, the one-line bodies from WRAP_FINISHES by name. */
+export const FINISH_PICKER = {
+  hint: "Hover or tap a finish to see it on a car.",
+  seeLabel: "See vinyl wraps",
+  seeHref: "/vinyl-wraps/#finishes",
+  bodyFor: (name: string) => WRAP_FINISHES.find((f) => f.name === name)?.body ?? "",
+} as const;
+
+/** Tint tier switcher: segmented pills over the three spec cards. Columns and rows stay in TINT_TIERS. */
+export const TIER_SWITCH = {
+  legend: "Film",
+  ariaLabel: "Choose a film to compare",
+} as const;
+
+/** Shade slider tick labels under the track, darkest at the left. Same steps as SHADES. */
+export const SHADE_TICKS: readonly string[] = SHADES.map((s) => s.label);
+
+/** Lightbox controls. */
+export const LIGHTBOX = {
+  close: CTA.close,
+  previous: CTA.previous,
+  next: CTA.next,
+  counter: (index: number, count: number) => `${index} / ${count}`,
+  label: "Photo",
+} as const;
+
+/** The mobile menu button reads Menu, and Close while the sheet is open. */
+export const MENU = {
+  open: CTA.menu,
+  close: CTA.close,
+  ariaLabel: "Menu",
+} as const;
 
 // ---------------- Services ----------------
 

@@ -8,11 +8,11 @@ interface FormNoticeProps {
 }
 
 /**
- * The honest notice (docs/DESIGN.md 5.17 and 5.20). It replaces the whole
+ * The honest notice (docs/DESIGN.md 2.6 and 3.5). It replaces the whole
  * quote ticket when NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is empty at build time,
- * and stands in as the error state after a failed send. A white card with the
- * error colour on its border so it reads as a flag, never green, never a fake
- * thank-you. Every way to reach the shop is a real link: call (tel), text
+ * and stands in as the error state after a failed send. A charcoal card (white
+ * on the daylight sheet) with the error colour on its border so it reads as a
+ * flag, never green, never a fake thank-you. Every way to reach the shop is a real link: call (tel), text
  * (sms), the number itself (tel), email (mailto) and book online (Square).
  */
 export default function FormNotice({ heading = FORM.notice.heading, className }: FormNoticeProps) {
@@ -27,7 +27,7 @@ export default function FormNotice({ heading = FORM.notice.heading, className }:
         <a href={BRAND.phoneSms} className="link">
           text
         </a>{" "}
-        <a href={BRAND.phoneHref} className="link t-mono">
+        <a href={BRAND.phoneHref} className="link t-num">
           {BRAND.phoneDisplay}
         </a>
         , email{" "}

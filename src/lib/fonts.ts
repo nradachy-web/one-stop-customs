@@ -1,36 +1,56 @@
-import { Bricolage_Grotesque, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Inter, Inter_Tight } from "next/font/google";
 
 /**
- * The two voices of the sample book (docs/DESIGN.md 2.3).
+ * The three voices of v2 "Liner off" (docs/DESIGN.md 2.3).
  *
- * Bricolage Grotesque is the cover voice: one variable file with the optical size
- * and width axes loaded, so the same font is a condensed signage face at
- * opsz 96 / wdth 82 for the h1 and a quiet text face at body sizes. The axes must
- * be requested here or next/font serves the default instance only and the
- * font-variation-settings in globals.css do nothing.
+ * Inter Tight is the display voice: every h1, h2, h3, the wordmark, the giant
+ * phone number and the menu rows. Only 700 and 800 are loaded; the display
+ * classes in globals.css use nothing else. Tracking and line height are set
+ * per class, not here.
  *
- * IBM Plex Mono is the leaf voice: every label, chip, number, phone, hour and
- * table value. Only 400 and 500 are loaded; the system never uses another weight.
+ * Inter is the body voice: ledes, body, small, labels, buttons, fields. 400,
+ * 500 and 600.
  *
- * Both are exposed as CSS variables that globals.css reads in @theme:
- * --font-bricolage and --font-plex-mono. Apply `fontClassName` to <html> in
- * src/app/layout.tsx once and nowhere else.
+ * IBM Plex Mono is the chip voice and nothing more: the 12px label under a
+ * photo, the frame counter, the hours table and any tabular number the
+ * design keeps. 500 only.
+ *
+ * Each font exposes one CSS variable that globals.css reads inside @theme:
+ *   --font-display  Inter Tight
+ *   --font-body     Inter
+ *   --font-mono     IBM Plex Mono
+ * globals.css maps them onto its own Tailwind tokens (--font-head, --font-sans,
+ * --font-code) so the next/font variable and the theme token never share a
+ * name (a shared name would be a circular var() reference). Apply
+ * `fontClassName` to <html> in src/app/layout.tsx once and nowhere else.
+ *
+ * All three names are verified against this repo's next/font/google data
+ * (node_modules/next/dist/compiled/@next/font/dist/google/index.d.ts):
+ * Inter_Tight, Inter and IBM_Plex_Mono, with the weights requested below.
  */
-export const bricolage = Bricolage_Grotesque({
+export const interTight = Inter_Tight({
   subsets: ["latin"],
-  weight: "variable",
-  axes: ["opsz", "wdth"],
+  weight: ["700", "800"],
+  style: ["normal"],
   display: "swap",
-  variable: "--font-bricolage",
+  variable: "--font-display",
+});
+
+export const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal"],
+  display: "swap",
+  variable: "--font-body",
 });
 
 export const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["500"],
   style: ["normal"],
   display: "swap",
-  variable: "--font-plex-mono",
+  variable: "--font-mono",
 });
 
-/** The className for <html>: both variables, nothing else. */
-export const fontClassName = `${bricolage.variable} ${plexMono.variable}`;
+/** The className for <html>: the three variables, nothing else. */
+export const fontClassName = `${interTight.variable} ${inter.variable} ${plexMono.variable}`;

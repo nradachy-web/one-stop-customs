@@ -10,34 +10,45 @@ export const metadata: Metadata = {
   robots: ROBOTS_NOINDEX,
 };
 
-/** The phone number inside a label is set in mono; the verb stays in the button's own type. */
+/**
+ * The phone number inside a button label gets tabular digits and never
+ * wraps; the verb keeps the button's own type. The whole label is one span
+ * so the button's flex gap does not open a second space before the number.
+ */
 function PhoneLabel({ label }: { label: string }) {
   const number = BRAND.phoneDisplay;
-  if (!label.includes(number)) return <>{label}</>;
+  if (!label.includes(number)) return <span>{label}</span>;
   const [before, after] = label.split(number);
   return (
-    <>
+    <span>
       {before}
-      <span className="t-mono">{number}</span>
+      <span className="t-num">{number}</span>
       {after}
-    </>
+    </span>
   );
 }
 
 /**
  * The thank-you page (docs/DESIGN.md 7.7), the other centred page. Reached
  * only when Web3Forms has confirmed the send (or by its native redirect
- * without JavaScript). No form, and the layout leaves the mobile bar off
- * this path. The shop sheet sits in a centred four-column block beneath.
+ * without JavaScript). Centred on black: the h1, the lede, the giant phone
+ * number as a tel link, the green Call or text button and the outline Book
+ * online button, then Back to the gallery. The shop panel sits in a centred
+ * five-column block beneath. No form, and the layout leaves the mobile bar
+ * off this path.
  */
 export default function ThankYouPage() {
   return (
     <section className="section" aria-labelledby="thanks-title">
       <div className="container text-center">
-        <h1 id="thanks-title" className="t-h2">
+        <h1 id="thanks-title" className="t-h1 t-h1-service">
           {THANK_YOU.h1}
         </h1>
-        <p className="t-lede muted measure mx-auto mt-4">{THANK_YOU.lede}</p>
+        <p className="t-lede muted measure mx-auto mt-5">{THANK_YOU.lede}</p>
+
+        <a href={BRAND.phoneHref} className="t-phone mt-10 inline-block text-white">
+          {BRAND.phoneDisplay}
+        </a>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-3 md:flex-row">
           <Button href={THANK_YOU.primary.href}>
@@ -54,8 +65,8 @@ export default function ThankYouPage() {
         </p>
 
         <div className="grid-12 mt-16 text-left">
-          <div className="lg:col-span-4 lg:col-start-5">
-            <ShopSheet />
+          <div className="lg:col-span-5 lg:col-start-4">
+            <ShopSheet withBooking />
           </div>
         </div>
       </div>

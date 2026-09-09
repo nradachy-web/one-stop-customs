@@ -1,12 +1,3 @@
-// REQUEST for lane A: SectionHead cannot build the service and city title
-// block (docs/DESIGN.md 7.2.1). It needs the h1 in columns 3 to 8 with the
-// chip cover card in columns 9 to 12 on the same row, and under lg the order
-// tab, h1, cover, strip, lede. SectionHead's content column is 3 to 12 and it
-// keeps the lede under the heading, so TitleBlock below builds that one row
-// with the same classes (.tab, .t-h1.t-h1-service, .t-lede.muted.measure-wide).
-// If SectionHead gains an `aside` slot for columns 9 to 12 and a way to
-// place the lede after the strip under lg, TitleBlock can go back to it.
-
 import ActionStrip from "@/components/ui/ActionStrip";
 import SectionHead from "@/components/ui/SectionHead";
 import ShopSheet from "@/components/ui/ShopSheet";
@@ -17,88 +8,102 @@ import QuoteForm from "@/components/forms/QuoteForm";
 import Choose from "@/components/service/Choose";
 import Process from "@/components/service/Process";
 import TimeLedger from "@/components/service/TimeLedger";
-import { HOME_SECTIONS, photo, SERVICE_TEMPLATE, type ServiceSpec } from "@/lib/constants";
+import { photo, SERVICE_TEMPLATE, type ServiceSpec } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 /**
- * Crop hints for the 4:5 chip covers, chosen by eye from the contact sheets.
- * A 4:5 box shows the middle 60 percent of a 4:3 frame, so cars parked left
- * of centre lean the crop left. Photos that store their own position in
- * constants (the red Charger, the Escalade glass, the Maserati) are not here.
- * Same arbitrary-property form as SwatchCard so tailwind-merge keeps this one.
+ * Crop hints for the chip covers, chosen by eye from the contact sheets
+ * (docs/DESIGN.md 8). The cover box is 4:3 from md and 4:5 under it. Most
+ * covers are 4:3 files and need nothing; a square file in a 4:3 box keeps
+ * the car by leaning the crop up. Photos that store their own position in
+ * constants (the red Charger, the Escalade glass, the Maserati) are not
+ * here. Same arbitrary-property form as SwatchCard so tailwind-merge keeps
+ * this one.
  */
-const CROP_4x5: Readonly<Record<string, string>> = {
-  "porsche-911-black": "[object-position:35%_50%]",
-  "sclass-white-front": "[object-position:40%_50%]",
-  "charger-pink": "[object-position:40%_50%]",
-  "camaro-red-front": "[object-position:45%_50%]",
-  "challenger-blue": "[object-position:45%_50%]",
+const CROP_COVER: Readonly<Record<string, string>> = {
+  "huracan-red-square": "[object-position:50%_45%]",
 };
 
 export interface TitleBlockProps {
-  /** The binding tab: "Service" or "Service area". */
-  tab: string;
-  /** The .t-label line under the tab: the service descriptor or "{County} County". */
-  tabNote: string;
   title: string;
   lede: string;
   cover: { photoId: string; kind: "chip" | "band" };
   /** Where the Get a quote cell goes. Both templates carry their own ticket at #quote. */
   quoteHref?: string;
+  /**
+   * One .t-label line above the h1. City pages print "{County} County" here:
+   * a fact, not an eyebrow (docs/DESIGN.md 7.3.1). Service pages print nothing.
+   */
+  note?: string;
+  /** v1 prop, accepted and ignored (there is no binding tab in v2). */
+  tab?: string;
+  /** v1 prop, accepted and ignored. */
+  tabNote?: string;
 }
 
 /**
- * The title block (docs/DESIGN.md 7.2.1 and 7.3.1). At lg: the tab and its
- * note in columns 1 to 2; the h1 and lede in 3 to 8; a chip cover in 9 to 12
- * aligned to the h1's top, spanning the h1 and lede rows (the rows template
- * gives the lede row the card's extra height so the lede stays under the h1);
- * a band cover across 3 to 12 beneath the lede; then the action strip across
- * 3 to 12, 32px below. Under lg the DOM order is the visual order: tab, note,
- * h1, cover, strip, lede. The section has no rule; the header carries it.
- * The cover is each page's first and largest image, so it loads eagerly.
+ * The title block (docs/DESIGN.md 7.2.1 and 7.3.1), laid out so nothing is
+ * left empty beside the lede at desktop (the v1 fault). The section has no
+ * rule; the header carries it. The cover is each page's first and largest
+ * image, so it loads eagerly.
+ *
+ * Chip covers (wraps, tint, every city): at lg the h1 and lede sit in columns
+ * 1 to 6 and the cover card in 7 to 12 at 4:3 (600 by 450 plus its strip),
+ * the two halves of the grid. The grid has two rows, `1fr auto`: the copy
+ * takes row 1, the four doors take row 2, and the cover spans both, so the
+ * strip's bottom edge lands on the cover's bottom edge whichever of the two
+ * is taller. Under lg the DOM order is the visual order: h1, lede, the cover
+ * at 4:5 (350 by 437 at 390), the strip.
+ *
+ * Band covers (commercial, paint protection film, buildings, powder): the h1
+ * and lede in columns 1 to 8, the strip on its own row beneath, then the
+ * band across all twelve columns at its native aspect with the settle mask
+ * (docs/DESIGN.md 3.3). Under lg: h1, lede, the band at 2:1, the strip.
  */
-export function TitleBlock({ tab, tabNote, title, lede, cover, quoteHref = "#quote" }: TitleBlockProps) {
+export function TitleBlock({ title, lede, cover, quoteHref = "#quote", note }: TitleBlockProps) {
   const p = photo(cover.photoId);
   const chip = cover.kind === "chip";
 
   return (
-    <section className="section pt-10!" aria-labelledby="page-title">
+    <section className="section pt-10! lg:pt-14!" aria-labelledby="page-title">
       <div className="container">
-        <div className={cn("grid-12", chip && "lg:grid-rows-[auto_1fr_auto]")}>
-          {/* Spans the h1 and lede rows so the tab's own height never sizes row 1 and pushes the lede down. */}
-          <div className="tab lg:pt-12! lg:[grid-row:1/span_2]">
-            <p className="t-label">{tab}</p>
-            <p className="t-label mt-1">{tabNote}</p>
+        <div className={cn("grid-12", chip && "lg:grid-rows-[1fr_auto]")}>
+          <div className={cn("lg:row-start-1", chip ? "lg:col-span-6" : "lg:col-span-8")}>
+            {note ? <p className="t-label mb-4">{note}</p> : null}
+            <h1 id="page-title" className="t-h1 t-h1-service">
+              {title}
+            </h1>
+            <p className="t-lede muted measure-wide mt-5 lg:mt-6">{lede}</p>
           </div>
-
-          <h1 id="page-title" className="t-h1 t-h1-service lg:col-span-6 lg:col-start-3 lg:row-start-1">
-            {title}
-          </h1>
 
           {chip ? (
             <SwatchCard
               photo={p}
-              aspect="4/5"
+              aspect="4/3"
+              mobileAspect="4/5"
               priority
-              imgClassName={CROP_4x5[p.id]}
-              className="mt-5! lg:col-span-4 lg:col-start-9 lg:mt-0! lg:self-start lg:[grid-row:1/span_2]"
+              imgClassName={CROP_COVER[p.id]}
+              className="mt-6! lg:col-span-6 lg:col-start-7 lg:row-span-2 lg:row-start-1 lg:mt-0! lg:self-start"
             />
           ) : (
             <SwatchCard
               photo={p}
               aspect="native"
               mobileAspect="2/1"
+              mask
               priority
-              className="mt-5! lg:col-span-10 lg:col-start-3 lg:row-start-3 lg:mt-8!"
+              className="mt-6! lg:col-span-12 lg:row-start-3 lg:mt-12!"
             />
           )}
 
           <ActionStrip
             quoteHref={quoteHref}
-            className={cn("mt-4 lg:col-span-10 lg:col-start-3 lg:mt-8", chip ? "lg:row-start-3" : "lg:row-start-4")}
+            className={cn(
+              "mt-6 lg:row-start-2 lg:mt-10",
+              // Capped at 496px beside a chip cover so the four doors wrap two by two, never three and one.
+              chip ? "lg:col-span-6 lg:max-w-[496px] lg:self-end" : "lg:col-span-12",
+            )}
           />
-
-          <p className="t-lede muted measure-wide mt-5 lg:col-span-6 lg:col-start-3 lg:row-start-2 lg:mt-4">{lede}</p>
         </div>
       </div>
     </section>
@@ -111,29 +116,27 @@ interface ServicePageTemplateProps {
 
 /**
  * One tree for all six service pages (docs/DESIGN.md 7.2): the title block,
- * what you can choose, how it goes, questions, two reviews, and the quote
- * ticket with the service's chip already checked in the server HTML beside
- * the shop sheet. The footer comes from the layout.
+ * what you can choose, how it goes (the process beside the timing panel),
+ * questions, two reviews, and the daylight sheet with the quote ticket (the
+ * service's chip already checked in the server HTML) beside the black shop
+ * panel. The footer comes from the layout.
  */
 export default function ServicePageTemplate({ spec }: ServicePageTemplateProps) {
   return (
     <>
-      <TitleBlock
-        tab={SERVICE_TEMPLATE.titleTab}
-        tabNote={spec.descriptor}
-        title={spec.h1}
-        lede={spec.lede}
-        cover={spec.cover}
-      />
+      <TitleBlock title={spec.h1} lede={spec.lede} cover={spec.cover} />
 
       <Choose spec={spec} />
 
       <section id="how-it-goes" className="section section-rule" aria-labelledby="process-title">
         <div className="container">
-          <SectionHead tab={SERVICE_TEMPLATE.processTab} title={SERVICE_TEMPLATE.processTitle} id="process-title" />
-          <div className="grid-12 mt-8">
-            <Process className="lg:col-span-6 lg:col-start-3" />
-            <TimeLedger rows={spec.timing} className="mt-8! lg:col-span-4 lg:col-start-9 lg:mt-0!" />
+          <SectionHead title={SERVICE_TEMPLATE.processTitle} id="process-title" />
+          <div className="grid-12 mt-10 lg:mt-12">
+            <Process className="lg:col-span-7" />
+            <div className="panel mt-8 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-start">
+              <p className="t-label">Timing</p>
+              <TimeLedger rows={spec.timing} className="mt-3!" />
+            </div>
           </div>
         </div>
       </section>
@@ -142,17 +145,12 @@ export default function ServicePageTemplate({ spec }: ServicePageTemplateProps) 
 
       <Reviews count={2} />
 
-      <section id="quote" className="section section-rule" aria-labelledby="quote-title">
+      <section id="quote" className="section on-white" aria-labelledby="quote-title">
         <div className="container">
-          <SectionHead
-            tab={SERVICE_TEMPLATE.quoteTab}
-            title={HOME_SECTIONS.quote.h2}
-            lede={SERVICE_TEMPLATE.quoteLede}
-            id="quote-title"
-          />
-          <div className="grid-12 mt-8">
-            <QuoteForm preset={spec.quotePreset} className="lg:col-span-6 lg:col-start-3 lg:self-start" />
-            <ShopSheet withBooking className="mt-8 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-start" />
+          <SectionHead title={SERVICE_TEMPLATE.quoteTitle(spec.name)} lede={SERVICE_TEMPLATE.quoteLede} id="quote-title" />
+          <div className="grid-12 mt-10 lg:mt-12">
+            <QuoteForm preset={spec.quotePreset} className="lg:col-span-7 lg:self-start" />
+            <ShopSheet onBlack withBooking className="mt-8 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-start" />
           </div>
         </div>
       </section>

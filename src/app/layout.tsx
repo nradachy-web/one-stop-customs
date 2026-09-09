@@ -12,9 +12,11 @@ import StickyCallBar from "@/components/layout/StickyCallBar";
 /**
  * The head gate (docs/DESIGN.md 3.1). Runs synchronously in the head before
  * any content is parsed, so the two attributes exist at first paint:
- *   data-js="on"      the visitor has JavaScript (the .js-only helpers appear)
+ *   data-js="on"      the visitor has JavaScript (the .js-only helpers appear,
+ *                     the header may start transparent over the hero)
  *   data-motion="on"  and has not asked for reduced motion (the peel may run)
- * Without JavaScript neither is set and every gated rule simply never exists.
+ * Without JavaScript neither is set and every gated rule simply never exists:
+ * the header is black from the first frame and the hero is complete.
  * Kept inline on purpose: an external file could arrive after first paint.
  */
 const HEAD_GATE =
@@ -45,10 +47,23 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F3F1EC",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
 };
+
+/**
+ * The page starts under the fixed 72px header (docs/DESIGN.md 2.4). Every
+ * page's <main> carries .header-offset (padding-top var(--nav-h)); the home
+ * page is the one exception, because its hero pads itself by --nav-h plus
+ * 16px (24px at lg) so the photo box and the transparent header share the
+ * black ground. The layout cannot read the route on a static export, so the
+ * exception is a CSS condition instead: `has-[.hero]:pt-0!` drops the offset
+ * whenever a .hero section is inside main. The ! suffix is required because
+ * .header-offset is an unlayered rule in globals.css and beats a plain
+ * utility (see the note at the top of globals.css).
+ */
+const MAIN_CLASS = "header-offset has-[.hero]:pt-0!";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -62,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SkipLink />
         <Navbar />
-        <main id="main" tabIndex={-1}>
+        <main id="main" tabIndex={-1} className={MAIN_CLASS}>
           {children}
         </main>
         <Footer />

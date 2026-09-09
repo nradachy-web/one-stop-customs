@@ -1,12 +1,11 @@
 import Link from "next/link";
-import Wordmark from "@/components/ui/Wordmark";
-import ShopSheet from "@/components/ui/ShopSheet";
-import { BRAND, CITIES, CITY_COPY, CREDIT, FOOTER_LINKS } from "@/lib/constants";
+import { BRAND, CITIES, CITY_COPY, CREDIT, CTA, FOOTER_LINKS, LOGO } from "@/lib/constants";
 import { asset } from "@/lib/asset";
+import { cn } from "@/lib/utils";
 
 const EXTERNAL = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-/** The social row at the foot of the back cover. Real links, new tab. */
+/** The bottom row: real links, new tab. Never rickywraps.com. */
 const FOLLOW = [
   { label: "Instagram", href: BRAND.social.instagram },
   { label: "TikTok", href: BRAND.social.tiktok },
@@ -25,43 +24,95 @@ function Row({ href, label }: { href: string; label: string }) {
   );
 }
 
+/** A shop row: 44px tall, the value a quiet link where it is one. */
+function ShopRow({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <li className={cn("t-small flex min-h-11 flex-col justify-center py-2!", className)}>{children}</li>;
+}
+
+/** The phone number inside a sentence gets tabular digits and never wraps. */
+function PhoneText({ label }: { label: string }) {
+  const number = BRAND.phoneDisplay;
+  if (!label.includes(number)) return <>{label}</>;
+  const [before, after] = label.split(number);
+  return (
+    <>
+      {before}
+      <span className="t-num">{number}</span>
+      {after}
+    </>
+  );
+}
+
 /**
- * The back cover (docs/DESIGN.md 5.2). The one place the mark appears, at
- * 96px, and the last rule of the sheet. Four blocks on the 12-column grid at
- * lg (the mark and the names, the shop sheet, the services, the service
- * area), stacked 40px apart under lg, then the hairline bottom row with the
- * socials at left and the exact credit at right. Black is the material here;
- * the globals swap every hairline, label and link for the ground.
+ * The footer (docs/DESIGN.md 5.2). Black with a hairline top, 80px of
+ * padding (120px at lg). Four blocks on the 12-column grid at lg: the full
+ * lockup public/logo-transparent.png at 200px (160px under lg) over the legal
+ * line and the counties; the shop as plain ledger rows (address, the seven
+ * hours rows in mono, by appointment, call or text, text, email); the nine
+ * service links; the twelve city links. Under lg the blocks stack 40px
+ * apart in that order. The bottom row carries the socials at left and
+ * exactly the credit line at right. Every path goes through asset().
  */
 export default function Footer() {
   return (
-    <footer className="on-black section section-rule">
+    <footer className="on-black section-rule py-20 lg:py-30">
       <div className="container">
         <div className="grid-12">
-          {/* 1. The mark and the names, columns 1 to 3. */}
+          {/* 1. The lockup, the legal line, the counties. Columns 1 to 3. */}
           <div className="lg:col-span-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={asset("/logo.png")}
-              alt="One Stop Customs Auto Spa mark"
-              width={96}
-              height={96}
+              className="footer-lockup"
+              src={asset(LOGO.lockup.src)}
+              width={LOGO.lockup.width}
+              height={LOGO.lockup.height}
+              alt={LOGO.lockup.alt}
               loading="lazy"
               decoding="async"
-              className="h-24 w-24"
             />
-            <div className="mt-5">
-              <Wordmark onBlack />
-            </div>
-            <p className="t-label mt-2">{BRAND.legalName}</p>
+            <p className="t-label mt-6">{BRAND.legalName}</p>
+            <p className="t-label mt-1">{BRAND.countiesLine}</p>
           </div>
 
-          {/* 2. The shop sheet, columns 4 to 6. */}
+          {/* 2. The shop. Columns 4 to 6. */}
           <div className="mt-10 lg:col-span-3 lg:mt-0">
-            <ShopSheet />
+            <p className="t-label mb-3">Shop</p>
+            <ul className="ledger">
+              <ShopRow>
+                <a href={BRAND.address.mapUrl} {...EXTERNAL} className="link-quiet">
+                  {BRAND.address.full}
+                </a>
+              </ShopRow>
+              <ShopRow className="py-3!">
+                <ul className="m-0 list-none p-0">
+                  {BRAND.hours.map((h) => (
+                    <li key={h.day} className="t-mono flex justify-between gap-3">
+                      <span>{h.day}</span>
+                      <span className={cn(h.closed && "muted")}>{h.label}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-2">{BRAND.byAppointment}</p>
+              </ShopRow>
+              <ShopRow>
+                <a href={BRAND.phoneHref} className="link-quiet">
+                  <PhoneText label={CTA.callOrText} />
+                </a>
+              </ShopRow>
+              <ShopRow>
+                <a href={BRAND.phoneSms} className="link-quiet">
+                  <PhoneText label={CTA.text} />
+                </a>
+              </ShopRow>
+              <ShopRow>
+                <a href={BRAND.emailHref} className="link-quiet break-words">
+                  {BRAND.email}
+                </a>
+              </ShopRow>
+            </ul>
           </div>
 
-          {/* 3. Services, columns 7 to 9. */}
+          {/* 3. Services. Columns 7 to 9. */}
           <nav aria-labelledby="footer-services" className="mt-10 lg:col-span-3 lg:mt-0">
             <p id="footer-services" className="t-label mb-3">
               Services
@@ -73,7 +124,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* 4. Service area, columns 10 to 12. */}
+          {/* 4. Service area. Columns 10 to 12. */}
           <nav aria-labelledby="footer-area" className="mt-10 lg:col-span-3 lg:mt-0">
             <p id="footer-area" className="t-label mb-3">
               {CITY_COPY.tab}
@@ -83,23 +134,22 @@ export default function Footer() {
                 <Row key={c.slug} href={CITY_COPY.path(c)} label={c.name} />
               ))}
             </ul>
-            <p className="t-label mt-4">{BRAND.countiesLine}</p>
           </nav>
         </div>
 
         {/* The bottom row: a hairline, the socials, the credit. */}
-        <div className="mt-12 flex flex-col gap-4 border-t border-[color:var(--hairline-on-black)] pt-4 md:flex-row md:items-center md:justify-between lg:mt-16">
+        <div className="section-rule mt-12 flex flex-col gap-4 pt-4 md:flex-row md:items-center md:justify-between lg:mt-16">
           <ul className="flex flex-wrap gap-x-6">
             {FOLLOW.map((s) => (
               <li key={s.href}>
-                <a href={s.href} {...EXTERNAL} className="link t-label inline-flex min-h-11 items-center">
+                <a href={s.href} {...EXTERNAL} className="link-quiet t-label inline-flex min-h-11 items-center">
                   {s.label}
                 </a>
               </li>
             ))}
           </ul>
           <p className="t-label">
-            <a href={CREDIT.href} {...EXTERNAL} className="link inline-flex min-h-11 items-center">
+            <a href={CREDIT.href} {...EXTERNAL} className="link-quiet inline-flex min-h-11 items-center">
               {CREDIT.text}
             </a>
           </p>

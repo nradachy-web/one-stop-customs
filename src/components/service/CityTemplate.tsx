@@ -15,16 +15,18 @@ interface CityTemplateProps {
 
 /**
  * The city page (docs/DESIGN.md 7.3): the same skeleton as a service page,
- * thin on purpose. It says the shop serves the city and how to reach it, and
- * nothing it says is invented: no drive times, no claims about the city. The
- * cover is the city's card from the fixed rotation in constants.
+ * thin on purpose. The county prints in .t-label above the h1 (a fact, not
+ * an eyebrow), the cover is the city's card from the fixed rotation in
+ * constants, then the finish row over the tier switcher, the work strip,
+ * two reviews and the daylight sheet with the ticket (no preset) beside the
+ * black shop panel. Nothing it says is invented: no drive times, no claims
+ * about the city.
  */
 export default function CityTemplate({ city }: CityTemplateProps) {
   return (
     <>
       <TitleBlock
-        tab={CITY_COPY.tab}
-        tabNote={CITY_COPY.descriptor(city)}
+        note={CITY_COPY.descriptor(city)}
         title={CITY_COPY.h1(city)}
         lede={CITY_COPY.lede(city)}
         cover={{ photoId: city.coverPhotoId, kind: "chip" }}
@@ -32,41 +34,35 @@ export default function CityTemplate({ city }: CityTemplateProps) {
 
       <section id="options" className="section section-rule" aria-labelledby="choose-title">
         <div className="container">
-          <SectionHead tab={CITY_COPY.chooseTab} title={CITY_COPY.chooseTitle} id="choose-title" />
-          <div className="grid-12 mt-8">
-            <FinishRow className="lg:col-span-10 lg:col-start-3" />
-            <TierTable className="mt-12 lg:col-span-6 lg:col-start-3" />
-          </div>
+          <SectionHead title={CITY_COPY.chooseTitle} id="choose-title" />
+          <FinishRow className="mt-10 lg:mt-12" />
+          <TierTable className="mt-12" />
         </div>
       </section>
 
       <section id="recent-work" className="section section-rule" aria-labelledby="recent-title">
         <div className="container">
-          <SectionHead tab={CITY_COPY.recentTab} title={CITY_COPY.recentTitle} id="recent-title" />
-          <div className="grid-12 mt-8">
-            <WorkStrip ids={RECENT_WORK} className="lg:col-span-10 lg:col-start-3" />
-            <p className="mt-6 lg:col-span-6 lg:col-start-3">
+          <SectionHead
+            title={CITY_COPY.recentTitle}
+            id="recent-title"
+            action={
               <Link href={HOME_SECTIONS.recent.href} className="btn btn-text">
                 {HOME_SECTIONS.recent.linkLabel(WORK.length)}
               </Link>
-            </p>
-          </div>
+            }
+          />
+          <WorkStrip ids={RECENT_WORK} className="mt-10 lg:mt-12" />
         </div>
       </section>
 
       <Reviews count={2} />
 
-      <section id="quote" className="section section-rule" aria-labelledby="quote-title">
+      <section id="quote" className="section on-white" aria-labelledby="quote-title">
         <div className="container">
-          <SectionHead
-            tab={SERVICE_TEMPLATE.quoteTab}
-            title={HOME_SECTIONS.quote.h2}
-            lede={SERVICE_TEMPLATE.quoteLede}
-            id="quote-title"
-          />
-          <div className="grid-12 mt-8">
-            <QuoteForm className="lg:col-span-6 lg:col-start-3 lg:self-start" />
-            <ShopSheet withBooking className="mt-8 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-start" />
+          <SectionHead title={HOME_SECTIONS.quote.h2} lede={SERVICE_TEMPLATE.quoteLede} id="quote-title" />
+          <div className="grid-12 mt-10 lg:mt-12">
+            <QuoteForm className="lg:col-span-7 lg:self-start" />
+            <ShopSheet onBlack withBooking className="mt-8 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-start" />
           </div>
         </div>
       </section>

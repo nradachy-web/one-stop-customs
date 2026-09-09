@@ -4,30 +4,41 @@ import { useEffect, useRef, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ActionStrip from "@/components/ui/ActionStrip";
-import { MENU_LINKS } from "@/lib/constants";
+import { BRAND, MENU, MENU_LINKS } from "@/lib/constants";
 
 const LG = "(min-width: 64rem)";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), summary, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+/** "/vinyl-wraps", "/vinyl-wraps/" and "" all compare as "/vinyl-wraps/". */
+function normalise(path: string | null): string {
+  if (!path || path === "/") return "/";
+  return path.endsWith("/") ? path : `${path}/`;
+}
+
 /**
  * The phone menu (docs/DESIGN.md 5.1): a native <details> so it opens and
- * closes with JavaScript off. The sheet is white, full width under the
- * header, with the nine MENU_LINKS as 52px ledger rows and the action strip
- * (two rows of two) as its last row.
+ * closes with JavaScript off. The summary is the outline Menu pill; the
+ * sheet (.menu-sheet) is a fixed black layer from under the header to the
+ * bottom of the screen with the nine MENU_LINKS as 64px rows in Inter Tight
+ * 800 32px (the current page in green text), then the action strip two by
+ * two, then "Call or text" over the giant phone number as a tel link, then
+ * the address and hours in small silver.
  *
- * With JavaScript: the summary reads "Close" while open, Escape closes and
- * returns focus to the summary, a route change or a tap on any link closes
- * it, the page behind the header goes inert and the body stops scrolling
- * while it is open, Tab wraps inside the header, and growing the viewport
- * past lg closes it (the element is display none there anyway).
+ * With JavaScript: the summary reads Close while open, the header gets
+ * data-open (black ground and hairline while the sheet is up), Escape closes
+ * and returns focus to the summary, a route change or a tap on any link
+ * closes it, the page behind the header goes inert and the body stops
+ * scrolling while it is open, Tab wraps inside the header, and growing the
+ * viewport past lg closes it (the element is display none there anyway).
  */
 export default function MobileMenu() {
   const ref = useRef<HTMLDetailsElement>(null);
   const summaryRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const current = normalise(pathname);
 
   // Close on route change. The effect also runs on mount, where it is a no-op.
   useEffect(() => {
@@ -40,6 +51,9 @@ export default function MobileMenu() {
     const details = ref.current;
     const header = details?.closest("header");
     if (!details || !header) return;
+
+    // The header paints black with its hairline while the sheet is up.
+    header.setAttribute("data-open", "");
 
     // Scroll lock and inert: everything outside the header is out of reach.
     const prevOverflow = document.documentElement.style.overflow;
@@ -87,6 +101,7 @@ export default function MobileMenu() {
     desktop.addEventListener("change", onDesktop);
 
     return () => {
+      header.removeAttribute("data-open");
       document.documentElement.style.overflow = prevOverflow;
       document.removeEventListener("keydown", onKeyDown);
       desktop.removeEventListener("change", onDesktop);
@@ -102,28 +117,38 @@ export default function MobileMenu() {
   return (
     <details ref={ref} className="menu lg:hidden" onToggle={(e) => setOpen(e.currentTarget.open)}>
       {/* .menu > summary is 40px unlayered; the phone tap target wants 44. */}
-      <summary ref={summaryRef} className="h-11! min-w-11 justify-center" aria-controls="mobile-menu">
-        {open ? "Close" : "Menu"}
+      <summary ref={summaryRef} className="h-11! min-w-11" aria-label={MENU.ariaLabel}>
+        {open ? MENU.close : MENU.open}
       </summary>
 
-      <div
-        id="mobile-menu"
-        className="menu-sheet max-h-[calc(100dvh-var(--nav-h))] overflow-y-auto"
-        onClick={onSheetClick}
-      >
-        <nav aria-label="Menu">
-          <ul className="ledger">
+      <div id="mobile-menu" className="menu-sheet" onClick={onSheetClick}>
+        <nav aria-label={MENU.ariaLabel}>
+          <ul className="ledger border-t-0!">
             {MENU_LINKS.map((link) => (
-              <li key={link.href} className="menu-row">
-                <Link href={link.href} className="t-small flex min-h-[52px] w-full items-center">
+              <li key={link.href} className="py-0!">
+                <Link
+                  href={link.href}
+                  aria-current={normalise(link.href) === current ? "page" : undefined}
+                  className="menu-row"
+                >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
+
         <div className="p-5">
           <ActionStrip variant="menu" />
+        </div>
+
+        <div className="px-5 pt-1 pb-10">
+          <p className="t-label">Call or text</p>
+          <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white">
+            {BRAND.phoneDisplay}
+          </a>
+          <p className="t-small muted mt-4">{BRAND.address.full}</p>
+          <p className="t-small muted mt-1">{BRAND.hoursShort}</p>
         </div>
       </div>
     </details>

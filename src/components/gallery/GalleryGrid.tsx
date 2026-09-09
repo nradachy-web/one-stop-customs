@@ -48,13 +48,17 @@ function isModified(e: MouseEvent): boolean {
 }
 
 /**
- * The gallery grid (docs/DESIGN.md 7.4): every WORK entry as a 1:1 swatch
- * card, the wide files spanning two columns at 2:1, in a dense grid with
- * explicit aspect boxes so nothing shifts as the lazy images arrive. Each
+ * The gallery grid (docs/DESIGN.md 7.4): every WORK entry as a quiet card
+ * (a 1:1 box, a 4px colour bar, no label; the lightbox shows the full strip),
+ * the wide files spanning two columns at 2:1, in a dense grid on black with
+ * explicit aspect boxes so nothing shifts as the lazy images arrive. Two
+ * columns under md, three at md, four at lg; 12px gaps, 24px at lg. Each
  * card is a link to its full-size file; that is the whole no-JavaScript
- * gallery. With JavaScript the filter row appears, filtering toggles the
- * hidden attribute on cells by their data attributes, the counter line
- * updates, and a click opens the lightbox at that photo instead of the file.
+ * gallery. With JavaScript the filter row appears (the pressed chip is white
+ * on this page, never green, because the lime and mint BMWs live here),
+ * filtering toggles the hidden attribute on cells by their data attributes,
+ * the counter line updates, and a click opens the lightbox at that photo
+ * instead of the file.
  *
  * The server render is the complete state: sixty cards, none hidden, no
  * filter row (it sits in .js-only and only shows once the head gate sets
@@ -135,7 +139,7 @@ export default function GalleryGrid({ photos, className }: GalleryGridProps) {
 
       <ul
         ref={listRef}
-        className="mt-8 grid grid-flow-dense grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6"
+        className="mt-8 grid grid-flow-dense grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 lg:gap-6"
         aria-label="Photos"
       >
         {photos.map((p, i) => {
@@ -151,7 +155,7 @@ export default function GalleryGrid({ photos, className }: GalleryGridProps) {
               className={cn("min-w-0", wide && "col-span-2")}
             >
               <a href={asset(p.src)} data-index={i} className="card-link" onClick={(e) => open(e, i)}>
-                <SwatchCard photo={p} aspect={wide ? "2/1" : "1/1"} imgClassName={crop} />
+                <SwatchCard photo={p} aspect={wide ? "2/1" : "1/1"} imgClassName={crop} quiet />
               </a>
             </li>
           );

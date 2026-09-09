@@ -14,9 +14,9 @@ import QuoteSection from "@/components/home/QuoteSection";
 export const metadata = pageMeta({ title: HOME_TITLE, description: SEO.home.description, path: "/" });
 
 /**
- * The home page (docs/DESIGN.md 7.1): ten leaves of the sample book on one
- * sheet of paper, in this order, then the footer from the layout. Every
- * section carries its tab slug as its id.
+ * The home page (docs/DESIGN.md 7.1): ten sections on black in this order,
+ * the quote sheet as the one white section, then the footer from the layout.
+ * Every section keeps its v1 id so anchors and the "Also" links still land.
  */
 export default function HomePage() {
   return (

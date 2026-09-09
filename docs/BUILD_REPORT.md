@@ -1,187 +1,107 @@
-# Build report: One Stop Customs by Ricky Wraps (integration pass, 2026-09-08)
+# Build report v2: One Stop Customs by Ricky Wraps, "Liner off" (integration pass, 2026-09-08, night)
 
-Integrator pass over the five lanes. Type check, lint and the static export all pass; every route
-in DESIGN.md section 7 exists in `out.nosync`; nine routes were screenshotted at 390x844 and
-1440x900 and every capture was looked at; five plainly broken things were fixed and the site was
-rebuilt and reshot; JavaScript-off, reduced-motion-equivalent (the peel gate) and the mobile menu
-and bar were tested. No em or en dashes anywhere in `src`, `docs` or `out`.
+Integrator pass over the six v2 lanes (E1 devices, E2 primitives, A shell, B home, C service and city, D gallery, about, contact). Type check, lint and the static export pass; every route in DESIGN.md section 7 exists in `out.nosync`; eleven routes were shot at 390x844 and 1440x900 (fold, full page, and a settled full page after scrolling so lazy images and scroll-linked motion reach their end state) and every capture was looked at; the hero was captured at 200, 700 and 1400 ms after first paint, at about 490 ms wall clock, with reduced motion, and with JavaScript off at both widths; every interactive device was driven in headless Chrome; twelve things were fixed and the site rebuilt and reshot. No em or en dashes anywhere in `src`, `docs` or `out`.
 
 ## 1. Checks
 
 - `npx tsc --noEmit -p tsconfig.json`: exit 0 (before and after the fixes).
-- `npm run lint`: exit 0, zero warnings.
-- `npm run build:local`: 29 routes, export succeeds. Turbopack prints two "Module not found: Can't
-  resolve <dynamic>" warnings from `node_modules/next/dist/server/next-server.js` on every build;
-  they come from Next itself, not `src`, and the compile succeeds.
-- Keyless build (no `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`): the honest notice renders on every page
-  that carries the ticket and no `<form>` is emitted. This is the build in `out.nosync` now.
+- `npm run lint`: one error before the pass (`react-hooks/set-state-in-effect` in `SetStepper.tsx`, a `setLive(true)` inside `useEffect`), fixed with `useSyncExternalStore` (server snapshot false, client snapshot true) so the frame becomes a focusable button only after hydration without a state write in an effect. Exit 0 after, zero warnings.
+- `npm run build:local`: 29 routes, export succeeds. Turbopack prints "Module not found: Can't resolve <dynamic>" lines from `node_modules.nosync/next/dist/server/next-server.js` on every build; they are Next's own optional requires, not `src`, and the compile succeeds.
+- Delete and orphan scan: BUILD_PLAN_V2.md marks no file delete. Every component under `src/components` is imported by at least one other file (checked by grep); nothing was deleted.
+- Keyless build (no `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`): the honest notice renders on every page that carries the ticket (home, six service pages, twelve city pages, contact) with tel, sms, mailto and Square links and no `<form>`. This is the build in `out.nosync` now.
+- Built CSS audit: 283 distinct class names appear in the built HTML; every one has a rule in `_next/static/chunks/*.css` (unlayered globals or a Tailwind utility). Zero v1 leftovers (`.tab`, `.print`, `.tiers`, `.snap-row-sm` do not appear in any page).
 
 ## 2. Routes built (`out.nosync`)
 
-26 HTML files:
+26 HTML files, 24 MB total.
 
 ```
-index.html                                   (home)
-vinyl-wraps/index.html
-commercial-wraps/index.html
-window-tinting/index.html
-paint-protection-film/index.html
-commercial-residential-tinting/index.html
-powder-coating/index.html
-gallery/index.html
-about/index.html
-contact/index.html
-thank-you/index.html                          (noindex, follow)
-404.html, 404/index.html, _not-found/index.html   (noindex)
-wraps-and-tint/{warren,detroit,royal-oak,sterling-heights,eastpointe,roseville,
-  madison-heights,hazel-park,ferndale,troy,southfield,grosse-pointe}/index.html   (12)
+index.html                                    home
+vinyl-wraps/  commercial-wraps/  window-tinting/  paint-protection-film/
+commercial-residential-tinting/  powder-coating/          (six service pages)
+gallery/  about/  contact/  thank-you/ (noindex, follow)
+wraps-and-tint/{warren, detroit, royal-oak, sterling-heights, eastpointe, roseville,
+  madison-heights, hazel-park, ferndale, troy, southfield, grosse-pointe}/   (12)
+404.html  404/index.html  _not-found/index.html
 ```
 
-Plus `sitemap.xml` (22 URLs, every one with a trailing slash), `robots.txt` (domain build:
-`Allow: /` and the sitemap line), `og-image.jpg`, `icon.png`, `apple-icon.png`, `logo.png`,
-`photos/` (60 webp), `video/wrap-timelapse.mp4`, `_next/`.
+Plus `sitemap.xml` (22 URLs, every one with a trailing slash), `robots.txt` (`Allow: /` and the sitemap line, the domain build), `og-image.jpg`, `icon.png`, `apple-icon.png`, `logo.png`, `logo-mark.png`, `logo-transparent.png`, `photos/` (60 webp), `video/wrap-timelapse.mp4`, `_next/`.
 
-Home HTML verified: h1 is exactly "The wrap and tint shop on Eight Mile in Warren."; the hero is
-a `<picture>` (wide source at `min-width: 64rem`, portrait img) with `loading="eager"`,
-`decoding="sync"`, `fetchPriority="high"`; JSON-LD in the head; zero U+2013/U+2014; no
-`rickywraps.com`; no "years", "thousands", "family owned", "award".
+Home HTML verified: exactly one `<h1>` and its text equals `HERO.headline`; the hero is a `<picture>` (side view at `min-width: 64rem`, portrait img) with `loading="eager"`, `decoding="sync"`, `fetchPriority="high"`, and it is the only priority image; exactly ten `<section>` elements (the tier cards are `<article>` now, see fixes); JSON-LD in the head with no `aggregateRating`; zero U+2013 or U+2014; no `rickywraps.com`; no "years", "thousands", "family owned", "award"; no "$" followed by a digit anywhere in `src`.
 
-## 3. Page weight
+## 3. Weight
 
-- `du -sh out.nosync`: 25 MB total. `photos/` 14 MB (60 files), `video/` 2.1 MB, `_next/` 1.5 MB
-  (16 JS files, 680 KB; one CSS file, 45 KB), `logo.png` 576 KB, `logo-source.png` 448 KB
-  (unused by the site, ships because it sits in `public/`), `icon.png` 132 KB, `og-image.jpg` 56 KB.
-- Largest single assets: `video/wrap-timelapse.mp4` 1,915 KB; `logo.png` 571 KB;
-  `photos/corvette-black-wide.webp` 437 KB; `corvette-black-rear.webp` 422 KB;
-  `durango-black-rear.webp` 402 KB; `logo-source.png` 388 KB; `corvette-black-front.webp` 370 KB;
-  `camaro-red-front.webp` 336 KB; `charger-pink.webp` 329 KB; `durango-black-red-front.webp` 320 KB.
-- HTML sizes: home 128,266 bytes; gallery 112,879; vinyl-wraps 95,199; warren 90,952;
-  window-tinting 89,787; about 61,687; contact 53,824; thank-you 50,718; 404 42,127.
-- The home page references 8 JS chunks and 20 distinct photos (all lazy except the hero pair).
+- `out.nosync` 24 MB: `photos/` 14 MB (60 files), `video/` 2.1 MB (1,915 KB mp4), `_next/static` 1.7 MB (13 JS files, 868 KB; one CSS file, 63 KB; 19 woff2 subsets, 580 KB across Inter Tight, Inter and IBM Plex Mono), `logo.png` 571 KB (JSON-LD image and icon source only, never loaded by a page), `logo-mark.png` 62 KB and `logo-transparent.png` 97 KB (see fixes: they were 321 KB and 681 KB), `icon.png` 131 KB, `og-image.jpg` 101 KB.
+- Largest photos: `corvette-black-wide.webp` 437 KB, `corvette-black-rear.webp` 422 KB, `durango-black-rear.webp` 402 KB, `corvette-black-front.webp` 370 KB, `camaro-red-front.webp` 336 KB, `charger-pink.webp` 329 KB, `durango-black-red-front.webp` 320 KB, `silverado-black.webp` 316 KB.
+- HTML: home 104 KB; gallery 111 KB; window-tinting 89 KB; warren 88 KB; vinyl-wraps 87 KB; about 60 KB; contact 52 KB; thank-you 49 KB; 404 40 KB. Each page references 8 JS chunks (about 630 KB uncompressed, Next's runtime plus the client devices).
+- Hero first load at 1440: `trx-yellow-side.webp` 215 KB; at 390: `trx-yellow-portrait.webp` 239 KB. The home page references 19 photos plus the timelapse poster, all lazy except the hero pair and the first picker frame.
 
-## 4. What each screenshot shows
+## 4. Screenshots (all in the session scratchpad, `shots-v2/`)
 
-Captures live in the session scratchpad: `scratchpad/shots/` (first pass, before fixes) and
-`scratchpad/shots2/` (after fixes), each with `slices/` cut into 1,800px (desktop) or 1,700px
-(mobile) strips for inspection. The rig reported `overflowX=false`, zero console errors and zero
-broken images on every route at both viewports, both passes.
+Rig: `~/.npm/_npx/705bc6b22212b352/shoot_ricky.mjs` (fold and full page at 390x844 mobile emulation and 1440x900 after networkidle plus 2.8 s), `shoot_ricky_settled.mjs` (the same after scrolling through the page a viewport at a time, then a full page capture from the top: this is the honest full page, because a plain full page capture leaves every lazy image below the first viewport as a blank charcoal box and every scroll-linked chip bar at its from-frame), `moments_ricky_v2.mjs` (the hero moments, reduced motion, JavaScript off), `states_ricky_v2.mjs` (the interactive states), `final_probe.mjs` (fold measurements). Files: `{route}-{mobile|desktop}-{fold|full|settled}.png` (66), `pass2/` the same after the fixes (33), `pass3/` the final fold and footer, plus `slices/` and `mont/` for review.
 
-| Page | 390x844 | 1440x900 |
-|---|---|---|
-| / | Header (lockup, bare number, Menu); h1 two lines at 44px; the portrait TRX card fully in view (card top 192, photo 348x435) with its yellow chip and "Gloss, yellow, black hood. Ram TRX / On the lot, 04/04"; the 2 by 2 strip with its top edge at 698px; the sub below the fold; the bar hidden at first paint (`bar bar-hidden`) and present after the strip scrolls away. Full page: finish snap row, escalade card, three column tint table, five pane ladder in two per row, PPF band with the clear chip, timelapse poster then the numbered process, two fleet cards, powder band, work strip with the Scroll hint, four reviews, the notice then the shop sheet, the black footer. | Header with six links, "Call or text (248) 259-1617" and the solid button; h1 two lines at 96px; the facts block (Films, Shop, Hours, Google) beside it; the five line sub; the strip at 500 to 556; the card from 590, so about 310px of truck above the fold. Peel captures: at 0.4s the white sheet is mid-slide with the 2px green seam at x 1268 and the truck revealed to its left; at 1.2s the card is complete and the label is printed. Full page: every section in DESIGN 7.1 order with its tab in the binding column. |
-| /vinyl-wraps/ | Tab "Service" plus descriptor, h1, red Charger cover 4:5, strip, lede; six finish cards as a snap row; wrap types ledger; kitchen and wall cards stacked; process; time ledger; eight FAQ rows; two reviews; notice; sheet; footer. | Title block with the cover in columns 9 to 12 aligned to the h1 top and the strip 32px under the card; the 3 by 2 finish row; "Other things we wrap" pair at 900px cap; process beside the time ledger; FAQ; reviews; the quote row. |
-| /window-tinting/ | Escalade cover, strip, lede; the tier table in three columns with "Heat rejection" whole (after the fix); tint-hands card; six panes with the slider pane and "Drag to compare"; the legal sentence once; the extras ledger with the "Also" row; process, FAQ, reviews, notice, sheet. | Table in columns 3 to 8 with the tint-hands chip card in 9 to 12; the six pane ladder across 3 to 12; the range input under the sixth pane; everything else as the template. |
-| /paint-protection-film/ | Band cover at 2:1 with the outlined empty chip labelled "Clear. Film going onto a headlight"; two ledgers stacked; the rest of the template. | Band cover across 3 to 12 at native 1600x581; the two ledgers side by side (3 to 8 and 9 to 12). |
-| /gallery/ | Title, "60 photos, all the shop's own.", the filter chips wrapping over five rows (All pressed with an ink tab, no green), "60 of 60", then two columns of 1:1 cards with the seven wide crops spanning both columns; after the fix every label is whole and the setting sits on its own row. | Filter row on one line; four columns with the wide crops spanning two at 2:1 and `grid-flow-dense` pulling later 1:1 cards up; the lime and mint BMWs in the colour group with no green mark on the page. |
-| /contact/ | Title, lede, the 2 by 2 strip, the notice, the sheet with the Book online button; no mobile bar on this page. | Strip across 3 to 12; the notice at its own height in 3 to 8 (after the fix) beside the sheet in 9 to 12. |
-| /about/ | Title, lede, Mustang card, three paragraphs, Silverado card, sheet, strip, two reviews. | Copy in 3 to 8 with the Mustang 4:5 card in 9 to 12; Silverado 4:3 in 3 to 8 beside the sheet; the strip across 3 to 12; reviews. |
-| /wraps-and-tint/warren/ | "Service area / Macomb County", h1 "Car wraps and window tint for Warren", TRX front cover, strip, lede; finish row; tier table; work strip; "See all 60 photos"; two reviews; notice; sheet. | Same skeleton at lg, table in 3 to 8 under the finish row. |
-| /thank-you/ | Centred "Got it.", lede, solid tel button, outline Square button, "Back to the gallery", the sheet; no form, no bar. | Same, centred, the sheet in a four column block. |
-| / JavaScript off | Hero portrait complete with its chip strip, ten sections present (probe: every `main section` visible, `data-js` absent, `.peel` display none, bar transform none so it is always present), the notice rendered, no filter row. | Hero wide image complete (naturalWidth 1440, visible), all ten sections visible, notice rendered; identical to the JavaScript build minus the peel. |
-| Mobile menu | White sheet under the header with nine 52px rows (Wraps, Tint, Paint protection film, Powder coating, Gallery, About, Commercial wraps, Building tint, Contact) then the 2 by 2 strip; the summary reads "Close"; Escape closes it (probe: `open` false afterwards). | n/a |
-| Mobile bar after the strip | Scrolled to 1400px: the fixed four cell bar (Call solid, Text, Book, Quote) is visible; class is `bar` with no `bar-hidden`. | n/a |
+What each shows:
 
-Capture note: Chromium's beyond-viewport full-page capture (Playwright `fullPage: true`, also
-with `animations: "disabled"`) renders compositor animations at their first keyframe, so the
-`*-desktop-full.png` files show the hero card as a white sheet with the green seam and an empty
-label even though the page is finished. Viewport captures (`*-fold.png`, `peel-1200ms.png`) and
-the DOM probe (`.peel` at `translateX(1339px)`, the visible label's `clip-path: inset(0 0% 0 0)`)
-show the real state. Lighthouse's final screenshot does not use beyond-viewport capture.
+- `home-desktop-fold`: header transparent over black, the lockup (mark 62x44) with "One Stop Customs" over "by Ricky Wraps", six nav links, the number and the green button; the h1 at 104px in two lines (191px tall, y 96 to 287); the 704x469 photo box (y 311 to 780) with the yellow TRX, its caption pill; the sub and the two by two hero strip bottom aligned beside it; the facts row with its bottom edge at 887 of 900. Everything DESIGN 5.9 asks for is on screen.
+- `home-mobile-fold`: lockup (mark 57x40) and Menu; the h1 at 44px in four lines (162px; the two rise spans each balance to two lines, the canon's accepted tradeoff versus the three lines DESIGN estimated); the 350x438 portrait box with the whole truck and the caption pill (bottom at 703 of 844); the start of the sub; the mobile bar at the bottom.
+- `home-desktop-settled` (12,077px): the finish picker with the pink Charger in the sticky frame and six hairline rows with chip pills; the tint slider pane at 60 beside the "Also" panel; pills over three tier cards with Black carbon lit; the PPF band with the clear outlined bar and two panels; the timelapse card (poster) beside the five green numbered process rows; the two fleet cards; the powder band; two set steppers with counters "01 / 04" and "01 / 03"; four review cards two by two; the white quote sheet with the notice and the black shop panel with the giant number; the footer with the 200px lockup, four columns, twelve cities and the credit line.
+- `home-mobile-settled` (15,997px): the same sections in one column; picker rows with their own 4:3 photos; the pane then the legal line then the panel then the pills and one tier card; bands at 2:1; the steppers stacked at 350x350; the sheet; the footer with the 160px lockup.
+- `vinyl_wraps-*`: chip cover (red striped Charger, 4:3 in columns 7 to 12 at lg, 4:5 under lg) beside the h1, the four doors two by two under it; the picker; the WRAP_TYPES ledger; "Other things we wrap" with the kitchen and hallway cards; How it goes with the timing panel; the accordion; two reviews; the quote sheet.
+- `window_tinting-*`: the tint cover (the black GMC Denali door glass, relabelled, see fixes) beside the h1; the slider pane in columns 1 to 7 beside the tint-hands card; the five pane ladder (Darkest to No film, clearly stepped) with the legal line once; the pills and cards; the "Also" panel in columns 1 to 6.
+- `paint_protection_film-*` and `powder_coating-*`: band covers at native aspect under the strip (1224x444 and 1224x330 at 1440; 2:1 at 390) with the clear bar and the blue bar; two panels (Clear, Matte, Colored; Front end, Full body) and the five row powder panel.
+- `commercial_wraps-*`: the pink WeDriveFor Blazer band cover; the Tesla Homes.com pair with counters 01/02 and 02/02; the FLEET_ROWS panel.
+- `gallery-*`: the filter row with All pressed in white, "60 of 60", the 4 column quiet grid (2 at 390) with 4px bars, seven two column wide crops that never break a row. `st-lightbox-1440` and `st-lightbox-390`: corvette-black-front open, the full strip beneath the photo, the round Previous and Next, the counter "27 / 60", Close focused.
+- `about-*`: the h1, the three paragraphs in columns 1 to 6, the white Mustang 4:5 card in 8 to 12, the Denali band at 2:1 across the grid (native 4:3 at 390), the shop panel beside the strip (two by two), two reviews. No white section.
+- `contact-*`: the black title section with the strip, then the white sheet with the notice and the black panel with the giant number and the green Book online button. No mobile bar.
+- `wraps_and_tint_warren-*`: "Macomb County" in a label above the h1, the TRX front cover, six finish cards three by two (stacked at 390), the pills and cards, the eight card work strip as a grid (a snap row at 390), "See all 60 photos", two reviews, the sheet.
+- `thank_you-*`: "Got it." centred, the lede, the giant number, the green "Call or text (248) 259-1617" button and the outline Book online, "Back to the gallery", the shop panel centred in five columns. No bar, noindex.
+- `st-header-scrolled-1440`: after 100px the header is black with the hairline (`data-scrolled` set). `st-menu-open-390`: nine 64px rows in Inter Tight 32px, the two by two strip, "Call or text" and the giant number; the header carries `data-open`; Escape closes and returns focus. `st-bar-hidden-390`: the bar slides away while the hero strip is at least half on screen and returns after.
+- `st-finish-hover-satin-1440` and `st-finish-focus-matte-1440`: the frame crossfades to the purple Range Rover on hover and to the black Cybertruck on keyboard focus; the row name goes white. `st-slider-0-1440` and `st-slider-92-1440`: the overlay tracks the thumb (opacity 0.92 read back). `st-tier-ceramic-1440` and `st-tier-ceramic-390`: Ceramic pressed in green; at 1440 three cards with Ceramic lit and the others at 0.72; at 390 one card. `st-stepper-frame3-1440`: the Corvette stepper on "03 / 04". `st-faq-open-1440`: the first question open, green, the plus rotated to a cross, the answer eased open. `pass2/st-timelapse-playing-1440`: the real video mounted and playing (paused false, 2.4 s in) once "Watch it happen" is on screen; no `<video>` exists before that.
+- `nojs-1440-*` and `nojs-390-*`: JavaScript off. Header black with the hairline from the first frame; the hero complete; the picker shows the pink Charger in the frame at 1440 and six photos at 390; all three tier cards with Black carbon lit; both set steppers as grids of every frame (the odd third TRX frame spans both columns at 2:1, see fixes); no filter row, no pills, no stepper controls; the notice on the sheet; the bar always present at 390. Zero broken images.
 
-## 5. What was fixed
+## 5. The load moment (1440x900, `hero-1440-{200,700,1400}ms.png`, `hero-1440-wallclock-400ms.png`, `hero-1440-reduced-0ms.png`)
 
-1. **Notice card stretched to the sheet's height** on every service page, city page and the
-   contact page (a 470px empty white box with the notice text at its top; the home page already
-   used `lg:self-start`). Added `lg:self-start` to the QuoteForm and ShopSheet placements in
-   `src/components/service/ServicePageTemplate.tsx`, `src/components/service/CityTemplate.tsx`
-   and `src/app/contact/page.tsx`. The same class also stops a keyed ticket from stretching.
-2. **Phone numbers breaking mid-number.** The 390 strip cells read "Call (248) 259-" over "1617",
-   and the footer and thank-you sheets read "Call or text (248) 259-" over "1617".
-   `src/components/ui/ActionStrip.tsx`: the `.t-mono` number span is `whitespace-nowrap`, so the
-   cell wraps to "Call" over "(248) 259-1617" (two lines inside the 52px cell).
-   `src/components/ui/ShopSheet.tsx`: a `PhoneLine` helper wraps `BRAND.phoneDisplay` inside
-   `BRAND.callOrText` in a nowrap span, so the sheet reads "Call or text" over "(248) 259-1617".
-   Nothing is typed; the strings still come from constants.
-3. **Tint table at 390 broke "Heat rejection" as "rejectio / n"** (lane C flagged it for lane E).
-   `src/app/globals.css` under md: first column 92px (was 84), cell padding 10px 6px (was 8px),
-   `overflow-wrap: break-word` (was `anywhere`). Every word in the table now stays whole down to
-   a 360px phone; the value columns still fit "Quoted per vehicle" and "About 80 percent".
-4. **Gallery chip labels at 390 crushed to one word per line** ("Gloss, / yellow, / black / hood. /
-   Ram / TRX" over six lines with the setting ellipsized to "On the lot…") because the left span
-   had `flex: 1 1 0` and the right span a 60 percent cap. `src/app/globals.css` `.chip-label`:
-   `flex-wrap: wrap`, row gap 4px, left span `flex: 1 1 auto`, right span `margin-left: auto`
-   with `max-width: 100%`. When both fit on one line nothing changes (hero, band cards, most
-   desktop cards); when they do not, the setting drops to its own right aligned row and the strip
-   grows, which DESIGN 5.4 allows ("the strip grows; the card allows it"). The left label never
-   truncates; the right still ellipsizes only when it alone exceeds the card.
-5. **Binding tab baseline** measured 2px above the h2 baseline on every section at 1440 (within
-   the 2px acceptance but not on it). `.tab` padding cap raised from `2rem` to `2.125rem`
-   (34px at 1440); re-measured 0px on all fifteen h2 sections across / and /vinyl-wraps/.
-6. `src/components/layout/Navbar.tsx`: a code comment quoted the literal phone number; it now
-   says `BRAND.callOrText`, so a grep of `src` for the number hits only constants.ts.
+Frames were taken deterministically by pausing every document-timeline animation and seeking it to the moment (the scroll-driven chip and mask animations are left alone), then once more by wall clock.
 
-Each change carries a comment naming the integration pass. No other lane file was changed; no
-copy, constants, fonts or docs (other than this report) were touched.
+- 200 ms: the charcoal liner has moved 347px to the right and its 2px green seam rides the reveal edge; the left half of the TRX is out; the headline lines, the sub and the strip are at opacity 0 and 24px down; the facts row at 0; the header transparent.
+- 700 ms: the liner at 712px (almost off the 704px box); line one settled (opacity 0.997), the sub at 0.92 and 2px from home, the strip at 0.71 and 7px down; the facts still at 0. The wall clock capture at about 490 ms shows the same picture with the headline mid rise.
+- 1400 ms: everything at opacity 1 and transform none; the liner gone; the header still transparent. Complete, as DESIGN 3.1 schedules (done by 1.22 s).
+- Reduced motion: `data-motion` is never set, the peel does not exist, the finished hero is the first frame.
+- JavaScript off: as above, complete at first paint.
 
-## 6. What remains (not fixed on purpose, taste or gates)
+## 6. Fixes made in this pass
 
-- **Hero fold at 1440x900 shows about 310px of truck**, not the "about 400px" of DESIGN 7.1 or the
-  "at least 380px" of BUILD_PLAN. Every value on the way down is per spec (header 64, padding 40,
-  h1 two lines at 96px, 24px gap, sub, 32px, strip 56, 32px, card at 590); the sub is five lines
-  in `.measure-wide` at 21px, which the design's arithmetic did not allow for. Getting to 380px
-  needs about 70px, which means shortening the hero sub copy (Nick's call, it is BRIEF copy) or
-  changing spec'd spacing. Left as specified and flagged.
-- The lime and mint BMWs never share a viewport with a green state mark on any page (checked the
-  home finish row, the city pages and the gallery, where the pressed filter tab is ink).
-- Full-page screenshot tools will show the hero sheet at frame zero (see the capture note above).
-  A one line `animationend` handler that hides the sheet would make such captures honest, but it
-  adds JavaScript to a moment DESIGN 3.1 defines in CSS only; not added.
-- Under lg the gallery's chip strips now vary in height (two or three rows for the long labels),
-  which is the allowed behaviour but reads busier than the one line strips at lg.
-- Reviews attribution prints the month ("Fadi A., on Google, November 2025"); DESIGN 5.15 says
-  "Name L., on Google". Lane E's deviation, one line to drop.
-- Before launch, per DESIGN 5.15: re-run `scripts/fetch-reviews.mjs` so `src/lib/reviews.ts`
-  and `docs/REVIEWS.json` agree (Fadi A. is in the generated file, not the JSON).
-- Gates for Nick, unchanged: the Web3Forms key (then one real submission he confirms in the
-  inbox, since Web3Forms returns success for dead keys), the domain cutover, Ricky's confirmation
-  of the address, Royal Oak, the tint warranty terms and stocked shades, the readable plates on
-  rangerover-purple, corvette-black-rear and chrysler300-black-side, and a One Stop Customs
-  domain (SITE_URL stays rickywrapsllc.com; regenerate `og-image.jpg` with `scripts/make-og.py`
-  if the shop line wording changes).
-- Lighthouse on the GitHub Pages preview (LCP under 2.5s mobile, CLS 0) is still to run; if LCP
-  is over, DESIGN 3.1 says shorten the peel to 480ms first.
-- `public/logo-source.png` (448 KB) ships in `out/` but nothing references it; harmless, could be
-  removed from `public/` to save the bytes.
-- `/commercial-wraps/`, `/commercial-residential-tinting/`, `/powder-coating/` and the eleven
-  other city pages were built and grepped but not screenshotted in this pass (the task's list
-  covered nine routes). They render from the same templates as the pages that were.
+1. `SetStepper.tsx`: the lint error (setState in an effect) replaced by `useSyncExternalStore`; same behaviour, no cascading render.
+2. `constants.ts`, two mislabelled photos, both checked in the files: `escalade-black-window.webp` (the tint page cover and the tint page card) shows a black GMC pickup with a DENALI fender badge, not a Cadillac Escalade; `silverado-black.webp` (the About band, the gallery) shows DENALI door badging and GMC wheel caps, not a Chevy Silverado. Labels and alts now read "Tinted glass. GMC Denali" and "Gloss, black. GMC Denali" (the vocabulary the two `denali-black-*` entries already use). The ids and file names are unchanged; DESIGN.md section 8 and PHOTOS.md still carry the old vehicle names in their tables (design lead to update).
+3. `globals.css`: the black shop panel inside the white quote sheet inherited the sheet's light variants: `.t-label` and `.muted` were steel (#5B6068) on black (3.1:1, a contrast failure) and the ledger hairlines were `rgba(17,17,17,0.12)` on black (invisible). Added `.on-white .on-black` re-declarations for muted, labels, bylines, ledgers, links, text buttons, outline buttons and strip cells. Read back on /contact/: label ash, muted silver, hairlines white at 12 percent.
+4. `globals.css`: `.on-black.panel { background: black }` (lane E2's request); `ShopSheet` drops its `bg-black!` utility.
+5. `globals.css`: `.strip-hero` under md now hides cells 2 and 3 (Text, Book online) and keeps Call and Get a quote, as DESIGN 4.6 says; the old `:nth-child(n + 3)` selector hid Get a quote too and ActionStrip was forcing it back with utilities.
+6. `globals.css`: the band settle (`mask-settle`) now animates `.card-photo` inside the card, not the card, so the chip label under the PPF, powder and About bands is no longer clipped ("ar. Film going onto a headlight" and "ss, black" in the first captures) while the band enters; the keyframes drop the `round` since the figure already clips its corners.
+7. `globals.css`: `.hero-grid` places `.hero-copy` and `.hero-media` on row 2 at lg (Hero.tsx's `lg:row-start-2` utilities removed; the request comment retired).
+8. `globals.css`: `.panel > .ledger > :last-child { border-bottom: 0 }` so the timing panel, the tint "Also" panel, the fleet panel and the shop panel end at their padding rather than at a hairline hanging above it (lane C's request).
+9. `globals.css`: with JavaScript off, a set with an odd number of frames (the three frame TRX set) left an empty charcoal cell in its two column grid; the odd last frame now spans both columns at 2:1 (the whole truck).
+10. `TierTable.tsx`: the three tier cards are `<article>` elements, so the home page has exactly ten sections again (13 before).
+11. `FinishPicker.tsx` gains `seeLink?: boolean` (default true); `Choose.tsx` passes `false` on /vinyl-wraps/ so the wraps page no longer links to itself from the last picker row (lane C's request).
+12. `thank-you/page.tsx`: the green button read "Call or text  (248) 259-1617" with a visible double gap, because the label was three flex items inside the 10px-gap button; it is one span now. `about/page.tsx`: the action strip beside the shop panel is capped at 496px so its four doors wrap two by two (Call and Text over Book online and Get a quote) instead of three and one.
+13. `public/logo-mark.png` and `public/logo-transparent.png` were 321 KB and 681 KB (34k and 56k colours) for a mark drawn at 62x44 on every page and a lockup at 200px; both quantized to 256 colours with alpha at the same pixel size (897x633 and 1024x1024): 62 KB and 97 KB, no visible difference at 3x header scale (compare images in the scratchpad, originals kept in `scratchpad/logo-orig/`).
+14. Lane request comments that had landed were retired in `ActionStrip.tsx`, `Wordmark.tsx`, `SectionHead.tsx` (now typed straight from `types.ts`), `ServicePageTemplate.tsx`, `ShopSheet.tsx` and `Hero.tsx`.
 
-## 7. Commands used
+## 7. Creative director's pass
 
-```
-cd /Users/modernapex/Desktop/ricky-wraps
-npx tsc --noEmit -p tsconfig.json
-npm run lint
-npm run build:local 2>&1 | tail -80
-find out.nosync -name "*.html" | sort
-grep -o "<loc>[^<]*</loc>" out.nosync/sitemap.xml | wc -l          # 22
-grep -rl $'\xe2\x80\x94\|\xe2\x80\x93' out.nosync src docs            # nothing
-grep -rn "259-1617\|13417\|48089\|10 am\|rickwraps101\|\$[0-9]" src | grep -v "lib/constants.ts\|lib/reviews.ts"
+What the build gets right on first load: black ground, one green, the logo in the header on every page, Inter Tight at 104px holding two lines across the content width, a 704px cover that peels with a real seam, the copy rising in beats, the whole truck above the fold on a phone, cars as the colour, a real timelapse that only moves when you reach it, pills and cards instead of a table, round stepper controls, a giant phone number on a black panel inside the one white sheet, and a footer with the full lockup. Every device answers an action and nothing waits for scroll.
 
-(python3 -m http.server 4173 --directory out.nosync > /dev/null 2>&1 &)
-cd /Users/modernapex/.npm/_npx/705bc6b22212b352
-node shoot_ricky.mjs http://localhost:4173 <scratchpad>/shots "/,/vinyl-wraps/,/window-tinting/,/paint-protection-film/,/gallery/,/contact/,/about/,/wraps-and-tint/warren/,/thank-you/"
-node shoot_ricky2.mjs http://localhost:4173 <scratchpad>/shots2 "<same paths>"
-    # shoot_ricky.mjs plus: scrolls the page before the full capture so lazy images load,
-    # probes the hero (.peel transform, hero img currentSrc/complete, strip top, bar class),
-    # lists broken images, captures fullPage with animations: "disabled"
-node measure_tab.mjs        # tab baseline versus heading first-line baseline at 1440
-node print_probe.mjs        # clip-path of both hero .print spans at 1.5s
-node nojs_ricky.mjs http://localhost:4173 <scratchpad>/shots2
-    # javaScriptEnabled: false at 1440x900 and 390x844 (fold + full + DOM probe),
-    # then JS on: hero at 0.4s and 1.2s, mobile menu open + Escape, bar after scrolling past the strip
-python3 (PIL) slices every *-full.png into 1800px / 1700px strips under shots*/slices/
-pkill -f "http.server 4173"
-```
+What still keeps it from beautiful, and what was done:
 
-`<scratchpad>` is `/private/tmp/claude-501/-Users-modernapex/85f8856a-49da-45a8-b506-def09dca5acb/scratchpad`.
+- Fixed above: the invisible hairlines and grey-on-black labels in the shop panel on the sheet; the clipped labels under the bands; the wrong vehicles in two captions; the self link on the wraps page; the lonely fourth door on About; the double gap in the thank-you button; the empty stepper cell without JavaScript.
+- Left as canon: at 1440 the sub and doors sit bottom aligned to the photo box, leaving about 200px of black above them in columns 1 to 5. It reads as air rather than a hole, and DESIGN 5.9 asks for it. At 390 the h1 wraps to four lines because the two rise spans each balance; the truck is still whole above the fold.
+- Left, worth a look by the design lead: the four home review cards stretch to the tallest in each row, so the short Donielle H. quote sits over 300px of empty charcoal beside the long Ali J. quote (pairing the cards by length, or `align-items: start`, would fix it; not in canon). The service "What you can choose" sections that end in a single panel or ledger in columns 1 to 6 (tint's "Also", the wrap types, the powder panel) leave the right half of the grid empty at 1440; DESIGN places them there on purpose. The mobile bar covers the caption of whatever card sits at the bottom of a phone screen (expected for a fixed bar).
+
+## 8. What remains (gates, not build faults)
+
+- DESIGN.md section 8 and PHOTOS.md still describe `escalade-black-window.webp` as a Cadillac Escalade and `silverado-black.webp` as a Chevy Silverado; both files are a black GMC Denali pickup. Update the docs (and, if wanted, rename the ids and files) before launch.
+- `ABOUT.paragraphs[0]` names Carlton twice ("Carlton Spencer, known as Ricky" and the quoted "My name is Carlton"); the "Carlton named once" acceptance needs a copy decision.
+- `reviews.ts` versus `docs/REVIEWS.json`: Fadi A. is in the generated file but not the JSON; reconcile with the fetch script before launch.
+- Readable plates on `rangerover-purple`, `corvette-black-rear` and `chrysler300-black-side`: Nick decides; nothing was blurred or cropped.
+- Web3Forms key: the export is keyless and shows the notice; a placeholder-key build (lane C verified the presets) is the one to ship once the key exists.
+- Lighthouse on the GitHub Pages preview (LCP under 2.5 s mobile, CLS 0) and the h1 on a Windows machine: not possible from this pass; if LCP misses, `--peel-ms` goes 800 to 560 first.
+- The lane screenshots and rig scripts live in the session scratchpad and are not part of the repo.
