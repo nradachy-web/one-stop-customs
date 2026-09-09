@@ -1,3 +1,4 @@
+import Ground from "@/components/ui/Ground";
 import SectionHead from "@/components/ui/SectionHead";
 import { REVIEWS } from "@/lib/reviews";
 import { HOME_SECTIONS } from "@/lib/constants";
@@ -16,7 +17,9 @@ interface ReviewsProps {
  * it came from Google. Charcoal cards, two columns from md, the quote in
  * white lede type and the attribution pinned to the bottom. No stars, no
  * photos, nothing in JSON-LD. The as-of line under the heading is one link
- * to the listing so the figure can always be checked.
+ * to the listing so the figure can always be checked. The grid sits on a
+ * carbon mat (docs/DESIGN.md 10.5, reviewsMat); the cards keep their own
+ * charcoal and the as-of link stays on black above the mat.
  *
  * `tab` is passed for the v1 SectionHead signature and renders nothing in v2.
  */
@@ -34,18 +37,21 @@ export default function Reviews({ count, className }: ReviewsProps) {
             </a>
           </p>
         </SectionHead>
-        <ul role="list" className="reviews-grid mt-10 lg:mt-12">
-          {items.map((r) => (
-            <li key={`${r.name}-${r.when}`} className="review">
-              <blockquote cite={REVIEWS.url}>
-                <p className="t-lede">{r.text}</p>
-              </blockquote>
-              <p className="review-meta">
-                {copy.attribution(r.name)}, {r.when}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <div className="ground ground-mat mt-10 lg:mt-12">
+          <Ground id="reviewsMat" />
+          <ul role="list" className="reviews-grid">
+            {items.map((r) => (
+              <li key={`${r.name}-${r.when}`} className="review">
+                <blockquote cite={REVIEWS.url}>
+                  <p className="t-lede">{r.text}</p>
+                </blockquote>
+                <p className="review-meta">
+                  {copy.attribution(r.name)}, {r.when}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

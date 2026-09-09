@@ -50,7 +50,7 @@ export interface WorkPhoto {
   position?: string;
 }
 
-export type CardAspect = "4/5" | "4/3" | "1/1" | "2/1" | "9/16" | "native";
+export type CardAspect = "4/5" | "4/3" | "1/1" | "2/1" | "16/9" | "9/16" | "native";
 
 export type DoorId = "call" | "text" | "book" | "quote";
 export interface Door {
@@ -782,7 +782,8 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
       "In-house graphic design",
       "Wrap removal",
     ],
-    cover: { photoId: "charger-red-stripes", kind: "chip" },
+    /** A chip cover whose photo has a living photo (LIVING_BY_PHOTO) renders as that clip at 16:9 (docs/DESIGN.md 10.5). Fallback if Nick pulls the plate: charger-red-stripes. */
+    cover: { photoId: "rangerover-purple", kind: "chip" },
     choose: {
       kind: "finishes",
       note: FINISH_NOTE,
@@ -1218,3 +1219,245 @@ export const SHOP_SHEET = {
   book: "Book online",
   follow: "Follow",
 } as const;
+
+// ---------------- AI grounds and living photos (docs/DESIGN.md 10, docs/ASSETS_AI.md) ----------------
+// Added by the design lead, 2026-09-09. Two kinds of generated media, two rules:
+//
+// 1. Grounds (public/ai/*.webp) are decoration only: textured grounds behind a
+//    section head, a mat under a device, the back of a panel, the footer's
+//    ceiling. They are never presented as the shop, its bay, its cars or its
+//    work; never captioned; never in the gallery; never a service cover in
+//    place of a real photo; never in JSON-LD or the OG image. Alt is always
+//    empty and the element is aria-hidden. Copy that sits directly on a
+//    ground keeps the ground at 0.4 or lower; ash labels never sit on a
+//    ground at all (they sit on the masked-off black or on a panel).
+// 2. Living photos (public/video/live-*.mp4) are Veo clips seeded with the
+//    owner's own photos. Each keeps the caption of the WORK entry it came
+//    from and plays muted through Loop.tsx: poster first, on screen only,
+//    preload none below the fold, nothing at all under reduced motion or
+//    data saver.
+//
+// Every src below goes through asset() at the point of use. Nothing here is
+// a fact about the shop.
+
+export type AiAssetId =
+  | "satinBlack"
+  | "satinBlackTall"
+  | "swatchFan"
+  | "windowFilmRoll"
+  | "squeegee"
+  | "lightStreaks"
+  | "carbon"
+  | "chromePanel"
+  | "powderCloud"
+  | "hexLights"
+  | "greenPeel"
+  | "greenFilm"
+  | "satinPurple";
+
+export interface AiAsset {
+  id: AiAssetId;
+  /** Under /public. */
+  src: string;
+  width: number;
+  height: number;
+  /** Always empty: decorative. */
+  alt: "";
+  /** File size, for the weight budget (each ground stays under 350 KB). */
+  kb: number;
+  /** What the picture is, for the person placing it. Never printed. */
+  what: string;
+}
+
+const A = "/ai/";
+
+export const AI_ASSETS: Readonly<Record<AiAssetId, AiAsset>> = {
+  satinBlack: { id: "satinBlack", src: `${A}bg-satin-black-vinyl.webp`, width: 1376, height: 768, alt: "", kb: 28, what: "Satin black vinyl in soft folds, one long highlight, a faint green rim on the fold edge. The hero material." },
+  satinBlackTall: { id: "satinBlackTall", src: `${A}bg-satin-black-vinyl-tall.webp`, width: 768, height: 1376, alt: "", kb: 20, what: "The same satin black fold, portrait, for phone grounds and tall panels." },
+  swatchFan: { id: "swatchFan", src: `${A}bg-swatch-fan.webp`, width: 1376, height: 768, alt: "", kb: 21, what: "A fan of vinyl colour chips on black glass: pink, purple, black, yellow, rose gold, red, mint." },
+  windowFilmRoll: { id: "windowFilmRoll", src: `${A}bg-window-film-roll.webp`, width: 1376, height: 768, alt: "", kb: 29, what: "A roll of dark window film unrolled on a black bench." },
+  squeegee: { id: "squeegee", src: `${A}bg-squeegee-macro.webp`, width: 1376, height: 768, alt: "", kb: 33, what: "A felt edged squeegee pressing gloss black film onto a curved panel." },
+  lightStreaks: { id: "lightStreaks", src: `${A}bg-light-streaks.webp`, width: 1376, height: 768, alt: "", kb: 42, what: "Long exposure white and pale green light streaks on a wet black floor." },
+  carbon: { id: "carbon", src: `${A}bg-carbon-weave.webp`, width: 1376, height: 768, alt: "", kb: 51, what: "Twill carbon fibre weave, matte, very dark. The panel material." },
+  chromePanel: { id: "chromePanel", src: `${A}bg-chrome-panel.webp`, width: 1376, height: 768, alt: "", kb: 16, what: "A gloss black curved panel reflecting one light bar." },
+  powderCloud: { id: "powderCloud", src: `${A}bg-powder-cloud.webp`, width: 1376, height: 768, alt: "", kb: 82, what: "A cloud of blue and green powder in a beam of light on black." },
+  hexLights: { id: "hexLights", src: `${A}bg-hex-lights.webp`, width: 1376, height: 768, alt: "", kb: 83, what: "A ceiling of white hexagonal LED panels in an empty black bay, looking up. Never captioned as the shop." },
+  greenPeel: { id: "greenPeel", src: `${A}bg-gloss-green-peel.webp`, width: 1376, height: 768, alt: "", kb: 14, what: "A sheet of gloss green vinyl lifting off its white release liner at one corner." },
+  greenFilm: { id: "greenFilm", src: `${A}bg-green-film-macro.webp`, width: 1376, height: 768, alt: "", kb: 13, what: "Gloss green film over a curved panel, one soft highlight. The one green ground; never beside the lime or mint BMW photos." },
+  satinPurple: { id: "satinPurple", src: `${A}bg-satin-purple-macro.webp`, width: 768, height: 1376, alt: "", kb: 17, what: "Satin purple vinyl over a curved panel, portrait." },
+} as const;
+
+/**
+ * Where a ground goes and how it is drawn. One preset per placement so no
+ * lane invents an opacity or a crop; Ground.tsx (src/components/ui) maps the
+ * fields onto the CSS variables globals.css reads (docs/DESIGN.md 10.3):
+ *   opacity   --ground-opacity   the whole layer, after the mask
+ *   position  --ground-pos       object-position of the image
+ *   fade      --gl --gr --gt --gb  where the layer is opaque; outside the span it
+ *             fades to nothing at that edge (left "40%" means transparent at
+ *             the left edge, fully drawn from 40 percent of the width onward;
+ *             bottom "60%" means fully drawn to 60 percent of the height, then
+ *             gone by the bottom edge)
+ *   height    --ground-h         caps the layer so a 1376 wide file never has to
+ *             cover a 1400px tall section (it would blur); the layer hangs from
+ *             the top of the host, or from the bottom when anchor is "bottom"
+ *   tall      a portrait file for screens under lg, through a <picture> source
+ *   drift     the ambient 24 s drift on the image (transform only, gated on
+ *             html[data-motion="on"], off under reduced motion and JavaScript off)
+ */
+export type GroundId =
+  | "hero"
+  | "finishesMat"
+  | "finishesHead"
+  | "tintPanel"
+  | "ppf"
+  | "watch"
+  | "fleetMat"
+  | "powder"
+  | "recentWork"
+  | "reviewsMat"
+  | "shopPanel"
+  | "footer"
+  | "lightbox"
+  | "menuSheet"
+  | "gallery"
+  | "about"
+  | "contact"
+  | "thankYou"
+  | "notFound"
+  | "titleWraps"
+  | "titleCommercial"
+  | "titleTint"
+  | "titlePpf"
+  | "titleBuildings"
+  | "titlePowder"
+  | "titleCity"
+  | "process";
+
+export interface GroundFade {
+  /** Where the left fade starts (default 0%); the layer is transparent before it and opaque from `left`. */
+  leftFrom?: string;
+  left?: string;
+  right?: string;
+  /** Where the top fade starts (default 0%); transparent above it and opaque from `top`. */
+  topFrom?: string;
+  top?: string;
+  bottom?: string;
+}
+
+export interface GroundSpec {
+  asset: AiAssetId;
+  tall?: AiAssetId;
+  opacity: number;
+  position: string;
+  fade?: GroundFade;
+  height?: string;
+  anchor?: "top" | "bottom";
+  drift?: boolean;
+  driftSeconds?: number;
+  /** Mirror the file left to right (a material whose subject sits on the wrong side for its placement). */
+  flip?: boolean;
+  /** Overrides under lg (opacity, position, height; `fade` replaces the whole fade). */
+  small?: { opacity?: number; position?: string; fade?: GroundFade; height?: string };
+}
+
+export const GROUNDS: Readonly<Record<GroundId, GroundSpec>> = {
+  // Home
+  hero: { asset: "satinBlack", tall: "satinBlackTall", opacity: 0.32, position: "70% 35%", fade: { left: "38%", bottom: "72%" }, drift: true },
+  finishesMat: { asset: "swatchFan", opacity: 0.55, position: "50% 62%" },
+  finishesHead: { asset: "swatchFan", opacity: 0.22, position: "100% 40%", fade: { left: "40%", bottom: "55%" }, height: "420px" },
+  tintPanel: { asset: "windowFilmRoll", opacity: 0.4, position: "28% 100%", fade: { top: "52%" }, anchor: "bottom" },
+  ppf: { asset: "squeegee", opacity: 0.34, position: "100% 0%", fade: { left: "45%", bottom: "60%" }, height: "560px" },
+  watch: { asset: "lightStreaks", opacity: 0.3, position: "100% 100%", fade: { left: "30%", top: "40%" }, height: "620px", anchor: "bottom" },
+  fleetMat: { asset: "carbon", opacity: 0.5, position: "50% 50%" },
+  powder: { asset: "powderCloud", opacity: 0.5, position: "100% 0%", fade: { left: "30%", bottom: "65%" }, height: "640px", drift: true },
+  recentWork: { asset: "chromePanel", opacity: 0.4, position: "100% 0%", fade: { left: "45%", bottom: "55%" }, height: "520px" },
+  reviewsMat: { asset: "carbon", opacity: 0.45, position: "50% 50%" },
+  shopPanel: { asset: "carbon", opacity: 0.32, position: "50% 100%", fade: { top: "30%" }, height: "60%", anchor: "bottom" },
+  footer: { asset: "hexLights", opacity: 0.28, position: "50% 0%", fade: { bottom: "40%" }, height: "clamp(180px, 20vw, 288px)", drift: true, driftSeconds: 36 },
+  // Shell
+  lightbox: { asset: "satinBlack", tall: "satinBlackTall", opacity: 0.24, position: "50% 50%", drift: true },
+  menuSheet: { asset: "satinBlackTall", opacity: 0.22, position: "50% 100%", fade: { top: "45%" }, height: "60%", anchor: "bottom" },
+  // Pages
+  gallery: { asset: "swatchFan", opacity: 0.26, position: "100% 30%", fade: { left: "40%", bottom: "60%" }, height: "520px" },
+  about: { asset: "hexLights", opacity: 0.3, position: "100% 0%", fade: { leftFrom: "50%", left: "70%", bottom: "55%" }, height: "560px", small: { opacity: 0.22, height: "440px", fade: { bottom: "40%" } } },
+  contact: { asset: "hexLights", opacity: 0.3, position: "100% 0%", fade: { leftFrom: "50%", left: "70%", bottom: "55%" }, height: "520px", small: { opacity: 0.22, height: "440px", fade: { bottom: "40%" } } },
+  thankYou: { asset: "greenFilm", opacity: 0.3, position: "50% 40%", fade: { bottom: "55%" }, height: "640px", drift: true },
+  notFound: { asset: "greenPeel", opacity: 0.3, position: "50% 45%", fade: { bottom: "55%" }, height: "640px", drift: true },
+  // Service and city title blocks, and the process on service pages
+  titleWraps: { asset: "satinPurple", opacity: 0.36, position: "60% 40%", fade: { left: "45%", bottom: "70%" } },
+  titleCommercial: { asset: "chromePanel", opacity: 0.4, position: "100% 20%", fade: { left: "50%", bottom: "60%" }, height: "520px" },
+  // The roll lies in the lower left under the actions (the cover card at right is solid and would hide it); the top fade starts below the lede.
+  titleTint: { asset: "windowFilmRoll", opacity: 0.36, position: "0% 100%", fade: { topFrom: "45%", top: "62%", right: "60%" }, small: { opacity: 0.3 } },
+  titlePpf: { asset: "squeegee", opacity: 0.36, position: "100% 0%", fade: { left: "45%", bottom: "65%" }, height: "520px" },
+  titleBuildings: { asset: "windowFilmRoll", opacity: 0.3, position: "100% 40%", fade: { left: "50%", bottom: "65%" }, height: "520px", flip: true },
+  titlePowder: { asset: "powderCloud", opacity: 0.5, position: "100% 0%", fade: { left: "35%", bottom: "65%" }, height: "560px", drift: true },
+  titleCity: { asset: "satinBlack", tall: "satinBlackTall", opacity: 0.3, position: "70% 35%", fade: { left: "40%", bottom: "70%" } },
+  process: { asset: "lightStreaks", opacity: 0.3, position: "0% 100%", fade: { right: "55%", top: "45%" }, height: "560px", anchor: "bottom" },
+} as const;
+
+/**
+ * A living photo: one of the owner's own photos with a short muted clip made
+ * from it. The caption (chip, label, setting, alt) is read from the WORK
+ * entry it came from and never retyped, so the card under a living photo
+ * says exactly what the still said. The poster is the clip's own first frame
+ * (a 16:9 crop of the original), so a living placement uses a 16:9 box.
+ */
+export interface LivingPhoto {
+  id: string;
+  /** The WORK entry the clip was made from. */
+  photoId: string;
+  /** The mp4 under /public/video. */
+  src: string;
+  /** The clip's first frame under /public/photos; the real content and the LCP candidate for its box. */
+  poster: string;
+  width: number;
+  height: number;
+  alt: string;
+  chip: ChipHex;
+  label: string;
+  setting: string;
+  /** Kept for object-position parity with the still; the poster is centred. */
+  position?: string;
+  seconds: number;
+  /** Clip size, for the weight budget (each clip stays under 2.5 MB). */
+  mb: number;
+}
+
+const V = "/video/";
+
+function living(photoId: string, file: string, seconds: number, mb: number): LivingPhoto {
+  const p = photo(photoId);
+  return {
+    id: file,
+    photoId,
+    src: `${V}${file}.mp4`,
+    poster: `${P}${file}-poster.webp`,
+    width: 1280,
+    height: 720,
+    alt: p.alt,
+    chip: p.chip,
+    label: p.label,
+    setting: p.setting,
+    seconds,
+    mb,
+  };
+}
+
+/** The three living photos, keyed by where they go (docs/DESIGN.md 10.5). */
+export const LIVING = {
+  /** The satin purple Range Rover inside the shop: the vinyl wraps page cover. */
+  rangerover: living("rangerover-purple", "live-rangerover-purple", 8, 1.1),
+  /** The gloss pink Charger on the street: the Gloss slot of the finish picker at lg, and the Detroit city cover. */
+  charger: living("charger-pink", "live-charger-pink", 8, 1.8),
+  /** The wheel in the powder booth: the home powder coating section, in place of the still band. */
+  powder: living("powdercoat-wheel-spray", "live-powdercoat-wheel-spray", 8, 0.7),
+} as const;
+
+/** Lookup by the still's WORK id, for a device that holds stills and swaps one for its clip (the finish picker). */
+export const LIVING_BY_PHOTO: Readonly<Record<string, LivingPhoto>> = Object.fromEntries(
+  Object.values(LIVING).map((l) => [l.photoId, l]),
+);
+
+/** The one line printed under a standalone living photo (not inside the picker), in .t-label. True and short. */
+export const LIVING_NOTE = "From the shop's own photo.";

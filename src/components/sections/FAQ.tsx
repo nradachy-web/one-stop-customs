@@ -1,5 +1,5 @@
 import SectionHead from "@/components/ui/SectionHead";
-import { SERVICE_TEMPLATE } from "@/lib/constants";
+import { BRAND, SERVICE_TEMPLATE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface FAQProps {
@@ -28,6 +28,11 @@ function Plus() {
  * animate height to auto (::details-content with interpolate-size, Chrome
  * 129 and later) and opens instantly everywhere else and under reduced
  * motion. All in globals.css; the component is markup only.
+ *
+ * At lg the accordion keeps columns 1 to 8 and columns 9 to 12 carry the
+ * phone aside (docs/DESIGN.md 10.7): "Call or text", the number as one tel
+ * link in .t-phone, then the by-appointment line. The aside's top aligns
+ * with the first question; under lg it follows the last answer.
  */
 export default function FAQ({ items, tab = SERVICE_TEMPLATE.faqTab, title = SERVICE_TEMPLATE.faqTitle, className }: FAQProps) {
   return (
@@ -47,6 +52,15 @@ export default function FAQ({ items, tab = SERVICE_TEMPLATE.faqTab, title = SERV
                 </div>
               </details>
             ))}
+          </div>
+          {/* lg:mt-0: the ledger keeps margin 0 from globals (its top rule sits under the heading), so the aside starts level with it. */}
+          <div className="mt-10 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-start">
+            <p className="t-label">Call or text</p>
+            {/* Sized to its four columns at lg (the full .t-phone clamp overruns a 392px cell); the shop panel keeps the full size. */}
+            <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white lg:text-[clamp(2rem,3.3vw,3rem)]!">
+              {BRAND.phoneDisplay}
+            </a>
+            <p className="t-small muted mt-4">{BRAND.byAppointmentLine}</p>
           </div>
         </div>
       </div>

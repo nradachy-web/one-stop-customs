@@ -27,6 +27,12 @@ export type {
   ServiceTag,
   FinishTag,
   ColourTag,
+  LivingPhoto,
+  AiAssetId,
+  AiAsset,
+  GroundId,
+  GroundSpec,
+  GroundFade,
 } from "@/lib/constants";
 
 export type { Review } from "@/lib/reviews";

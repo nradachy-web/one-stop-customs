@@ -3,13 +3,17 @@ import Link from "next/link";
 import { asset } from "@/lib/asset";
 import { cn } from "@/lib/utils";
 import Photo from "@/components/ui/Photo";
+import Loop from "@/components/ui/Loop";
 import ChipStrip from "@/components/devices/ChipStrip";
-import { TIMELAPSE, type CardAspect, type WorkPhoto } from "@/lib/constants";
+import { TIMELAPSE, type CardAspect, type LivingPhoto, type WorkPhoto } from "@/lib/constants";
 
-type CardPhoto = WorkPhoto | typeof TIMELAPSE;
+type CardPhoto = WorkPhoto | LivingPhoto | typeof TIMELAPSE;
 
 export interface SwatchCardProps {
-  /** A WORK entry (via photo(id) or WORK_BY_ID) or TIMELAPSE. Never a filename. */
+  /**
+   * A WORK entry (via photo(id) or WORK_BY_ID), a living photo from LIVING
+   * (docs/DESIGN.md 10.5) or TIMELAPSE. Never a filename.
+   */
   photo: CardPhoto;
   /** The photo box's aspect. "native" uses the photo's own width and height. */
   aspect: CardAspect;
@@ -34,7 +38,10 @@ export interface SwatchCardProps {
   href?: string;
   /** Opens href in a new tab with rel noopener. Implied for http(s) hrefs. */
   external?: boolean;
-  /** Replaces the Photo inside the box (Timelapse drops Loop in here). */
+  /**
+   * Replaces the media inside the box (Timelapse drops its own Loop in here).
+   * A living photo needs nothing: the card renders Loop itself.
+   */
   media?: ReactNode;
   /** Gallery cells: a 4px bar and no label (.card-quiet). The lightbox shows the full strip. */
   quiet?: boolean;
@@ -57,7 +64,8 @@ function positionOf(p: CardPhoto): string {
   return ("position" in p && p.position) || DEFAULT_POSITION;
 }
 
-function isTimelapse(p: CardPhoto): p is typeof TIMELAPSE {
+/** A photo that comes with a clip (a living photo or the timelapse): the still shown is its poster. */
+function hasClip(p: CardPhoto): p is LivingPhoto | typeof TIMELAPSE {
   return "poster" in p;
 }
 
@@ -77,6 +85,12 @@ function isRoute(href: string): boolean {
  * the browser supports view timelines the bar grows in from the left as the
  * card enters the viewport; everywhere else, with reduced motion and with
  * JavaScript off, the card is simply complete at first paint.
+ *
+ * A living photo (docs/DESIGN.md 10.1 rule 2) renders through Loop: the
+ * poster is the real content and the LCP candidate for its box; the muted
+ * clip fades in over it only on screen, and never mounts under reduced
+ * motion or data saver. The strip beneath keeps the caption of the WORK
+ * entry the clip was made from, read from constants, never retyped.
  */
 export default function SwatchCard({
   photo,
@@ -92,8 +106,8 @@ export default function SwatchCard({
   className,
   imgClassName,
 }: SwatchCardProps) {
-  const timelapse = isTimelapse(photo);
-  const src = timelapse ? photo.poster : photo.src;
+  const clip = hasClip(photo);
+  const src = clip ? photo.poster : photo.src;
   const position = positionOf(photo);
 
   // The photo box. --aspect is the lg (or only) ratio; --aspect-sm the small-screen one.
@@ -114,6 +128,20 @@ export default function SwatchCard({
   let picture: ReactNode;
   if (media !== undefined) {
     picture = media;
+  } else if (clip) {
+    picture = (
+      <Loop
+        src={photo.src}
+        poster={photo.poster}
+        alt={photo.alt}
+        width={photo.width}
+        height={photo.height}
+        priority={priority}
+        frame={false}
+        className="h-full w-full"
+        mediaClassName={cn("[object-position:var(--pos)]", imgClassName)}
+      />
+    );
   } else if (mobilePhoto) {
     picture = (
       <picture>

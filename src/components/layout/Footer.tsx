@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Ground from "@/components/ui/Ground";
 import { BRAND, CITIES, CITY_COPY, CREDIT, CTA, FOOTER_LINKS, LOGO } from "@/lib/constants";
 import { asset } from "@/lib/asset";
 import { cn } from "@/lib/utils";
@@ -44,8 +45,13 @@ function PhoneText({ label }: { label: string }) {
 }
 
 /**
- * The footer (docs/DESIGN.md 5.2). Black with a hairline top, 80px of
- * padding (120px at lg). Four blocks on the 12-column grid at lg: the full
+ * The footer (docs/DESIGN.md 5.2 and 10.5). Black with a hairline top. The
+ * hex light ceiling (GROUNDS.footer) runs as a band across the top, 180 to
+ * 288px tall at 0.34, drifting over 36 s, faded to black by its own bottom
+ * edge; the top padding is 200px (304px at lg) so the lockup, the legal line
+ * and the four columns all start beneath the band on plain black (the ash
+ * labels never sit on the ground). Bottom padding stays 80px (120px at lg).
+ * Four blocks on the 12-column grid at lg: the full
  * lockup public/logo-transparent.png at 200px (160px under lg) over the legal
  * line and the counties; the shop as plain ledger rows (address, the seven
  * hours rows in mono, by appointment, call or text, text, email); the nine
@@ -55,7 +61,8 @@ function PhoneText({ label }: { label: string }) {
  */
 export default function Footer() {
   return (
-    <footer className="on-black section-rule py-20 lg:py-30">
+    <footer className="on-black section-rule ground pt-50 pb-20 lg:pt-76 lg:pb-30">
+      <Ground id="footer" />
       <div className="container">
         <div className="grid-12">
           {/* 1. The lockup, the legal line, the counties. Columns 1 to 3. */}

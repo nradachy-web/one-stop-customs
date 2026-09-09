@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SectionHead from "@/components/ui/SectionHead";
+import Ground from "@/components/ui/Ground";
 import ActionStrip from "@/components/ui/ActionStrip";
 import ShopSheet from "@/components/ui/ShopSheet";
 import SwatchCard from "@/components/devices/SwatchCard";
@@ -23,7 +24,9 @@ export const metadata: Metadata = pageMeta({
  * panel in 1 to 5 beside the action strip in 7 to 12 (capped at 496px so its
  * four doors wrap two by two, as in the hero); then two review cards.
  * Under lg the DOM order reads title, copy, Mustang, band, panel, strip.
- * "The shop you know as Ricky Wraps" appears once, in the lede.
+ * "The shop you know as Ricky Wraps" appears once, in the lede. The hex
+ * ceiling ground (docs/DESIGN.md 10.5) sits at the top right of the title
+ * block, faded off the h1, the lede and the paragraphs.
  *
  * The band: the Silverado file is 4:3 (1440 by 1082), not a wide file, so
  * across the full content width it is shown at 2:1 from md (1224 by 612 at
@@ -37,7 +40,8 @@ export default function AboutPage() {
 
   return (
     <>
-      <section id="about" className="section pt-10! lg:pt-14!">
+      <section id="about" className="section ground pt-10! lg:pt-14!">
+        <Ground id="about" />
         <div className="container">
           <SectionHead as="h1" title={ABOUT.h1} lede={ABOUT.lede} ledeClassName="measure-wide" />
 

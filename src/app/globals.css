@@ -2148,3 +2148,198 @@ html:not([data-js="on"]) .set-frame > .set-slide:last-child:nth-child(odd) {
   grid-column: 1 / -1;
   aspect-ratio: 2 / 1;
 }
+
+/* ---------- AI grounds and living photos, docs/DESIGN.md 10 (design lead, 2026-09-09) ---------- */
+/* A ground is a generated material photo (public/ai, docs/ASSETS_AI.md)
+   drawn behind a host at low opacity: a section, a panel, a mat under a
+   device, the footer, the lightbox, the menu sheet. The host carries .ground
+   and Ground.tsx (src/components/ui) renders the layer, .ground-media with a
+   <picture> or <img> inside, as the host's first child with the preset's
+   variables inline (constants GROUNDS). The layer sits at z-index -1 inside
+   the host's own stacking context, so it paints above the host's background
+   and beneath every in-flow child without touching the children. Grounds
+   are decoration: alt is empty, the layer is aria-hidden, nothing is ever
+   captioned. Copy that sits directly on a ground keeps the ground at 0.4 or
+   lower; ash labels never sit on one (docs/DESIGN.md 10.4 has the numbers).
+   Complete with JavaScript off and under reduced motion: the image is simply
+   there at its opacity, still. It may fade in (decoration), nothing else may. */
+:root {
+  --ground-opacity: 0.3; /* the whole layer, after the mask */
+  --ground-pos: 50% 50%; /* object-position of the image */
+  --ground-h: 100%; /* the layer's height; capped so a 1376px file never has to cover a tall section */
+  --drift-s: 24s; /* the ambient drift loop */
+  --gl0: 0%; /* where the left fade starts; transparent before it */
+  --gt0: 0%; /* where the top fade starts; transparent above it */
+  --gl: 0%; /* the opaque span: from --gl to --gr across, --gt to --gb down; the layer fades to nothing outside it */
+  --gr: 100%;
+  --gt: 0%;
+  --gb: 100%;
+}
+.ground {
+  position: relative;
+  isolation: isolate;
+}
+/* Fixed hosts keep their position; on them .ground only adds the stacking context. */
+.lightbox.ground,
+.menu-sheet.ground {
+  position: fixed;
+}
+.ground-media {
+  position: absolute;
+  inset: 0;
+  bottom: auto;
+  z-index: -1;
+  height: var(--ground-h);
+  max-height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: var(--ground-opacity);
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(to right, transparent var(--gl0), #000 var(--gl), #000 var(--gr), transparent 100%),
+    linear-gradient(to bottom, transparent var(--gt0), #000 var(--gt), #000 var(--gb), transparent 100%);
+  mask-image: linear-gradient(to right, transparent var(--gl0), #000 var(--gl), #000 var(--gr), transparent 100%),
+    linear-gradient(to bottom, transparent var(--gt0), #000 var(--gt), #000 var(--gb), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  transition: opacity 900ms var(--ease-out);
+}
+/* Anchored to the bottom of the host instead of the top (a roll under a panel's rows, streaks under a process). */
+.ground-media-b {
+  top: auto;
+  bottom: 0;
+}
+.ground-media > picture,
+.ground-media > img,
+.ground-media > picture > img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--ground-pos);
+}
+/* A mirrored file: the picture element flips, not the image, so the drift keeps its own transform. */
+.ground-media > picture.ground-flip {
+  transform: scaleX(-1);
+}
+/* Under lg a preset may override its opacity, height, position and fade
+   (GroundSpec.small). Ground.tsx writes the same variables with an -sm
+   suffix; each falls back to the lg value, so a preset without `small` is
+   unchanged. Stays above @starting-style so the fade in still wins. */
+@media (max-width: 63.99rem) {
+  .ground-media {
+    height: var(--ground-h-sm, var(--ground-h));
+    opacity: var(--ground-opacity-sm, var(--ground-opacity));
+    -webkit-mask-image: linear-gradient(to right, transparent var(--gl0-sm, var(--gl0)), #000 var(--gl-sm, var(--gl)), #000 var(--gr-sm, var(--gr)), transparent 100%),
+      linear-gradient(to bottom, transparent var(--gt0-sm, var(--gt0)), #000 var(--gt-sm, var(--gt)), #000 var(--gb-sm, var(--gb)), transparent 100%);
+    mask-image: linear-gradient(to right, transparent var(--gl0-sm, var(--gl0)), #000 var(--gl-sm, var(--gl)), #000 var(--gr-sm, var(--gr)), transparent 100%),
+      linear-gradient(to bottom, transparent var(--gt0-sm, var(--gt0)), #000 var(--gt-sm, var(--gt)), #000 var(--gb-sm, var(--gb)), transparent 100%);
+  }
+  .ground-media > picture > img,
+  .ground-media > img {
+    object-position: var(--ground-pos-sm, var(--ground-pos));
+  }
+}
+/* The lightbox caps every img at the viewport less the chrome (.lightbox img);
+   its ground is the one exception and fills the dialog. */
+.lightbox .ground-media img {
+  max-height: none;
+  border-radius: 0;
+}
+/* A background image is decoration, so it may fade in. Nothing else starts invisible. */
+@starting-style {
+  .ground-media {
+    opacity: 0;
+  }
+}
+/* The ambient drift: transform only, 24 s (36 s on the footer ceiling), gated
+   on the head script's motion flag, so it never runs with JavaScript off or
+   under reduced motion. Scale stays above 1 so the drift never uncovers an edge. */
+@keyframes ground-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.06);
+  }
+  50% {
+    transform: translate3d(-1.6%, -1.2%, 0) scale(1.09);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.06);
+  }
+}
+html[data-motion="on"] .ground-media img.ground-drift {
+  animation: ground-drift var(--drift-s) ease-in-out infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ground-media img.ground-drift {
+    animation: none !important;
+  }
+}
+/* A mat: a black plate with a hairline and the card radius that a device sits
+   on (the finish picker frame, the fleet pair, the reviews grid). The host
+   carries both classes, `ground ground-mat`, and the ground fills the plate. */
+.ground-mat {
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  background: var(--color-black);
+}
+@media (min-width: 64rem) {
+  .ground-mat {
+    padding: 16px;
+  }
+}
+/* The panel-over-texture rule: a block of copy that has to sit where a ground
+   is brighter than 0.4 gets a 90 percent black panel. Cards, panels, review
+   cards, tier cards, the ticket, the notice and the panes already carry a
+   solid ground of their own and need nothing. */
+.ground-copy {
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: var(--radius-card);
+  padding: 20px 24px;
+}
+/* The living slot in the finish picker: each frame is a slot (an <img>, or
+   Loop for a finish that has a living photo) that crossfades like the bare
+   images did. The poster inside a slot is always drawn; the slot carries the
+   opacity. Loop's own video opacity is left to Loop. */
+.picker-photo > .picker-slot {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out);
+}
+.picker-photo > .picker-slot[data-active="true"] {
+  opacity: 1;
+}
+.picker-slot > * {
+  width: 100%;
+  height: 100%;
+}
+.picker-slot img {
+  opacity: 1;
+  transition: none;
+}
+/* A ledger that runs in two columns at lg: the wrap types, the fleet rows,
+   the tint extras and the powder list no longer leave half the grid empty. */
+@media (min-width: 64rem) {
+  .ledger-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 48px;
+  }
+  /* In a panel the last row loses its hairline; with an even count the left cell of the last pair is a last row too. */
+  .panel > .ledger-cols > :nth-last-child(2):nth-child(odd) {
+    border-bottom: 0;
+  }
+}
+/* Hover polish: a card's label brightens with its bar and its edge. */
+.chip-label > :first-child {
+  transition: color 200ms var(--ease-out);
+}
+.card:hover .chip-label > :first-child,
+.card-link:hover .chip-label > :first-child,
+.card-link:focus-visible .chip-label > :first-child {
+  color: var(--color-white);
+}

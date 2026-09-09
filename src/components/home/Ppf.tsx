@@ -1,4 +1,5 @@
 import Button from "@/components/ui/Button";
+import Ground from "@/components/ui/Ground";
 import SectionHead from "@/components/ui/SectionHead";
 import SwatchCard from "@/components/devices/SwatchCard";
 import { HOME_SECTIONS, PPF_ROWS, photo } from "@/lib/constants";
@@ -13,20 +14,25 @@ import { cn } from "@/lib/utils";
  * where the browser supports view timelines (fully visible everywhere
  * else). Beneath, two charcoal panels side by side for the coverage choice,
  * Front end and Full body, from PPF_ROWS; stacked at 390.
+ *
+ * The squeegee macro sits at the top right behind the head (GROUNDS.ppf,
+ * 0.34, gone before the band); the h2 sits left of its fade and only the
+ * outline action button meets it.
  */
 export default function Ppf() {
   const copy = HOME_SECTIONS.ppf;
   const band = photo(copy.photoId);
 
   return (
-    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule">
+    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule ground">
+      <Ground id="ppf" />
       <div className="container">
         <SectionHead
           title={copy.h2}
           lede={copy.lede}
           id={`${copy.id}-title`}
           action={
-            <Button variant="text" href={copy.link.href}>
+            <Button variant="outline" className="btn-sm" href={copy.link.href}>
               {copy.link.label}
             </Button>
           }

@@ -50,7 +50,7 @@ Derived values in `:root`:
 - `--nav-h: 72px`, `--bar-h: 56px`, `--chip-h: 6px`, `--shade: 0.6`.
 - `--breakpoint-xs: 26rem` in `@theme` (the only added breakpoint; md 48rem and lg 64rem are Tailwind's own).
 
-No navy, no tinted near-blacks, no gradients as decoration, no shadows, no glass, no glow, no blur. Black is black. The two places a gradient exists are masks on photos, and v2 uses none on the home page (the hero photo is a framed box, not a bleed); the lightbox backdrop is a flat 96 percent black.
+No navy, no tinted near-blacks, no gradients as decoration, no shadows, no glass, no glow, no blur. Black is black. The two places a gradient exists are masks on photos, and v2 uses none on the home page (the hero photo is a framed box, not a bleed); the lightbox backdrop is a flat 96 percent black. The fades on a ground (section 10) are masks on a decorative image, not gradients on a surface.
 
 ### 2.2 Radius and hairlines
 
@@ -214,7 +214,7 @@ Not allowed: opacity reveals, IntersectionObserver driven visibility (the only o
 
 Exactly one thing moves on its own: the owner's real timelapse, `public/video/wrap-timelapse.mp4` (720x1280, 12 s, muted, 1.9 MB) with poster `public/photos/wrap-timelapse-poster.webp` (900x1600), played through the existing `src/components/ui/Loop.tsx` (poster first as the real content and the LCP candidate for its box, video fades in over it once it can play, plays only while on screen, `preload="none"`, not mounted at all with prefers-reduced-motion or data saver). It sits in a 9:16 card in "Watch it happen", columns 1 to 4 at lg (about 392px wide, 697px tall), full width at 390 (350 by 622), chip #6B7075, label "Satin, gray. Range Rover quarter panel" left and "In a driveway" right, with the caption beneath. The folding chair stays in frame; the label tells the truth.
 
-No generated video, no living photos, no Ken Burns, no hover zoom, no parallax. Every still stays a still. The timelapse never appears in the hero or as a service page cover.
+Since 2026-09-09 three living photos (Veo clips made from the owner's own photos) and a slow ambient drift on the textured grounds join the timelapse; both are specified in section 10 and nothing else moves on its own. No Ken Burns, no hover zoom, no parallax. Every other still stays a still. The timelapse never appears in the hero or as a service page cover.
 
 ### 3.5 Reduced motion and JavaScript off
 
@@ -224,7 +224,7 @@ No generated video, no living photos, no Ken Burns, no hover zoom, no parallax. 
 
 ### 3.6 Banned
 
-No scroll-triggered reveals or fades, no IntersectionObserver visibility, no parallax, no marquee, no hover lift, no scale on hover, no cursor effects, no particle canvas, no gradient except a photo mask (and v2 uses none), no glow, no blur, no shadow, no filter animations on images, no layout-property animations (width, flex-grow, left), no auto-playing carousels, no animated numbers, no generated video.
+No scroll-triggered reveals or fades, no IntersectionObserver visibility, no parallax, no marquee, no hover lift, no scale on hover, no cursor effects, no particle canvas, no gradient except a photo mask (the fades on a ground, section 10), no glow, no blur, no shadow, no filter animations on images, no layout-property animations (width, flex-grow, left), no auto-playing carousels, no animated numbers, no generated video except the three living photos of section 10, which are the owner's own photos with motion added and keep their real captions.
 
 ## 4. Devices (only where they carry information, designed as UI)
 
@@ -372,7 +372,7 @@ Sections in order. Every section is `.section.section-rule` on black unless stat
 
 7. Powder coating. `id="powder-coat"`.
    - Head: h2 "Wheels, in any color that bakes." Lede: `HOME_SECTIONS.powder.lede`. Action: "See powder coating".
-   - Media: powdercoat-wheel-spray.webp (1600x431) as a `.band.mask-settle` card across columns 1 to 12 at native aspect (1224 by 330), 2:1 under md with object-position 35% 50%; chip #1F8FD8, "Powder, blue. Wheel in the booth", "Close up".
+   - Media: the living photo of powdercoat-wheel-spray (section 10.5) as a 16:9 Loop card across columns 1 to 12 (1224 by 689 at 1440, 350 by 197 at 390) with the same chip #1F8FD8, "Powder, blue. Wheel in the booth", "Close up" and the LIVING_NOTE line beneath. The still band (1600x431, native aspect, 2:1 under md, object-position 35% 50%) stays the powder page cover.
 
 8. Recent work. `id="recent-work"`.
    - Head: h2 "From the book to the street." Action: "See all {WORK.length} photos" (`.btn-text`, /gallery/).
@@ -396,7 +396,7 @@ Removed on purpose: the binding tabs, the facts block beside the h1 (now the fac
 One component tree renders all six service pages from a `ServiceSpec` in constants. `<main class="header-offset">`. Order:
 
 1. Title block: `.section` with padding-top 40px (56px at lg). `.grid-12`: the h1 (`.t-h1.t-h1-service`) and lede (`.t-lede.muted.measure-wide`) in columns 1 to 6, then the action strip (`variant="full"`, `quoteHref="#quote"`) 32px below; the cover card in columns 8 to 12 aligned to the h1's top when `cover.kind === "chip"` (4:5, 392 by 490); when `cover.kind === "band"` the cover is a `.band.mask-settle` card across columns 1 to 12 beneath the strip at native aspect. At 390: h1, lede, cover (4:5 for chip, 2:1 for band), strip.
-   - Covers: vinyl wraps: charger-red-stripes (chip, object-position 50% 55%). Commercial wraps: commercial-blazer-pink (band). Window tinting: escalade-black-window (chip, 55% 50%). Paint protection film: ppf-headlight-wide (band, clear chip). Commercial and residential tinting: home-deck-tint (band). Powder coating: powdercoat-wheel-spray (band).
+   - Covers: vinyl wraps: rangerover-purple as its living photo (a 16:9 Loop card, section 10.5; the still fallback is charger-red-stripes, chip, object-position 50% 55%). Commercial wraps: commercial-blazer-pink (band). Window tinting: escalade-black-window (chip, 55% 50%). Paint protection film: ppf-headlight-wide (band, clear chip). Commercial and residential tinting: home-deck-tint (band). Powder coating: powdercoat-wheel-spray (band).
    - h1s and ledes unchanged from v1 (`SERVICE_PAGES`).
 2. What you can choose. h2 `SERVICE_TEMPLATE.chooseTitle`. `id="finishes"` on the wraps page, `id="films"` on tint, `id="options"` elsewhere. The service's own device:
    - Vinyl wraps: the finish picker (4.2); the metallic, chrome and colour flip line; the `WRAP_TYPES` as hairline rows in columns 1 to 6; then "Other things we wrap" (`id="other"`, `.t-h3`) as two 4:3 cards in columns 1 to 6 and 7 to 12 (kitchen-wrap.webp capped at 900px, #8A7D72, "Printed, wood grain. Kitchen cabinets", "In a kitchen"; wall-wrap.webp, #6E9BD1, "Printed, blue floral. Hallway wall", "In a hallway") with the line "Helmets, appliances, cabinets and walls." in `.t-small` silver.
@@ -461,12 +461,12 @@ Chip hexes are starting values: the saturated cars were sampled by k-means on th
 | trx-yellow-side.webp | 1440x1080 | #F2B10C | Gloss, yellow, black hood. Ram TRX | On the lot, 02/04 | wraps / gloss / colour | Home hero at lg (3:2, 60% 50%); TRX stepper frame 3; gallery |
 | trx-yellow-front.webp | 1440x1085 | #F2BD1A | Gloss, yellow, black hood. Ram TRX | On the lot, 03/04 | wraps / gloss / colour | TRX stepper frame 2; city cover: Warren; gallery |
 | trx-yellow-portrait.webp | 1299x1600 | #E4AE14 | Gloss, yellow, black hood. Ram TRX | On the lot, 04/04 | wraps / gloss / colour | Home hero under lg (4:5, 50% 60%); TRX stepper frame 1; gallery |
-| rangerover-purple.webp | 1206x1080 | #52296E | Satin, purple. Range Rover | Inside the shop | wraps / satin / colour | Finish picker (Satin); gallery. Gate: readable plate. Fallback if Nick says pull it: audi-rosegold-front takes Satin. |
+| rangerover-purple.webp | 1206x1080 | #52296E | Satin, purple. Range Rover | Inside the shop | wraps / satin / colour | Finish picker (Satin); wraps page cover as its living photo (section 10.5); gallery. Gate: readable plate. Fallback if Nick says pull it: audi-rosegold-front takes Satin and charger-red-stripes takes the wraps cover. |
 | audi-rosegold-front.webp | 1440x1081 | #946A68 | Satin, rose gold. Audi A6 | On the street, 01/02 | wraps / satin / colour | City cover: Royal Oak; gallery |
 | audi-rosegold-wide.webp | 1439x648 | #96696A | Satin, rose gold. Audi A6 | On the street, 02/02 | wraps / satin / colour | Gallery (2 columns) |
 | bmw-lime.webp | 1440x1080 | #B5D608 | Gloss, lime. BMW 3 series | On the street | wraps / gloss / colour | Gallery only (never beside a green mark) |
 | bmw-mint-front.webp | 1440x1085 | #27D6D0 | Satin, mint. BMW 3 series | Inside the shop | wraps / satin / colour | Gallery only (same rule) |
-| charger-pink.webp | 1440x1080 | #D92C80 | Gloss, pink. Dodge Charger | On the street | wraps / gloss / colour | Finish picker (Gloss, the default frame); city cover: Detroit; gallery |
+| charger-pink.webp | 1440x1080 | #D92C80 | Gloss, pink. Dodge Charger | On the street | wraps / gloss / colour | Finish picker (Gloss, the default frame, living at lg); city cover: Detroit (living); gallery |
 | huracan-red-square.webp | 1200x1200 | #D33430 | Gloss, red. Lamborghini Huracan | On the lot | wraps / gloss / colour | City work strip; city cover: Eastpointe; gallery |
 | bmw-camo-blue.webp | 1440x790 | #2356B8 | Printed, blue camo. BMW 4 series | On the lot | wraps / printed / colour | Finish picker (Printed, 40% 50%); city work strip; gallery |
 | maserati-blue-side.webp | 1440x1080 | #5FB0DC | Blue. Maserati GranTurismo | On the street, 01/02 | wraps / none / colour | Slider pane and ladder scene (40% 50%); city cover: Roseville; gallery |
@@ -477,7 +477,7 @@ Chip hexes are starting values: the saturated cars were sampled by k-means on th
 | crown-grey-rear.webp | 1440x1080 | #6B6259 | Gray. Toyota Crown | Inside the shop, at night | wraps / none / grey | Gallery |
 | camaro-red-front.webp | 1440x1080 | #A5162A | Gloss, red. Chevy Camaro SS | On the lot | wraps / gloss / colour | City cover: Hazel Park; gallery |
 | camaro-red-convertible.webp | 1440x1080 | #B01F2E | Gloss, red. Chevy Camaro convertible | On the lot | wraps / gloss / colour | Gallery |
-| charger-red-stripes.webp | 1440x1080 | #E01420 | Gloss, red, black stripes. Dodge Charger | Inside the shop | wraps / stripes / colour | Finish picker (Stripes); wraps page cover (4:5, 50% 55%); gallery |
+| charger-red-stripes.webp | 1440x1080 | #E01420 | Gloss, red, black stripes. Dodge Charger | Inside the shop | wraps / stripes / colour | Finish picker (Stripes); the wraps page cover's still fallback (4:5, 50% 55%); gallery |
 | charger-white-red.webp | 1440x1080 | #E9EAEC | Gloss, white, red stripes. Dodge Charger | On the lot, 01/02 | wraps / stripes / white | City cover: Ferndale; gallery |
 | charger-white-side.webp | 1440x1080 | #DCDDE0 | Gloss, white. Dodge Charger | On the lot at dusk, 02/02 | wraps / gloss / white | Gallery |
 | durango-black-red-front.webp | 1440x1319 | #161A1E | Gloss, black, red pinstripes. Dodge Durango | On the lot, 01/02 | wraps / stripes / black | Gallery |
@@ -514,7 +514,7 @@ Chip hexes are starting values: the saturated cars were sampled by k-means on th
 | home-deck-tint.webp | 1248x448 | #5A6B70 | Window film. Sliding glass doors | On a back deck | buildings / none / grey | Buildings page cover (band); gallery (2 columns) |
 | home-front-tint.webp | 600x450 | #6D8A9B | Window film. Front windows | A house | buildings / none / grey | Buildings page (capped at 600px); gallery (1 column, never spans) |
 | ppf-headlight-wide.webp | 1600x581 | clear | Clear. Film going onto a headlight | Close up | ppf / none / none | Home PPF band; PPF page cover (band); gallery (2 columns) |
-| powdercoat-wheel-spray.webp | 1600x431 | #1F8FD8 | Powder, blue. Wheel in the booth | Close up | powder / none / colour | Home powder band (35% 50% under md); powder page cover (band); gallery (2 columns) |
+| powdercoat-wheel-spray.webp | 1600x431 | #1F8FD8 | Powder, blue. Wheel in the booth | Close up | powder / none / colour | Home powder section as its living photo (16:9); powder page cover (band, 35% 50% under md); gallery (2 columns) |
 | kitchen-wrap.webp | 900x509 | #8A7D72 | Printed, wood grain. Kitchen cabinets | In a kitchen | other / printed / none | Wraps page "Other things we wrap"; gallery |
 | wall-wrap.webp | 1290x746 | #6E9BD1 | Printed, blue floral. Hallway wall | In a hallway | other / printed / colour | Wraps page "Other things we wrap" (35% 50%); gallery |
 | wrap-timelapse-poster.webp | 900x1600 | #6B7075 | Satin, gray. Range Rover quarter panel | In a driveway | not in WORK | Poster for the timelapse card only |
@@ -543,3 +543,86 @@ Object positions worth storing (all others 50% 50%): trx-yellow-portrait 50% 60%
 - Devices: the swatch card frame, the binding tab, the tint table, the five-pane home ladder, the mono facts block and the eight-card home strip are gone. The colour bar and label, the slider, the tiers, the sets, the doors, the shop sheet, the process, the timing rows, the reviews and the FAQ all survive as UI: a 6px bar, a green thumbed slider, pills over cards, steppers with round controls, buttons, a panel with a giant phone number, green numbers, cards, accordions.
 - Copy and facts: unchanged, except a shorter hero sub. Every v1 export in constants still exists so no lane loses a string.
 - What v2 shares with Bubbles and what it does not: both are black with one accent and one type family for display, both have one load moment and a hover swap. v2's hero is a framed cover (headline across the top, copy beside a 3:2 box that peels) rather than a masked full-height photo with copy over it; v2's accent is green with ink text on fills rather than blue with white; v2 has no foam edge, no bubbles, no generated video and no white sections beyond the quote sheet; v2's devices (the picker rows with chip pills, the slider with ticks, the tier pills and cards, the set steppers, the colour bar) belong to a wrap shop and none of them appear on Bubbles.
+
+## 10. AI grounds and living photos (added 2026-09-09)
+
+Nick, 2026-09-09: "finish the polishing over changes. i think we should also create some imagen assets for bg and other images and videos across the site to add in addition to the imagery we already have. so make the entirety of the site feel more premium and designed." Thirteen generated material photos and three Veo clips now exist (docs/ASSETS_AI.md). This section is canon for how they are used; docs/PREMIUM_PLAN.md is the build plan for the pass. Where this section and sections 3, 7 and 8 disagree, this section wins and the older text has been amended to point here.
+
+### 10.1 Rules
+
+1. A ground is decoration. It is never presented as the shop, its bay, its cars or its work: never captioned, never in the gallery, never a service cover in place of a real photo, never in JSON-LD or the OG image, never near a "shop" or "bay" word in copy. `alt=""`, `aria-hidden`, `draggable={false}`.
+2. A living photo is one of the owner's own photos with a short muted clip made from it (Veo 3.1, seeded with the still). It keeps the caption of the WORK entry it came from, read from `LIVING` in constants, never retyped. It plays through `Loop.tsx`: poster first (the clip's own first frame, the LCP candidate for its box), video only on screen, `preload="none"` below the fold, never mounted under reduced motion or data saver. Exactly three exist and no fourth is added without a reason as strong as these.
+3. Legibility over texture. Copy that sits directly on a ground keeps that ground at 0.4 or lower. Ash text (`.t-label`, `.t-byline`, chip settings, counters, `.facts dt`) never sits on a ground: it sits on the masked-off black, on a panel, or the ground is anchored away from it. A block of copy that must sit where a ground is brighter takes `.ground-copy` (a 90 percent black panel). Cards, panels, review cards, tier cards, the ticket, the notice and the panes carry their own solid ground and need nothing.
+4. Every ground goes through `asset()` as an `<img>` (never a CSS `url()`, which the base path would break), lazy except the home hero's, `fetchPriority="low"` when eager. Each file stays under 350 KB (the largest is 83 KB); each clip under 2.5 MB (the largest is 1.8 MB). Nothing is preloaded.
+5. Complete with JavaScript off and under reduced motion: the ground is simply there at its opacity, still; the living photo is its poster. A ground may fade in over 900 ms at first render (decoration); no text and no photo ever starts invisible.
+6. Blend mode is normal everywhere. Opacity and the mask do the work; there is no multiply, no screen, no glow.
+7. Green grounds (`greenFilm`, `greenPeel`) appear only on the two terminal pages (thank-you, 404), never beside `bmw-lime.webp` or `bmw-mint-front.webp`, never as a section ground in the main flow.
+
+### 10.2 The material vocabulary
+
+Four chapter grounds carry the site's material story, and everything else is a mat or a panel back:
+
+- Satin black vinyl (`satinBlack`, `satinBlackTall`): the hero material. The home hero, every city title block, the lightbox, the menu sheet.
+- The shop's own materials, one per subject: the swatch fan under finishes and on the gallery title; the window film roll for tint (home panel, tint and buildings title blocks); the squeegee for paint protection film (home section and title block); the powder cloud for powder coating (home section and title block); the chrome panel for finished gloss (commercial title block, home recent work); the light streaks for motion and the road (the process on home and every service page).
+- Carbon weave: the panel material. The fleet pair's mat, the reviews mat, the back of every shop panel.
+- The hex light ceiling: the back cover. The top band of the footer on every page, and the title blocks of About and Contact.
+
+### 10.3 The system in code
+
+`src/lib/constants.ts`: `AI_ASSETS` (id, src, width, height, `alt: ""`, kb, what), `GROUNDS` (one preset per placement, 27 of them: asset, optional `tall` file for under lg, opacity, position, fade span, height cap, anchor, drift), `LivingPhoto`, `LIVING` (rangerover, charger, powder), `LIVING_BY_PHOTO` (by the still's WORK id), `LIVING_NOTE`. `CardAspect` gains `"16/9"`. Added in the integration pass (2026-09-09, v3): `fade.leftFrom` and `fade.topFrom` (where the left or top fade starts, so a ground can begin at the middle of a title block instead of ramping from the edge), `flip` (the picture element mirrored, for a file whose subject sits on the wrong side: the film roll on the tint and buildings title blocks) and `small` (opacity, position, height and a replacement fade under lg; Ground.tsx writes them as `-sm` variables and globals falls back to the lg values).
+
+`src/app/globals.css`: `.ground` (the host: relative, isolated), `.ground-media` (the layer: absolute, z-index -1, `opacity: var(--ground-opacity)`, `object-position: var(--ground-pos)`, height `var(--ground-h)`, two-axis mask from `--gl --gr --gt --gb`, fades in through `@starting-style`), `.ground-media-b` (anchored to the host's bottom), `img.ground-drift` (the 24 s ambient drift, `--drift-s`, gated on `html[data-motion="on"]`, off under reduced motion), `.ground-mat` (a black plate with a hairline and the card radius that a device sits on), `.ground-copy` (the 90 percent black panel), `.picker-slot` (the crossfading frame wrapper the finish picker uses so one slot can hold a Loop), `.ledger-cols` (a two column ledger at lg), and the label brighten on card hover.
+
+`src/components/ui/Ground.tsx` (lane D, first fifteen minutes): `<Ground id={GroundId} priority? className? />` renders `.ground-media` with the preset's variables inline and the `<picture>` inside; it is always the host's first child. `SwatchCard` accepts a `LivingPhoto` and renders `Loop` itself; a chip cover whose photo has an entry in `LIVING_BY_PHOTO` renders as its living photo in a 16:9 box. The exact code is in docs/PREMIUM_PLAN.md section 0.
+
+### 10.4 Contrast, verified by number
+
+Relative luminance of the brightest region of each file at 100 percent, multiplied by the ground's opacity, gives the brightest gray any text could meet. Contrast is computed against that gray (WCAG formula, 0.05 offset).
+
+| ground at its opacity | brightest gray | white 1.05 | silver 0.60 | ash 0.28 |
+|---|---|---|---|---|
+| satin black at 0.32 (highlight L 0.65) | L 0.037 | 12:1 | 7.5:1 | 3.8:1, fails |
+| hex lights at 0.34 (lines L 0.95) | L 0.05 | 10.5:1 | 6.5:1 | 3.3:1, fails |
+| swatch fan at 0.42 (yellow chip L 0.75) | L 0.06 | 9.5:1 | 5.9:1 | 3:1, fails |
+| carbon at 0.5 (fibre L 0.35) | L 0.018 | 15:1 | 9.6:1 | 4.9:1, passes |
+| powder cloud at 0.5 (particles L 0.6) | L 0.06 | 9.5:1 | 5.9:1 | 3:1, fails |
+| any ground at 0.22 or lower | L 0.03 or lower | 13:1 | 8:1 | 4.1:1, fails |
+
+So: white and silver copy may sit on any ground in the table; ash never does, except on carbon at 0.5 or lower. Every preset in `GROUNDS` respects this by masking the ground off the ash (the hero facts row, the footer columns, the city county line, the section head's as-of link) or by keeping the ash on a panel. Lanes verify each placement by eye in the built site and, where in doubt, by sampling the brightest pixel under the text.
+
+### 10.5 Placements
+
+Grounds (host, preset, what it does; sizes at 1440 and 390 are in docs/PREMIUM_PLAN.md):
+
+- Home hero: `section.hero.ground`, `hero`, satin black (tall under lg), 0.32, the fold highlight behind the photo box at top right, faded to black across the left 38 percent (behind the copy) and the bottom 28 percent (behind the facts row), drifting, eager with low fetch priority.
+- Home finishes: at lg the picker frame's mat (`ground ground-mat` around the photo frame and its strip), `finishesMat`, the swatch fan at 0.55 (nothing sits on the mat but the solid frame and strip; 0.42 barely showed in the 16px margin); under lg a section ground behind the head, `finishesHead`, 0.22, top right, 420px tall.
+- Home tint: the "Also" panel, `panel ground` stretched to the slider pane's height, `tintPanel`, the film roll in the panel's lower half at 0.4, faded to charcoal above 52 percent.
+- Home paint protection film: section ground, `ppf`, the squeegee top right behind the head at 0.34, gone before the band.
+- Home watch it happen: section ground anchored bottom, `watch`, the light streaks under the process rows at 0.3, faded off the timelapse column.
+- Home commercial wraps: the two cards on one carbon mat, `fleetMat`, 0.5.
+- Home powder coating: section ground, `powder`, the powder cloud top right at 0.5, drifting, gone before the living photo.
+- Home recent work: section ground, `recentWork`, the chrome panel top right behind the head at 0.4.
+- Reviews (every page): the grid on a carbon mat, `reviewsMat`, 0.45.
+- Shop panel (every page): `panel ground`, `shopPanel`, carbon in the lower 60 percent at 0.32 (the layer is 60 percent of the panel, anchored bottom, faded in over its top 30 percent; 0.4 measured 4.1:1 for the ash keys on the charcoal panel, 0.32 clears 4.9:1).
+- Footer (every page): `footer.ground`, `footer`, the hex ceiling as a 180 to 288px band at the top at 0.28 (the lit lines measure L 0.09 at 0.34, brighter than the 10.4 table assumed, so the band came down), drifting over 36 s, faded to black by its own bottom edge; the lockup and the four columns start beneath it on black (padding-top 200px, 304px at lg).
+- Lightbox: `dialog.lightbox.ground`, `lightbox`, satin black at 0.24 behind the photo, drifting.
+- Menu sheet: `.menu-sheet.ground`, `menuSheet`, the tall satin fold in the lower 60 percent at 0.22 under the giant number.
+- Gallery title: `gallery`, the swatch fan top right at 0.26 behind the count line and the filter row, gone before the grid.
+- About and Contact title blocks: `about`, `contact`, the hex ceiling at 0.3 in the right half only (the left fade starts at 50 percent and is full at 70, so the h1 and lede in columns 1 to 7 sit on black); under lg 0.22, 440px tall, gone by 40 percent so it stands behind the h1 and not the paragraphs.
+- Thank you: `thankYou`, the green film at 0.3 behind "Got it.", drifting. The 404: `notFound`, the green peel at 0.3 behind "This page is not in the book.", drifting.
+- Service title blocks: `titleWraps` (satin purple, behind the cover), `titleCommercial` (chrome panel), `titleTint` (film roll lying in the lower left under the actions, the top fade starting below the lede; the cover card at right is solid and would hide it), `titlePpf` (squeegee), `titleBuildings` (film roll, mirrored), `titlePowder` (powder cloud, drifting); every city page `titleCity` (satin black, tall under lg). All top right at 0.3 to 0.5, faded off the h1, lede and county line.
+- Service "How it goes": section ground anchored bottom, `process`, the light streaks under the process rows at 0.3, faded off the timing panel.
+
+Living photos (all through `Loop` in a 16:9 box, poster first, muted, on screen only, the caption from the WORK entry):
+
+- `LIVING.rangerover`, "Satin, purple. Range Rover", "Inside the shop": the vinyl wraps page cover (columns 7 to 12 at lg, 600 by 338; 350 by 197 at 390), `priority` so the poster is the page's LCP; `LIVING_NOTE` beneath. Gate: the readable plate; if Nick pulls it, the cover falls back to charger-red-stripes and the Satin picker row to audi-rosegold-front.
+- `LIVING.charger`, "Gloss, pink. Dodge Charger", "On the street": the Gloss slot of the finish picker frame at lg on home and the wraps page (the default frame, alive under no pointer; a hover on another finish crossfades to a still), and the Detroit city cover at every width.
+- `LIVING.powder`, "Powder, blue. Wheel in the booth", "Close up": the home powder coating section in place of the still band (columns 1 to 12, 1224 by 689 at 1440; 350 by 197 at 390), `LIVING_NOTE` beneath. The powder page keeps the still band as its cover.
+
+### 10.6 Motion
+
+The ambient drift on a ground: `transform` only, scale 1.06 to 1.09 with a 1.6 percent translate, 24 s ease-in-out loop (36 s on the footer ceiling), gated on `html[data-motion="on"]`, none under reduced motion or with JavaScript off. On six placements only: the home hero, the home powder section, the powder page title block, the footer, the lightbox, the thank-you and 404 pages. Mats and panel backs never drift. The peel, the rises and every action-driven transition of section 3 are unchanged. Nothing waits for scroll; the scroll-linked chip grow and band settle of 3.3 still apply to cards on a ground.
+
+### 10.7 What changed in earlier sections
+
+3.4 no longer says "no living photos"; 3.6 allows the three clips and the ground masks; 7.1.7 makes the home powder media the living photo; 7.2.1 makes the wraps cover the living Range Rover; the section 8 rows for rangerover-purple, charger-pink, charger-red-stripes and powdercoat-wheel-spray record the new uses. The footer (5.2) gains the ceiling band and the larger top padding. Section head actions on home and city pages are `.btn.btn-outline.btn-sm` (a button, not floating green text). The service "What you can choose" ledgers that stood in six columns run across twelve in `.ledger-cols`. The FAQ keeps columns 1 to 8 and gains the phone aside in 10 to 12 ("Call or text", the `.t-phone` number, `BRAND.byAppointmentLine`).

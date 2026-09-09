@@ -1,3 +1,4 @@
+import Ground from "@/components/ui/Ground";
 import SectionHead from "@/components/ui/SectionHead";
 import Timelapse from "@/components/devices/Timelapse";
 import Process from "@/components/service/Process";
@@ -11,12 +12,17 @@ import { HOME_SECTIONS } from "@/lib/constants";
  * footage"); Loop shows the poster first, mounts the video only on screen
  * and never under reduced motion or data saver. No lede. At 390 the card is
  * full width (350 by 622) and the process follows it.
+ *
+ * The light streaks run under the process rows from the section's bottom
+ * (GROUNDS.watch, 0.3, faded off the timelapse column at left and off the
+ * head above); the green numbers and the white titles pass on it.
  */
 export default function WatchIt() {
   const copy = HOME_SECTIONS.watch;
 
   return (
-    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule">
+    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule ground">
+      <Ground id="watch" />
       <div className="container">
         <SectionHead title={copy.h2} id={`${copy.id}-title`} />
         <div className="grid-12 mt-10 lg:mt-12">

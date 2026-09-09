@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Button from "@/components/ui/Button";
+import Ground from "@/components/ui/Ground";
 import { NOT_FOUND } from "@/lib/constants";
 import { pageMeta } from "@/lib/seo";
 
@@ -15,10 +16,16 @@ export const metadata: Metadata = pageMeta({ title: NOT_FOUND.metaTitle, descrip
  * at 120 by 6px stands in for the photo that is not here: an outlined empty
  * bar, the only chip that is not a colour. Then the h1 at the service size,
  * the lede, and two text links. The footer follows from the layout.
+ *
+ * The gloss green peel (GROUNDS.notFound, docs/DESIGN.md 10.5) drifts behind
+ * the heading at 0.3, the liner lifting, faded to black by 55 percent of its
+ * 640px so the links beneath sit on black. One of the two green grounds,
+ * terminal pages only. Present and still with JavaScript off.
  */
 export default function NotFound() {
   return (
-    <section className="section flex min-h-[60svh] items-center" aria-labelledby="not-found-title">
+    <section className="section ground flex min-h-[60svh] items-center" aria-labelledby="not-found-title">
+      <Ground id="notFound" />
       <div className="container text-center">
         {/* .chip-bar is width 100 percent unlayered; the inline width wins. */}
         <span aria-hidden="true" className="chip-bar chip-bar-clear mx-auto" style={{ width: 120 }} />

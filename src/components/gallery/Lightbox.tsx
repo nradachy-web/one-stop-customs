@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type TouchEvent } from "react";
 import { asset } from "@/lib/asset";
+import Ground from "@/components/ui/Ground";
 import ChipStrip from "@/components/devices/ChipStrip";
 import { LIGHTBOX, type WorkPhoto } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -66,7 +67,11 @@ function Chevron({ flip = false }: { flip?: boolean }) {
  *
  * The dialog element is always in the DOM (closed) so the ref is stable; its
  * content renders only while a photo is open, so the page never fetches a
- * second copy of every file.
+ * second copy of every file. The satin ground (docs/DESIGN.md 10.5) is always
+ * rendered as the dialog's first child; the closed dialog has no box, so its
+ * lazy image is not fetched until the dialog opens. It drifts behind the
+ * photo at 0.24 so the enlarged car sits on the hero's material; the
+ * backdrop stays 96 percent black.
  */
 export default function Lightbox({ photos, index, onClose, onStep }: LightboxProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -170,13 +175,16 @@ export default function Lightbox({ photos, index, onClose, onStep }: LightboxPro
   return (
     <dialog
       ref={dialogRef}
-      className="lightbox on-black"
+      className="lightbox on-black ground"
       aria-label={LIGHTBOX.label}
       onKeyDown={onKeyDown}
       onClick={onClick}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
+      {/* The satin ground runs the whole viewport behind the photo; globals exempts its image from
+          the .lightbox img cap (.lightbox .ground-media img). */}
+      <Ground id="lightbox" />
       {photo && index !== null && (
         <div ref={contentRef} className="flex min-h-0 w-full max-w-[1328px] flex-col items-center gap-4">
           {/* The photo in its card; the strip beneath takes the photo's width. The

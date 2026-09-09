@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Button from "@/components/ui/Button";
+import Ground from "@/components/ui/Ground";
 import ShopSheet from "@/components/ui/ShopSheet";
 import { BRAND, THANK_YOU } from "@/lib/constants";
 import { pageMeta } from "@/lib/seo";
@@ -36,10 +37,17 @@ function PhoneLabel({ label }: { label: string }) {
  * online button, then Back to the gallery. The shop panel sits in a centred
  * five-column block beneath. No form, and the layout leaves the mobile bar
  * off this path.
+ *
+ * The green film (GROUNDS.thankYou, docs/DESIGN.md 10.5) drifts behind the
+ * h1, the lede and the number at 0.3, the success moment and the one green
+ * ground in the flow of a visit, faded to black by 55 percent of its 640px;
+ * the buttons and the shop panel (itself on carbon) sit on black beneath.
+ * Present and still with JavaScript off.
  */
 export default function ThankYouPage() {
   return (
-    <section className="section" aria-labelledby="thanks-title">
+    <section className="section ground" aria-labelledby="thanks-title">
+      <Ground id="thankYou" />
       <div className="container text-center">
         <h1 id="thanks-title" className="t-h1 t-h1-service">
           {THANK_YOU.h1}

@@ -3,9 +3,11 @@
 import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 import Photo from "@/components/ui/Photo";
+import Loop from "@/components/ui/Loop";
+import Ground from "@/components/ui/Ground";
 import ChipStrip from "@/components/devices/ChipStrip";
 import { asset } from "@/lib/asset";
-import { FINISHES, FINISH_PICKER, photo } from "@/lib/constants";
+import { FINISHES, FINISH_PICKER, LIVING_BY_PHOTO, photo } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface FinishPickerProps {
@@ -47,6 +49,17 @@ const CROP_4x3: Readonly<Record<string, string>> = {
  * photo is in the HTML, so with JavaScript off the page shows the first
  * finish at lg and six photos under lg. Keyboard: Tab reaches each row's name
  * link and the last row's text link; focus activates the row.
+ *
+ * The living slot (docs/DESIGN.md 10.5): each frame image sits in a
+ * .picker-slot that carries the crossfade. The default slot (the first row,
+ * Gloss) renders Loop when its photo has a living photo in LIVING_BY_PHOTO,
+ * so the frame is alive under no pointer and crossfades to a still on hover;
+ * the clip keeps playing beneath an inactive slot, which is accepted. Only
+ * the default slot may be living: the Satin row's still also has a clip (it
+ * is the wraps page cover) and the frame holds one clip, not two. The poster
+ * is lazy because the frame sits below the fold. At lg the frame and its
+ * strip sit on a swatch fan mat (finishesMat); under lg the mat is not
+ * rendered with the frame.
  */
 export default function FinishPicker({ items = FINISHES, seeLink = true, className }: FinishPickerProps) {
   const [active, setActive] = useState(0);
@@ -97,30 +110,46 @@ export default function FinishPicker({ items = FINISHES, seeLink = true, classNa
       </ul>
 
       <div className="picker-frame">
-        <figure className="card">
-          <div className="picker-photo rounded-none! border-0!">
-            {photos.map((p, i) => {
-              const isActive = i === active;
-              const pos = CROP_4x3[p.id] ?? p.position ?? "50% 50%";
-              return (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={p.id}
-                  src={asset(p.src)}
-                  alt={isActive ? p.alt : ""}
-                  width={p.width}
-                  height={p.height}
-                  loading={i === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                  data-active={isActive ? "true" : "false"}
-                  aria-hidden={!isActive}
-                  style={{ objectPosition: pos }}
-                />
-              );
-            })}
-          </div>
-          <ChipStrip chip={current.chip} label={current.label} setting={current.setting} />
-        </figure>
+        <div className="ground ground-mat">
+          <Ground id="finishesMat" />
+          <figure className="card">
+            <div className="picker-photo rounded-none! border-0!">
+              {photos.map((p, i) => {
+                const isActive = i === active;
+                const pos = CROP_4x3[p.id] ?? p.position ?? "50% 50%";
+                const living = i === 0 ? LIVING_BY_PHOTO[p.id] : undefined;
+                return (
+                  <div key={p.id} className="picker-slot" data-active={isActive ? "true" : "false"} aria-hidden={!isActive}>
+                    {living ? (
+                      <Loop
+                        src={living.src}
+                        poster={living.poster}
+                        alt={isActive ? living.alt : ""}
+                        width={living.width}
+                        height={living.height}
+                        frame={false}
+                        className="h-full w-full"
+                        mediaClassName="object-cover [object-position:50%_50%]"
+                      />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={asset(p.src)}
+                        alt={isActive ? p.alt : ""}
+                        width={p.width}
+                        height={p.height}
+                        loading={i === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        style={{ objectPosition: pos }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <ChipStrip chip={current.chip} label={current.label} setting={current.setting} />
+          </figure>
+        </div>
       </div>
     </div>
   );

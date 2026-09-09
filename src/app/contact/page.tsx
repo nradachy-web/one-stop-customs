@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SectionHead from "@/components/ui/SectionHead";
+import Ground from "@/components/ui/Ground";
 import ActionStrip from "@/components/ui/ActionStrip";
 import ShopSheet from "@/components/ui/ShopSheet";
 import QuoteForm from "@/components/forms/QuoteForm";
@@ -21,12 +22,15 @@ export const metadata: Metadata = pageMeta({
  * effect to pre-check a chip, and renders the honest notice instead of a
  * form when the Web3Forms key is absent at build time; the strip still
  * stands either way. The strip's Get a quote cell points at the sheet on
- * this page. Lane A's mobile action bar stays off this path.
+ * this page. Lane A's mobile action bar stays off this path. The hex
+ * ceiling ground (docs/DESIGN.md 10.5) sits at the top right of the title
+ * block, faded off the h1 and lede; the sheet stays white.
  */
 export default function ContactPage() {
   return (
     <>
-      <section id="contact" className="section pt-10! lg:pt-14!">
+      <section id="contact" className="section ground pt-10! lg:pt-14!">
+        <Ground id="contact" />
         <div className="container">
           <SectionHead as="h1" title={CONTACT.h1} lede={CONTACT.lede} ledeClassName="measure-wide" />
           <ActionStrip quoteHref="#quote" className="mt-8" />

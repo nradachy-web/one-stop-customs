@@ -1,4 +1,5 @@
 import Button from "@/components/ui/Button";
+import Ground from "@/components/ui/Ground";
 import SectionHead from "@/components/ui/SectionHead";
 import SetStepper from "@/components/devices/SetStepper";
 import { HOME_SECTIONS, SETS, WORK } from "@/lib/constants";
@@ -12,18 +13,23 @@ import { cn } from "@/lib/utils";
  * the arrow keys step with a 240 ms crossfade. Without JavaScript each set
  * lays out as a two column grid of every frame. The count in the action is
  * WORK.length, never typed.
+ *
+ * The chrome panel sits at the top right behind the head (GROUNDS.recentWork,
+ * 0.4, gone before the frames), an echo of the gloss black Corvette in the
+ * first stepper; the outline action button is the only copy on it.
  */
 export default function RecentWork() {
   const copy = HOME_SECTIONS.recent;
 
   return (
-    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule">
+    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule ground">
+      <Ground id="recentWork" />
       <div className="container">
         <SectionHead
           title={copy.h2}
           id={`${copy.id}-title`}
           action={
-            <Button variant="text" href={copy.href}>
+            <Button variant="outline" className="btn-sm" href={copy.href}>
               {copy.linkLabel(WORK.length)}
             </Button>
           }

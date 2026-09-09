@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ActionStrip from "@/components/ui/ActionStrip";
+import Ground from "@/components/ui/Ground";
 import { BRAND, MENU, MENU_LINKS } from "@/lib/constants";
 
 const LG = "(min-width: 64rem)";
@@ -32,6 +33,16 @@ function normalise(path: string | null): string {
  * closes it, the page behind the header goes inert and the body stops
  * scrolling while it is open, Tab wraps inside the header, and growing the
  * viewport past lg closes it (the element is display none there anyway).
+ *
+ * The tall satin fold (GROUNDS.menuSheet, docs/DESIGN.md 10.5) sits in the
+ * lower 60 percent of the sheet at 0.22, anchored to the bottom and faded
+ * off above 45 percent of the layer, so the giant number and the address
+ * rest on the material and the nine rows stay on black. The sheet itself
+ * scrolls, so the ground's host is the in-flow content block (at least the
+ * sheet's height) rather than the fixed sheet: an absolute layer on the
+ * scroll container would anchor to its first screen and slide off the
+ * number as soon as the sheet scrolled. Decoration only, present with
+ * JavaScript off.
  */
 export default function MobileMenu() {
   const ref = useRef<HTMLDetailsElement>(null);
@@ -122,33 +133,36 @@ export default function MobileMenu() {
       </summary>
 
       <div id="mobile-menu" className="menu-sheet" onClick={onSheetClick}>
-        <nav aria-label={MENU.ariaLabel}>
-          <ul className="ledger border-t-0!">
-            {MENU_LINKS.map((link) => (
-              <li key={link.href} className="py-0!">
-                <Link
-                  href={link.href}
-                  aria-current={normalise(link.href) === current ? "page" : undefined}
-                  className="menu-row"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="ground flex min-h-full flex-col">
+          <Ground id="menuSheet" />
+          <nav aria-label={MENU.ariaLabel}>
+            <ul className="ledger border-t-0!">
+              {MENU_LINKS.map((link) => (
+                <li key={link.href} className="py-0!">
+                  <Link
+                    href={link.href}
+                    aria-current={normalise(link.href) === current ? "page" : undefined}
+                    className="menu-row"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-        <div className="p-5">
-          <ActionStrip variant="menu" />
-        </div>
+          <div className="p-5">
+            <ActionStrip variant="menu" />
+          </div>
 
-        <div className="px-5 pt-1 pb-10">
-          <p className="t-label">Call or text</p>
-          <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white">
-            {BRAND.phoneDisplay}
-          </a>
-          <p className="t-small muted mt-4">{BRAND.address.full}</p>
-          <p className="t-small muted mt-1">{BRAND.hoursShort}</p>
+          <div className="px-5 pt-1 pb-10">
+            <p className="t-label">Call or text</p>
+            <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white">
+              {BRAND.phoneDisplay}
+            </a>
+            <p className="t-small muted mt-4">{BRAND.address.full}</p>
+            <p className="t-small muted mt-1">{BRAND.hoursShort}</p>
+          </div>
         </div>
       </div>
     </details>

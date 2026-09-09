@@ -1,6 +1,7 @@
 import { BRAND, CTA, SHOP_SHEET } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
+import Ground from "@/components/ui/Ground";
 import type { ShopSheetProps } from "@/lib/types";
 
 const EXTERNAL = { target: "_blank", rel: "noopener noreferrer" } as const;
@@ -21,12 +22,20 @@ const TAP = "link-quiet inline-block py-3 -my-3";
  *
  * `onBlack` paints the panel black for the daylight sheet (the quote
  * sections pass it); the globals swap the muted and label colours with it.
+ *
+ * Every variant carries the carbon weave (GROUNDS.shopPanel, docs/DESIGN.md
+ * 10.5) in its lower 60 percent at 0.4, anchored to the panel's bottom and
+ * faded to nothing above 40 percent of the layer, so the giant number sits
+ * on a plate. The ash keys pass on carbon at that opacity (10.4, 4.9:1 or
+ * better); the rows stay white and mono. Decoration only: empty alt,
+ * aria-hidden, complete with JavaScript off.
  */
 export default function ShopSheet({ onBlack = false, withBooking = false, className }: ShopSheetProps) {
   const bookingHost = new URL(BRAND.bookingUrl).host;
 
   return (
-    <div className={cn("panel", onBlack && "on-black", className)}>
+    <div className={cn("panel ground", onBlack && "on-black", className)}>
+      <Ground id="shopPanel" />
       <p className="t-label">Call or text</p>
       <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white">
         {BRAND.phoneDisplay}

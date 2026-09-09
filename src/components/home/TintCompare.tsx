@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import Ground from "@/components/ui/Ground";
 import SectionHead from "@/components/ui/SectionHead";
 import ShadeSlider from "@/components/devices/ShadeSlider";
 import TierTable from "@/components/service/TierTable";
@@ -20,6 +21,12 @@ const ROW_LINK = "link inline-block py-3 -my-3";
  * five panes) so the legal line prints here exactly once. No prices, no
  * shade percentages: the values come from TINT_TIERS and the slider prints
  * no number.
+ *
+ * The "Also" panel stretches to the pane's height at lg and carries the
+ * window film roll in its lower half (GROUNDS.tintPanel, anchored bottom,
+ * faded to charcoal above 52 percent), so the room under the last row is a
+ * picture of the material the panel is about. The pills and tier cards stay
+ * on black. The head's action is an outline button.
  */
 export default function TintCompare() {
   const copy = HOME_SECTIONS.tint;
@@ -33,7 +40,7 @@ export default function TintCompare() {
           lede={copy.lede}
           id={`${copy.id}-title`}
           action={
-            <Button variant="text" href={copy.link.href}>
+            <Button variant="outline" className="btn-sm" href={copy.link.href}>
               {copy.link.label}
             </Button>
           }
@@ -45,7 +52,8 @@ export default function TintCompare() {
             <p className="t-small muted mt-4">{SHADE_LEGAL}</p>
           </div>
 
-          <div className="panel mt-6 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-start">
+          <div className="panel ground mt-6 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-stretch">
+            <Ground id="tintPanel" />
             <p className="t-label">Also</p>
             <ul className="ledger mt-3" role="list">
               {TINT_ROWS.map((row) => (

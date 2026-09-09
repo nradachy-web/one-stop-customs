@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Button from "@/components/ui/Button";
 import SectionHead from "@/components/ui/SectionHead";
 import ShopSheet from "@/components/ui/ShopSheet";
 import WorkStrip from "@/components/devices/WorkStrip";
@@ -19,8 +19,11 @@ interface CityTemplateProps {
  * an eyebrow), the cover is the city's card from the fixed rotation in
  * constants, then the finish row over the tier switcher, the work strip,
  * two reviews and the daylight sheet with the ticket (no preset) beside the
- * black shop panel. Nothing it says is invented: no drive times, no claims
- * about the city.
+ * black shop panel. The title block sits on the satin black ground (the
+ * hero material, docs/DESIGN.md 10.5); Detroit's cover is the living pink
+ * Charger because its still has a clip in LIVING_BY_PHOTO, decided by the
+ * TitleBlock lookup and nothing city specific here. Nothing it says is
+ * invented: no drive times, no claims about the city.
  */
 export default function CityTemplate({ city }: CityTemplateProps) {
   return (
@@ -30,6 +33,7 @@ export default function CityTemplate({ city }: CityTemplateProps) {
         title={CITY_COPY.h1(city)}
         lede={CITY_COPY.lede(city)}
         cover={{ photoId: city.coverPhotoId, kind: "chip" }}
+        ground="titleCity"
       />
 
       <section id="options" className="section section-rule" aria-labelledby="choose-title">
@@ -46,9 +50,9 @@ export default function CityTemplate({ city }: CityTemplateProps) {
             title={CITY_COPY.recentTitle}
             id="recent-title"
             action={
-              <Link href={HOME_SECTIONS.recent.href} className="btn btn-text">
+              <Button variant="outline" className="btn-sm" href={HOME_SECTIONS.recent.href}>
                 {HOME_SECTIONS.recent.linkLabel(WORK.length)}
-              </Link>
+              </Button>
             }
           />
           <WorkStrip ids={RECENT_WORK} className="mt-10 lg:mt-12" />

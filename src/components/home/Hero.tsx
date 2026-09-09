@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import ActionStrip from "@/components/ui/ActionStrip";
+import Ground from "@/components/ui/Ground";
 import { asset } from "@/lib/asset";
 import { HERO, photo } from "@/lib/constants";
 
@@ -47,6 +48,14 @@ const SIDE_POSITION = "60% 50%";
  * caption pill is part of the box and is revealed by the peel, not animated.
  * Total 1.22 s, transform and opacity only; the keyframes and the gate are in
  * globals.css.
+ *
+ * The satin black liner (docs/DESIGN.md 10.5, GROUNDS.hero) sits under the
+ * whole section as the campaign ground: its fold highlight behind the photo
+ * box at top right, masked to black across the left 38 percent behind the
+ * copy and the bottom 28 percent behind the facts row, so the ash keys of the
+ * facts never sit on it. Eager with low fetch priority (the truck stays the
+ * LCP); the tall file under lg. Drift is transform only and gated on the
+ * motion flag like the peel.
  */
 export default function Hero() {
   const side = photo(HERO.photoId);
@@ -58,7 +67,8 @@ export default function Hero() {
   } as CSSProperties;
 
   return (
-    <section id="top" aria-labelledby="hero-title" className="hero">
+    <section id="top" aria-labelledby="hero-title" className="hero ground">
+      <Ground id="hero" priority />
       <div className="container">
         <div className="hero-grid">
           <h1 id="hero-title" className="t-h1 hero-title">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import Ground from "@/components/ui/Ground";
 import SectionHead from "@/components/ui/SectionHead";
 import FinishPicker from "@/components/devices/FinishPicker";
 import { FINISH_NOTE, FINISH_PICKER, HOME_SECTIONS } from "@/lib/constants";
@@ -17,19 +18,25 @@ const ROW_LINK = "link inline-block py-3 -my-3";
  * in columns 1 to 6, the note about the finishes that are not in the picker
  * and two hairline rows: the other things the shop wraps (a link into the
  * wraps page) and the paint-safety sentence.
+ *
+ * Grounds (docs/DESIGN.md 10.5): under lg the swatch fan sits behind the
+ * section head (GROUNDS.finishesHead, top right, gone before the picker);
+ * at lg the fan is the picker frame's mat, which FinishPicker draws itself.
+ * The head's action is an outline button, not floating green text.
  */
 export default function Finishes() {
   const copy = HOME_SECTIONS.finishes;
 
   return (
-    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule">
+    <section id={copy.id} aria-labelledby={`${copy.id}-title`} className="section section-rule ground">
+      <Ground id="finishesHead" className="under-lg" />
       <div className="container">
         <SectionHead
           title={copy.h2}
           lede={copy.lede}
           id={`${copy.id}-title`}
           action={
-            <Button variant="text" href={copy.link.href}>
+            <Button variant="outline" className="btn-sm" href={copy.link.href}>
               {copy.link.label}
             </Button>
           }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Ground from "@/components/ui/Ground";
 import SectionHead from "@/components/ui/SectionHead";
 import SwatchCard from "@/components/devices/SwatchCard";
 import FinishPicker from "@/components/devices/FinishPicker";
@@ -73,12 +74,24 @@ function PlainRow({ text }: { text: string }) {
  * powder coating one panel. No table anywhere. Complete at first paint with
  * JavaScript off: the picker shows its first finish, the tier cards all show
  * with Black carbon lit, the slider carries its default value.
+ *
+ * The ledgers that stood in six columns (the wrap types, the fleet rows, the
+ * tint extras, the powder list) now run across all twelve in two columns
+ * (.ledger-cols, docs/DESIGN.md 10.7) so the right half of the grid is never
+ * empty at 1440. On the wraps page the swatch fan sits behind the section
+ * head under lg (finishesHead); at lg the picker frame carries its own mat.
  */
 export default function Choose({ spec, className }: ChooseProps) {
   const choose = spec.choose;
+  const finishes = choose.kind === "finishes";
 
   return (
-    <section id={CHOOSE_ID[choose.kind]} className={cn("section section-rule", className)} aria-labelledby="choose-title">
+    <section
+      id={CHOOSE_ID[choose.kind]}
+      className={cn("section section-rule", finishes && "ground", className)}
+      aria-labelledby="choose-title"
+    >
+      {finishes ? <Ground id="finishesHead" className="under-lg" /> : null}
       <div className="container">
         <SectionHead title={SERVICE_TEMPLATE.chooseTitle} id="choose-title">
           {choose.kind === "finishes" ? <p className="t-label only-lg mt-4">{FINISH_PICKER.hint}</p> : null}
@@ -97,9 +110,9 @@ function Device({ choose }: { choose: ChooseSpec }) {
           <FinishPicker seeLink={false} className="mt-10 lg:mt-12" />
 
           <div className="grid-12 mt-12 lg:mt-16">
-            <div className="lg:col-span-6">
-              <p className="t-small muted">{choose.note}</p>
-              <ul role="list" className="ledger mt-6!">
+            <div className="lg:col-span-12">
+              <p className="t-small muted measure-wide">{choose.note}</p>
+              <ul role="list" className="ledger ledger-cols mt-6!">
                 {choose.types.map((type) => (
                   <PlainRow key={type} text={type} />
                 ))}
@@ -128,8 +141,8 @@ function Device({ choose }: { choose: ChooseSpec }) {
               <SwatchCard key={id} photo={photo(id)} aspect="4/3" />
             ))}
           </div>
-          <div className="panel mt-6 lg:col-span-6">
-            <ul role="list" className="ledger">
+          <div className="panel mt-6 lg:col-span-12">
+            <ul role="list" className="ledger ledger-cols">
               {choose.rows.map((row) => (
                 <PlainRow key={row} text={row} />
               ))}
@@ -153,9 +166,9 @@ function Device({ choose }: { choose: ChooseSpec }) {
           {/* ShadeLadder prints SHADE_LEGAL once beneath its panes; nothing else on this page repeats it. */}
           <ShadeLadder className="mt-12 lg:col-span-12 lg:row-start-2" />
           <TierTable className="mt-12 lg:col-span-12 lg:row-start-3" />
-          <div className="panel mt-12 lg:col-span-6 lg:row-start-4">
+          <div className="panel mt-12 lg:col-span-12 lg:row-start-4">
             <p className="t-label">Also</p>
-            <ul role="list" className="ledger mt-3!">
+            <ul role="list" className="ledger ledger-cols mt-3!">
               {choose.rows.map((row) => (
                 <PlainRow key={row} text={row} />
               ))}
@@ -210,8 +223,8 @@ function Device({ choose }: { choose: ChooseSpec }) {
     case "powder":
       return (
         <div className="grid-12 mt-10 lg:mt-12">
-          <div className="panel lg:col-span-6">
-            <ul role="list" className="ledger">
+          <div className="panel lg:col-span-12">
+            <ul role="list" className="ledger ledger-cols">
               {choose.rows.map((row) => (
                 <PlainRow key={row} text={row} />
               ))}
