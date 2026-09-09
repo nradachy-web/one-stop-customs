@@ -1,0 +1,1383 @@
+@import "tailwindcss";
+
+/* ============================================================
+   ONE STOP CUSTOMS BY RICKY WRAPS, design system v1: "The sample book"
+
+   One continuous sheet of warm paper from the header to the last rule.
+   Every photo is a swatch card: white face, liner edge, the photo, a chip
+   bar in the car's own colour and a mono label. Black is a material (tint
+   panes, lightbox, the footer as back cover), never a section ground. The
+   logo green marks state only. Two type voices: Bricolage Grotesque for the
+   cover, IBM Plex Mono for every leaf label.
+
+   Read docs/DESIGN.md before changing anything here. After phase 0, lane E
+   owns edits to this file; append changes with a comment naming the lane.
+
+   TAILWIND V4 LAYERING, READ THIS FIRST
+   Tailwind v4 puts its utilities in @layer utilities. Everything below that
+   is not inside an @layer block is unlayered, and unlayered rules beat
+   layered ones regardless of order or specificity. So `.btn { height: 48px }`
+   here wins over `h-14` on the same element, `.chip-label { display: flex }`
+   wins over `hidden`, and so on. This is intentional: the component classes
+   below are the contract, and a utility should only be able to override one
+   on purpose. When a utility must win, give it the `!` suffix (`hidden!`,
+   `lg:flex!`) or use the visibility helpers `.only-lg` and `.under-lg`
+   defined here, which carry !important for exactly that reason. Components
+   add utilities for spacing, grid placement and aspect ratio only.
+   ============================================================ */
+
+@theme {
+  /* The default Tailwind palette, radii, shadows and blurs are removed on
+     purpose. The only colours a lane can reach are the tokens below, so no
+     component can drift to a navy surface, a green button or a soft shadow
+     through a utility. Nothing on this site is rounded, shadowed or blurred. */
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --blur-*: initial;
+
+  /* colour, docs/DESIGN.md 2.1 */
+  --color-paper: #f3f1ec; /* the sheet: body, header, mobile bar, ticket ground */
+  --color-white: #ffffff; /* card face, table cells, fields, active tint column, menu sheet */
+  --color-liner: #d8d5ce; /* every hairline on paper; never text */
+  --color-ink: #141412; /* primary text, wordmark, solid buttons, table values */
+  --color-graphite: #55534e; /* secondary text; 6.4:1 on paper, 7.6:1 on white */
+  --color-black: #000000; /* black as material: tint panes, lightbox, footer */
+  --color-ash: #b4b1aa; /* secondary text on black; 9.9:1 */
+  --color-signal: #32c246; /* the logo green; state marks only, never text or fill under text */
+  --color-error: #b3261e; /* field errors and the honest notice border */
+
+  /* type, docs/DESIGN.md 2.3; the variables come from src/lib/fonts.ts */
+  --font-sans: var(--font-bricolage), "Bricolage Grotesque", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  /* breakpoints; md (48rem) and lg (64rem) are Tailwind's own */
+  --breakpoint-xs: 26rem;
+}
+
+:root {
+  /* derived values */
+  --hairline-on-black: rgba(255, 255, 255, 0.16);
+  --hairline-on-black-strong: rgba(255, 255, 255, 0.4);
+  --ink-hover: #2a2a27; /* solid ink darkens to this on hover */
+  --ink-underline: rgba(20, 20, 18, 0.6); /* resting underline colour for links */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nav-h: 64px;
+  --bar-h: 56px; /* mobile action bar */
+  --chip-h: 10px; /* the colour bar in every chip strip */
+  --strip-h: 56px; /* action strip cells at md and up */
+  --shade: 0.6; /* default overlay opacity for the tint slider pane */
+}
+
+/* ---------- base ---------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 16px); /* anchors like #quote land under the sticky header */
+  -webkit-text-size-adjust: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-graphite) transparent;
+}
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1;
+}
+/* Under lg the fixed action bar covers the bottom of the page; reserve its
+   height so the footer credit is never hidden behind it. */
+@media (max-width: 63.99rem) {
+  body:has(.bar) {
+    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  }
+}
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+img,
+video,
+picture {
+  display: block;
+  max-width: 100%;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+figure {
+  margin: 0;
+}
+/* Focus is the one place green is allowed on every ground, including black. */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+/* Skip-link target: focus moves here, a ring around the whole landmark is not wanted. */
+main:focus {
+  outline: none;
+}
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ---------- visibility helpers (beat the unlayered display rules above and below) ---------- */
+@media (max-width: 63.99rem) {
+  .only-lg {
+    display: none !important;
+  }
+}
+@media (min-width: 64rem) {
+  .under-lg {
+    display: none !important;
+  }
+}
+/* JavaScript on: the head gate sets data-js="on" at first paint. Without it
+   the filter row, the "Sending" state and the bar's hide logic are absent. */
+html:not([data-js="on"]) .js-only {
+  display: none;
+}
+
+/* ---------- type, docs/DESIGN.md 2.3 ---------- */
+/* Bricolage: the opsz and wdth axes are set per class, so a heading is a
+   condensed signage face and body copy is the same file at rest. */
+.t-h1 {
+  font-family: var(--font-sans);
+  font-size: clamp(2.75rem, 7.4vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 0.96;
+  font-stretch: 82%;
+  font-variation-settings: "opsz" 96, "wdth" 82;
+  text-wrap: balance;
+}
+/* Service, city, gallery and about h1s sit at the h2 size band. */
+.t-h1-service {
+  font-size: clamp(2.5rem, 5.6vw, 4.5rem);
+}
+.t-h2 {
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-stretch: 86%;
+  font-variation-settings: "opsz" 72, "wdth" 86;
+  text-wrap: balance;
+}
+.t-h3 {
+  font-family: var(--font-sans);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  font-stretch: 92%;
+  font-variation-settings: "opsz" 24, "wdth" 92;
+}
+@media (min-width: 64rem) {
+  .t-h3 {
+    font-size: 1.5rem;
+  }
+}
+/* The lede carries no colour of its own: the hero sub and section ledes add
+   .muted (graphite); a review quote is a lede in ink. */
+.t-lede {
+  font-family: var(--font-sans);
+  font-size: clamp(1.125rem, 1.5vw, 1.3125rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.45;
+  font-variation-settings: normal;
+  text-wrap: pretty;
+}
+.t-body {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.55;
+  font-variation-settings: normal;
+  text-wrap: pretty;
+}
+.t-small {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.45;
+  font-variation-settings: normal;
+}
+/* Plex Mono: the leaf labels. Sentence case, weight 500 only. */
+.t-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--color-graphite);
+}
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+.t-chip {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+.t-wordmark {
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-stretch: 78%;
+  font-variation-settings: "opsz" 96, "wdth" 78;
+  white-space: nowrap;
+}
+.t-byline {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: var(--color-graphite);
+  white-space: nowrap;
+}
+.measure {
+  max-width: 36rem;
+}
+.measure-wide {
+  max-width: 44rem;
+}
+.muted {
+  color: var(--color-graphite);
+}
+
+/* ---------- layout, docs/DESIGN.md 2.4 ---------- */
+/* 1440 cap with 56px padding gives a 1328px content width at lg, so a 1440px
+   photo laid across the container is never upscaled. */
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+@media (min-width: 48rem) {
+  .container {
+    padding-inline: 32px;
+  }
+}
+@media (min-width: 64rem) {
+  .container {
+    padding-inline: 56px;
+  }
+}
+/* Below lg the grid is a plain block in DOM order; children space themselves
+   with margin utilities. At lg it is the 12-column sheet with a binding column. */
+.grid-12 {
+  display: block;
+}
+@media (min-width: 64rem) {
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+}
+/* The binding tab: the section's mono label. Under lg it is the single line
+   directly above the heading; at lg it sits in columns 1 to 2, padded down to
+   the h2 baseline. The padding value is tuned by eye by lane A and reported
+   to lane E. It is the same element in both cases, not an eyebrow. */
+.tab {
+  display: block;
+  margin: 0 0 8px;
+}
+@media (min-width: 64rem) {
+  .tab {
+    grid-column: 1 / span 2;
+    margin: 0;
+    padding-top: clamp(1.1rem, 2.4vw, 2rem);
+  }
+}
+.section {
+  padding-block: 64px;
+}
+@media (min-width: 64rem) {
+  .section {
+    padding-block: 120px;
+  }
+}
+/* The rule sits on the section element so it runs the full viewport width.
+   Adjacent sections share one rule: the leaves of a bound book. */
+.section-rule {
+  border-top: 1px solid var(--color-liner);
+}
+/* Black as material: the footer (back cover) and the lightbox only. */
+.on-black {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+.on-black .muted,
+.on-black .t-label,
+.on-black .t-byline,
+.on-black .t-chip {
+  color: var(--color-ash);
+}
+/* Hairline rows: included lists, coverage, FAQ, Also rows, the shop sheet. */
+.ledger {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-liner);
+}
+.ledger > * {
+  border-bottom: 1px solid var(--color-liner);
+  padding: 14px 0;
+}
+.on-black .ledger {
+  border-top-color: var(--hairline-on-black);
+}
+.on-black .ledger > * {
+  border-bottom-color: var(--hairline-on-black);
+}
+/* Shop sheet rows: a mono key column over or beside a mono value. */
+.sheet-row {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+}
+/* The numbered process: the only numbered list on the site. */
+.process {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-liner);
+}
+.process > li {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  column-gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-liner);
+}
+
+/* ---------- header ---------- */
+/* A solid paper band with its rule from the first frame. Nothing changes on scroll. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--nav-h);
+  background: var(--color-paper);
+  border-bottom: 1px solid var(--color-liner);
+}
+.nav-link {
+  display: inline-block;
+  padding: 4px 0;
+  color: var(--color-ink);
+  text-decoration: none;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+.nav-link:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--ink-underline);
+}
+.nav-link[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--color-ink);
+}
+/* Mobile menu: a details element so it opens with JavaScript off. The sheet
+   is clipped open from the header's bottom edge (clip-path, 220 ms) rather
+   than translated, because a child cannot slide out from behind its own
+   parent's background. */
+.menu {
+  position: static;
+}
+.menu > summary {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 4px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-ink);
+}
+.menu-sheet {
+  position: absolute;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  z-index: 39;
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-liner);
+  clip-path: inset(0);
+  transition: clip-path 220ms var(--ease-out);
+}
+@starting-style {
+  .menu[open] .menu-sheet {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+.menu-row {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 20px;
+}
+
+/* ---------- photo frame (Photo.tsx and Loop.tsx) ---------- */
+/* Radius 0: vinyl is cut square. Liner shows while the image loads. */
+.photo {
+  border-radius: 0;
+  background: var(--color-liner);
+  overflow: hidden;
+}
+.photo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- buttons, docs/DESIGN.md 5.3 ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 0;
+  border: 1px solid transparent;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  font-variation-settings: normal;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+}
+.btn-solid {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-white);
+}
+.btn-solid:hover {
+  background: var(--ink-hover);
+  border-color: var(--ink-hover);
+}
+.btn-outline {
+  background: transparent;
+  border-color: var(--color-liner);
+  color: var(--color-ink);
+}
+.btn-outline:hover {
+  border-color: var(--color-ink);
+}
+.on-black .btn-outline {
+  color: var(--color-white);
+  border-color: var(--hairline-on-black-strong);
+}
+.on-black .btn-outline:hover {
+  border-color: var(--color-white);
+}
+/* Text buttons and prose links are ink underlined in ink. Never green. */
+.btn-text {
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--ink-underline);
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+.btn-text:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--color-ink);
+}
+.on-black .btn-text {
+  color: var(--color-white);
+  text-decoration-color: var(--hairline-on-black-strong);
+}
+.on-black .btn-text:hover {
+  text-decoration-color: var(--color-white);
+}
+.btn-lg {
+  height: 56px;
+  padding: 0 24px;
+  font-size: 16px;
+}
+.btn[aria-disabled="true"],
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- links in prose ---------- */
+.link {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--ink-underline);
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+.link:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--color-ink);
+}
+.on-black .link {
+  color: var(--color-white);
+  text-decoration-color: var(--hairline-on-black-strong);
+}
+.on-black .link:hover {
+  text-decoration-color: var(--color-white);
+}
+
+/* ---------- the swatch card, docs/DESIGN.md 5.4 (the site's only photo frame) ---------- */
+.card {
+  display: block;
+  padding: 0;
+  margin: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-liner);
+  border-radius: 0;
+  overflow: hidden;
+}
+/* A linked card (gallery, recent work) draws nothing on hover; focus draws the ring. */
+.card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+/* The photo box. It must carry an aspect ratio (an aspect-[...] utility or an
+   inline style) because its children fill it absolutely; that fixed box is
+   what makes layout shift impossible while the photo loads. */
+.card-photo {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-liner);
+}
+.card-photo > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.card-photo img,
+.card-photo video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The chip strip: a 10px bar in the car's own colour, then a 30px label row.
+   The strip is 40px unless the left label wraps; the card allows it. */
+.chip-strip {
+  display: block;
+  background: var(--color-white);
+}
+.chip-bar {
+  display: block;
+  width: 100%;
+  height: var(--chip-h);
+  background: var(--chip, var(--color-liner));
+}
+/* The clear chip: the one chip that is not a colour, which is the point of PPF. */
+.chip-bar-clear {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-liner);
+}
+.chip-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 30px;
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+/* Left: finish, colour, vehicle. Never truncates; it wraps and the strip grows. */
+.chip-label > :first-child {
+  flex: 1 1 0;
+  min-width: 0;
+  color: var(--color-ink);
+}
+/* Right: the setting and the frame counter. May ellipsis at narrow widths. */
+.chip-label > :last-child:not(:first-child) {
+  flex: 0 1 auto;
+  max-width: 60%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: right;
+  color: var(--color-graphite);
+}
+.on-black .card {
+  background: var(--color-black);
+  border-color: var(--hairline-on-black);
+}
+.on-black .chip-strip {
+  background: var(--color-black);
+}
+.on-black .chip-label,
+.on-black .chip-label > :first-child,
+.on-black .chip-label > :last-child:not(:first-child) {
+  color: var(--color-ash);
+}
+.on-black .chip-bar-clear {
+  box-shadow: inset 0 0 0 1px var(--hairline-on-black-strong);
+}
+
+/* ---------- the one page-load moment: the peel, docs/DESIGN.md 3.1 ---------- */
+/* Home hero only, lg and up, once per full load. The photo is painted in its
+   final box at 0 ms (it is the LCP; occlusion does not count against it). A
+   white backing sheet with a 2px green seam slides off it left to right like
+   the release liner coming off a sheet of vinyl, then the chip label prints.
+   Transform and clip-path only. Every rule is gated on html[data-motion="on"],
+   which the inline head script sets only when the visitor has not asked for
+   reduced motion, so with JavaScript off, in a crawler, under lg, or with
+   reduced motion the finished card is simply there. */
+@keyframes peel {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(101%);
+  }
+}
+@keyframes print {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.peel {
+  display: none;
+}
+html[data-motion="on"] .peel {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: var(--color-white);
+  border-left: 2px solid var(--color-signal);
+  transform: translateX(0);
+  animation: peel 700ms var(--ease-out) 120ms both;
+  will-change: transform;
+  pointer-events: none;
+}
+.print {
+  display: inline-block;
+  max-width: 100%;
+}
+html[data-motion="on"] .print {
+  animation: print 240ms var(--ease-out) 820ms both;
+}
+@media (max-width: 63.99rem) {
+  html[data-motion="on"] .peel {
+    display: none;
+  }
+  html[data-motion="on"] .print {
+    animation: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .peel {
+    display: none !important;
+  }
+  .print {
+    animation: none !important;
+  }
+}
+
+/* ---------- the action strip, docs/DESIGN.md 5.6 (four doors, same order everywhere) ---------- */
+.strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--color-liner);
+  background: var(--color-paper);
+}
+.strip-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 6px 12px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variation-settings: normal;
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+.strip-cell:hover {
+  background: var(--color-white);
+}
+/* Under md: two rows of two, a rule between the rows, a rule between the columns. */
+.strip-cell:nth-child(even) {
+  border-left: 1px solid var(--color-liner);
+}
+.strip-cell:nth-child(n + 3) {
+  border-top: 1px solid var(--color-liner);
+}
+@media (min-width: 48rem) {
+  .strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .strip-cell {
+    min-height: var(--strip-h);
+  }
+  .strip-cell:nth-child(n + 2) {
+    border-left: 1px solid var(--color-liner);
+    border-top: 0;
+  }
+}
+/* Compact: Call and Get a quote only, two cells at every width. */
+.strip-compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 48rem) {
+  .strip-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* Cell 1, Call, is the solid cell. */
+.strip-cell-solid {
+  background: var(--color-ink);
+  color: var(--color-white);
+}
+.strip-cell-solid:hover {
+  background: var(--ink-hover);
+}
+/* "opens Square" under Book online, md and up. */
+.strip-note {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: var(--color-graphite);
+}
+@media (min-width: 48rem) {
+  .strip-note {
+    display: block;
+  }
+}
+.strip-cell-solid .strip-note {
+  color: var(--color-ash);
+}
+
+/* ---------- the mobile action bar, docs/DESIGN.md 5.7 (the strip's fixed twin) ---------- */
+.bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  height: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--color-paper);
+  border-top: 1px solid var(--color-liner);
+  transform: translateY(0);
+  transition: transform 200ms var(--ease-out);
+}
+/* Added by the client effect while any [data-strip] is on screen. */
+.bar-hidden {
+  transform: translateY(100%);
+}
+.bar-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--bar-h);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  font-variation-settings: normal;
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-out);
+}
+.bar-cell + .bar-cell {
+  border-left: 1px solid var(--color-liner);
+}
+.bar-cell:hover {
+  background: var(--color-white);
+}
+.bar .strip-cell-solid,
+.bar-cell.strip-cell-solid {
+  background: var(--color-ink);
+  color: var(--color-white);
+}
+@media (min-width: 64rem) {
+  .bar {
+    display: none;
+  }
+}
+
+/* ---------- fields, docs/DESIGN.md 5.17 ---------- */
+.field {
+  display: block;
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 0;
+  border: 1px solid var(--color-liner);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  font-variation-settings: normal;
+  transition: border-color 160ms var(--ease-out);
+}
+.field::placeholder {
+  color: var(--color-graphite);
+  opacity: 1;
+}
+.field:hover {
+  border-color: var(--color-graphite);
+}
+.field:focus {
+  border-color: var(--color-ink);
+}
+.field:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+textarea.field {
+  height: auto;
+  min-height: 120px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+.field-error,
+.field[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+.error-text {
+  color: var(--color-error);
+}
+
+/* ---------- chip checkboxes (the quote ticket), docs/DESIGN.md 5.17 ---------- */
+/* A real checkbox, visually hidden; the label is the chip. Checked draws the
+   3px signal tab across the top edge and the border goes liner to ink. The
+   input may sit inside the label or directly before it. */
+.chipbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-liner);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  font-variation-settings: normal;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 120ms var(--ease-out), box-shadow 120ms var(--ease-out);
+}
+.chipbox input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.chipbox:hover {
+  border-color: var(--color-ink);
+}
+.chipbox:has(input:checked),
+input:checked + .chipbox {
+  border-color: var(--color-ink);
+  box-shadow: inset 0 3px 0 var(--color-signal);
+}
+.chipbox:has(input:focus-visible),
+input:focus-visible + .chipbox {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+/* The ticket itself: a single-column job ticket on a white card. Conditional
+   rows are revealed by :has() on the service checkboxes, instantly, with no
+   JavaScript. Lane D gives the Vinyl wrap checkbox id="svc-wrap" and the
+   Window tint checkbox id="svc-tint". */
+.ticket {
+  background: var(--color-white);
+  border: 1px solid var(--color-liner);
+  padding: 24px;
+}
+@media (min-width: 64rem) {
+  .ticket {
+    padding: 32px;
+  }
+}
+.ticket-section {
+  border-top: 1px solid var(--color-liner);
+  padding-top: 24px;
+  margin-top: 24px;
+}
+.rows-wrap,
+.rows-tint {
+  display: none;
+}
+.ticket:has(#svc-wrap:checked) .rows-wrap {
+  display: grid;
+}
+.ticket:has(#svc-tint:checked) .rows-tint {
+  display: grid;
+}
+
+/* ---------- the tint tier table, docs/DESIGN.md 5.9 ---------- */
+/* A real table, three film columns, values in mono. The active column is
+   marked by a 3px signal rule over its header and white cells. The server
+   render carries data-active="carbon"; the client only changes the attribute. */
+.tiers {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.tiers th,
+.tiers td {
+  padding: 12px;
+  border-bottom: 1px solid var(--color-liner);
+  vertical-align: top;
+  text-align: left;
+}
+.tiers thead th {
+  padding: 0;
+  border-top: 1px solid var(--color-liner);
+  transition: box-shadow 120ms var(--ease-out), background-color 120ms var(--ease-out);
+}
+.tiers thead th > button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.tiers thead th > button:focus-visible {
+  outline-offset: -2px;
+}
+.tiers th[scope="row"] {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--color-graphite);
+}
+.tiers td {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  transition: background-color 120ms var(--ease-out);
+}
+.tiers thead th:first-child {
+  width: 22%;
+}
+/* Active column: header rule and white cells, by the table's data-active
+   attribute (server and client) or by aria-pressed on the header (client). */
+.tiers thead th[aria-pressed="true"],
+.tiers thead th:has(> button[aria-pressed="true"]),
+.tiers[data-active="standard"] thead th:nth-child(2),
+.tiers[data-active="carbon"] thead th:nth-child(3),
+.tiers[data-active="ceramic"] thead th:nth-child(4) {
+  box-shadow: inset 0 3px 0 var(--color-signal);
+  background: var(--color-white);
+}
+.tiers[data-active="standard"] td:nth-child(2),
+.tiers[data-active="carbon"] td:nth-child(3),
+.tiers[data-active="ceramic"] td:nth-child(4) {
+  background: var(--color-white);
+}
+/* Under md the table stays three columns at 13px; values wrap, nothing scrolls. */
+@media (max-width: 47.99rem) {
+  .tiers th,
+  .tiers td {
+    padding: 10px 8px;
+  }
+  .tiers thead th > button {
+    padding: 10px 8px;
+  }
+  .tiers thead th:first-child {
+    width: 84px;
+  }
+  .tiers td,
+  .tiers th[scope="row"],
+  .tiers thead th > button {
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    overflow-wrap: anywhere;
+  }
+}
+.tiers-note {
+  margin-top: 12px;
+}
+
+/* ---------- the shade ladder, docs/DESIGN.md 5.10 ---------- */
+/* The same crop under black overlays at stored opacities. Each pane sets
+   --shade inline (0.92, 0.72, 0.52, 0.36, 0) and the slider pane sets it live
+   on the input event. Five across from md; the tint page passes --panes: 6. */
+.ladder {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (min-width: 48rem) {
+  .ladder {
+    grid-template-columns: repeat(var(--panes, 5), minmax(0, 1fr));
+  }
+}
+.pane {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-black);
+  color: var(--color-ash);
+}
+.pane-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-black);
+}
+.pane-photo > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pane-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Pure black at the pane's opacity. No transition, so it tracks the thumb. */
+.pane-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-black);
+  opacity: var(--shade, 0);
+  pointer-events: none;
+}
+.pane-label {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 12px;
+  background: var(--color-black);
+  color: var(--color-ash);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+/* The native range input: a 2px ink track and a 20px square thumb. */
+.shade-range {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.shade-range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--color-ink);
+}
+.shade-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -9px;
+  border-radius: 0;
+  border: 0;
+  background: var(--color-ink);
+}
+.shade-range::-moz-range-track {
+  height: 2px;
+  background: var(--color-ink);
+}
+.shade-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  border: 0;
+  background: var(--color-ink);
+}
+.shade-range:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 4px;
+}
+
+/* ---------- gallery filter chips, docs/DESIGN.md 7.4 ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-liner);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  font-variation-settings: normal;
+  cursor: pointer;
+  transition: border-color 120ms var(--ease-out), box-shadow 120ms var(--ease-out);
+}
+.chip:hover {
+  border-color: var(--color-ink);
+}
+.chip[aria-pressed="true"] {
+  border-color: var(--color-ink);
+  box-shadow: inset 0 3px 0 var(--color-signal);
+}
+/* The gallery is the one place the pressed tab is ink, because the lime and
+   mint BMWs share that page and green never sits beside them. */
+.filters .chip[aria-pressed="true"] {
+  box-shadow: inset 0 3px 0 var(--color-ink);
+}
+
+/* ---------- scroll-snap rows (recent work, and the finish row on phones) ---------- */
+/* Native snap, no arrows, no autoplay. The scrollbar is hidden at lg but the
+   row stays keyboard and trackpad scrollable. Padding matches the container so
+   the first card aligns with the content column. */
+.snap-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-inline: 20px;
+}
+.snap-row > * {
+  flex: 0 0 72vw;
+  scroll-snap-align: start;
+}
+@media (min-width: 48rem) {
+  .snap-row {
+    scroll-padding-inline: 32px;
+  }
+  .snap-row > * {
+    flex-basis: 360px;
+  }
+}
+@media (min-width: 64rem) {
+  .snap-row {
+    scroll-padding-inline: 56px;
+    scrollbar-width: none;
+  }
+  .snap-row::-webkit-scrollbar {
+    display: none;
+  }
+}
+/* Phone-only snap row: at md and up it is inert, so grid utilities take over. */
+@media (max-width: 47.99rem) {
+  .snap-row-sm {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: 20px;
+  }
+  .snap-row-sm > * {
+    flex: 0 0 72vw;
+    scroll-snap-align: start;
+  }
+}
+
+/* ---------- FAQ, docs/DESIGN.md 5.16 ---------- */
+/* Native details inside a .ledger. The plus glyph is two 1px ink rules drawn
+   inline; it rotates 45 degrees, and the answer appears instantly. */
+.faq > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 12px 0;
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  font-stretch: 92%;
+  font-variation-settings: "opsz" 24, "wdth" 92;
+  color: var(--color-ink);
+}
+.faq-plus {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--color-ink);
+  transition: transform 200ms var(--ease-out);
+}
+.faq[open] .faq-plus {
+  transform: rotate(45deg);
+}
+.faq-answer {
+  padding-bottom: 20px;
+}
+
+/* ---------- the honest notice, docs/DESIGN.md 5.17 and 5.20 ---------- */
+/* Replaces the ticket when the Web3Forms key is absent, and stands in as the
+   error state. Error border so it reads as a flag, never green. */
+.notice {
+  background: var(--color-white);
+  border: 1px solid var(--color-error);
+  padding: 24px;
+}
+
+/* ---------- lightbox, docs/DESIGN.md 5.19 ---------- */
+/* A native dialog. The backdrop is black at 92 percent; the dialog is
+   transparent over it, fades in over 180 ms, and closes with a hard cut. */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 24px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-white);
+  opacity: 1;
+  transition: opacity 180ms var(--ease-out);
+}
+.lightbox[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+@starting-style {
+  .lightbox[open] {
+    opacity: 0;
+  }
+}
+.lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.92);
+}
+.lightbox img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100svh - 140px);
+  object-fit: contain;
+}
+body:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+/* ---------- reduced motion, docs/DESIGN.md 3.4 ---------- */
+/* The peel and the print are handled above (they never exist). Everything
+   else collapses to an instant change: the bar, the menu, the FAQ glyph, the
+   lightbox fade, the button colours. Loop.tsx does not mount its video. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,17 @@
+/node_modules
+/node_modules.nosync
+/.next
+/.next.nosync
+/out
+/out.nosync
+*.nosync
+/build
+*.pem
+.env*
+!.env.example
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+_plan/
+.playwright-mcp/
