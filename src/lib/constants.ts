@@ -533,12 +533,14 @@ export const TINT_TIERS: TintTiers = {
 };
 
 /** The shade ladder. Black overlay opacity per pane. No percentages printed until Ricky confirms stocked shades. */
+// Light to dark, left to right: the slider thumb moves right as the glass gets darker
+// (0 is no film, 92 is the darkest pane), so the ticks and the ladder read the same way.
 export const SHADES: readonly Shade[] = [
-  { label: "Darkest", opacity: 0.92 },
-  { label: "Dark", opacity: 0.72 },
-  { label: "Medium", opacity: 0.52 },
-  { label: "Light", opacity: 0.36 },
   { label: "No film", opacity: 0 },
+  { label: "Light", opacity: 0.36 },
+  { label: "Medium", opacity: 0.52 },
+  { label: "Dark", opacity: 0.72 },
+  { label: "Darkest", opacity: 0.92 },
 ] as const;
 
 export const SHADE_SCENE_ID = "maserati-blue-side";

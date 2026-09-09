@@ -1824,6 +1824,7 @@ html[data-js="on"] .set-frame > .set-slide[data-active="true"] {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
+  align-items: start; /* a short quote does not stretch to its neighbour's height */
 }
 @media (min-width: 48rem) {
   .reviews-grid {
@@ -2055,14 +2056,6 @@ body:has(.lightbox[open]) {
     transform: scaleX(1);
   }
 }
-@keyframes mask-settle {
-  from {
-    clip-path: inset(0 3%);
-  }
-  to {
-    clip-path: inset(0 0);
-  }
-}
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     html[data-motion="on"] .card {
@@ -2078,12 +2071,6 @@ body:has(.lightbox[open]) {
        the card itself, so the colour bar and label beneath the photo are
        never clipped while the band is entering (the figure's own overflow
        and radius still round the corners). */
-    html[data-motion="on"] .mask-settle .card-photo,
-    html[data-motion="on"] .band.mask-settle {
-      animation: mask-settle linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 70%;
-    }
   }
 }
 

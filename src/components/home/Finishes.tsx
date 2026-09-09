@@ -37,7 +37,7 @@ export default function Finishes() {
           <p className="t-label only-lg mt-3">{FINISH_PICKER.hint}</p>
         </SectionHead>
 
-        <FinishPicker className="mt-10 lg:mt-12" />
+        <FinishPicker seeLink={false} className="mt-10 lg:mt-12" />
 
         <div className="grid-12 mt-8 lg:mt-10">
           <div className="lg:col-span-6 lg:col-start-1">
