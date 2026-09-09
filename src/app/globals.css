@@ -329,7 +329,8 @@ html:not([data-js="on"]) .js-only {
   .tab {
     grid-column: 1 / span 2;
     margin: 0;
-    padding-top: clamp(1.1rem, 2.4vw, 2rem);
+    /* Integration: measured 2px above the h2 baseline at 1440 with a 2rem cap; 2.125rem (34px) lands on it. */
+    padding-top: clamp(1.1rem, 2.4vw, 2.125rem);
   }
 }
 .section {
@@ -632,9 +633,10 @@ html:not([data-js="on"]) .js-only {
 }
 .chip-label {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 4px 12px;
   min-height: 30px;
   padding: 4px 12px;
   font-family: var(--font-mono);
@@ -645,15 +647,19 @@ html:not([data-js="on"]) .js-only {
   color: var(--color-ink);
 }
 /* Left: finish, colour, vehicle. Never truncates; it wraps and the strip grows. */
+/* Integration: the left label keeps its natural width so a narrow card (the
+   two column gallery at 390) wraps the setting onto a second row instead of
+   crushing the label to one word per line. The strip grows; the card allows it. */
 .chip-label > :first-child {
-  flex: 1 1 0;
+  flex: 1 1 auto;
   min-width: 0;
   color: var(--color-ink);
 }
 /* Right: the setting and the frame counter. May ellipsis at narrow widths. */
 .chip-label > :last-child:not(:first-child) {
   flex: 0 1 auto;
-  max-width: 60%;
+  margin-left: auto;
+  max-width: 100%;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -1072,20 +1078,21 @@ input:focus-visible + .chipbox {
 @media (max-width: 47.99rem) {
   .tiers th,
   .tiers td {
-    padding: 10px 8px;
+    padding: 10px 6px;
   }
   .tiers thead th > button {
-    padding: 10px 8px;
+    padding: 10px 6px;
   }
+  /* Integration: 84px broke "rejection" mid word at 390; 92px with 6px padding keeps every word whole down to 360. */
   .tiers thead th:first-child {
-    width: 84px;
+    width: 92px;
   }
   .tiers td,
   .tiers th[scope="row"],
   .tiers thead th > button {
     font-size: 13px;
     letter-spacing: 0.01em;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 }
 .tiers-note {
