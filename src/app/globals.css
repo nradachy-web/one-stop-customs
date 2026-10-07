@@ -1,2385 +1,1783 @@
 @import "tailwindcss";
 
 /* ============================================================
-   ONE STOP CUSTOMS BY RICKY WRAPS, design system v2: "Liner off"
+   ONE STOP CUSTOMS BY RICKY WRAPS, design system v4 (October 2026)
 
-   A wrap bay at night. The page is true black, the cars are the colour, the
-   logo green is the one accent, and the type is Inter Tight set big and
-   tight. One page-load moment (the liner peels off the hero photo and the
-   copy rises), one living photo (the real timelapse), and every other move
-   answers an action. Nothing is hidden until scroll. Read docs/DESIGN.md
-   before changing anything here. After phase 0, devices lane E1 owns edits
-   to this file; append changes with a comment naming the lane.
+   Structure first. Two planes alternate down every page: a near black
+   "dark" plane and a cool paper "light" plane. Each plane sets the same
+   handful of variables (--heading, --body, --key, --rule, --panel, --link),
+   and every component reads those, so any component works on either plane.
 
-   TAILWIND V4 LAYERING, READ THIS FIRST
-   Tailwind v4 puts its utilities in @layer utilities. Every rule in this
-   file that is not inside an @layer block is unlayered, and unlayered rules
-   beat layered ones regardless of order or specificity. So `.btn { height:
-   48px }` here wins over `h-14` on the same element, `.chip-label { display:
-   flex }` wins over `hidden`, and `.grid-12 { display: grid }` wins over
-   `block`. This is intentional: the component classes below are the
-   contract, and a utility should only be able to override one on purpose.
-   When a utility must win, give it the `!` suffix (`hidden!`, `lg:pt-12!`)
-   or use the visibility helpers `.only-lg` and `.under-lg`, which carry
-   !important for exactly that reason. Components add utilities for spacing,
-   grid placement and aspect ratio only, never colour, radius or type.
+   One accent, the logo green, and it is rationed: the primary button, one
+   word in a hero heading, the tick on a section rule, check marks, links.
+   Nothing else is green.
 
-   FONT TOKENS
-   src/lib/fonts.ts puts three variables on <html>: --font-display (Inter
-   Tight), --font-body (Inter) and --font-mono (IBM Plex Mono). The theme
-   tokens below deliberately use different names (--font-head, --font-sans,
-   --font-code) so a token never references a variable of its own name.
-   Tailwind's default --font-mono token is removed so it can never shadow the
-   next/font variable on the same element.
+   Type is Inter Tight for display and Inter for everything else, in
+   sentence case. Read docs/DESIGN.md before changing anything here.
+
+   TAILWIND V4 LAYERING
+   Every rule below lives in @layer base or @layer components, so a
+   Tailwind utility on the same element always wins. Components use
+   utilities for spacing and grid placement only.
    ============================================================ */
 
 @theme {
-  /* The default palette, radii, shadows and blurs are removed on purpose.
-     The only colours a lane can reach are the tokens below, so no component
-     can drift to a navy surface, a tinted near-black or a soft shadow
-     through a utility. Nothing on this site is shadowed, blurred or glassy. */
-  --color-*: initial;
-  --radius-*: initial;
-  --shadow-*: initial;
-  --inset-shadow-*: initial;
-  --drop-shadow-*: initial;
-  --blur-*: initial;
-  --font-mono: initial;
-  --font-serif: initial;
+  --font-sans: var(--ff-body), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--ff-display), "Inter Tight", "Inter", system-ui, sans-serif;
 
-  /* colour, docs/DESIGN.md 2.1 */
-  --color-black: #000000; /* the ground: body, header after scroll, footer, lightbox */
-  --color-charcoal: #141414; /* raised panels, cards, fields, the liner sheet, the menu sheet */
-  --color-charcoal-2: #1a1a1a; /* hover ground for panels, fields and rows */
-  --color-white: #ffffff; /* primary text on black; the one daylight sheet per page */
-  --color-silver: #c9ccd1; /* secondary text on black: ledes, body in cards, nav links at rest */
-  --color-ash: #8e9299; /* tertiary text on black: labels, captions, as-of lines, placeholders */
-  --color-ink: #111111; /* text on the daylight sheet and on green */
-  --color-steel: #5b6068; /* secondary text on the daylight sheet */
-  --color-green: #32c246; /* the logo green: solid buttons, chip tab, seam, slider thumb, focus */
-  --color-green-deep: #229a36; /* solid button hover */
-  --color-green-text: #5be07a; /* links and text buttons on black (12.4:1) */
-  --color-green-ink: #1b7f2c; /* links and text buttons on the daylight sheet (4.8:1) */
-  --color-error: #ff6b6b; /* field errors and the honest notice on black */
-  --color-error-ink: #b3261e; /* the same on the daylight sheet */
+  --color-ink-950: #0b0c0d;
+  --color-ink-900: #131516;
+  --color-ink-800: #1b1d1f;
+  --color-ink-700: #2b2e31;
+  --color-ink-600: #474c52;
+  --color-ink-500: #6a7077;
+  --color-ink-400: #8b9097;
+  --color-ink-300: #b9bdc3;
+  --color-ink-200: #d9dcdf;
+  --color-ink-100: #e9ebed;
+  --color-ink-50: #f4f5f6;
 
-  /* radius, docs/DESIGN.md 2.2 */
-  --radius-ui: 4px; /* buttons, fields, pills, segments, chip pills */
-  --radius-card: 6px; /* cards, panels, photos, the menu sheet */
+  --color-brand: #32c246;
+  --color-brand-bright: #5bd66f;
+  --color-brand-deep: #17752a;
 
-  /* type, docs/DESIGN.md 2.3; the variables come from src/lib/fonts.ts */
-  --font-head: var(--font-display), "Inter Tight", "Inter", system-ui, sans-serif;
-  --font-sans: var(--font-body), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-code: var(--font-mono), "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  /* breakpoints; md (48rem) and lg (64rem) are Tailwind's own */
   --breakpoint-xs: 26rem;
 }
 
 :root {
-  /* hairlines, docs/DESIGN.md 2.2 */
-  --hairline: rgba(255, 255, 255, 0.12); /* every rule and edge on black */
-  --hairline-strong: rgba(255, 255, 255, 0.32); /* outline buttons, slider track, active edges */
-  --hairline-light: rgba(17, 17, 17, 0.12); /* rules on the daylight sheet */
-  --hairline-light-strong: rgba(17, 17, 17, 0.4); /* outline buttons and fields on the daylight sheet */
-  --green-wash: rgba(50, 194, 70, 0.14); /* checked chips, hover ground on green edged rows */
-  --green-ring: rgba(50, 194, 70, 0.3); /* the soft ring around a focused field */
-  --white-wash: rgba(255, 255, 255, 0.06); /* outline button hover ground on black */
-
-  /* motion, docs/DESIGN.md 3 */
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --peel-ms: 800ms; /* the liner sliding off the hero photo */
-  --peel-delay: 100ms;
-  --rise-ms: 560ms; /* a hero line rising into place */
-
-  /* sizes */
-  --nav-h: 72px;
-  --bar-h: 56px; /* the mobile action bar */
-  --chip-h: 6px; /* the colour bar under a photo */
-  --shade: 0.6; /* default overlay opacity for the tint slider pane */
-}
-
-/* ---------- base ---------- */
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--nav-h) + 16px); /* anchors like #quote land under the fixed header */
-  -webkit-text-size-adjust: 100%;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-ash) transparent;
-  background: var(--color-black);
-  color-scheme: dark;
-}
-html,
-body {
-  max-width: 100%;
-  overflow-x: clip;
-}
-body {
-  background: var(--color-black);
-  color: var(--color-white);
-  font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "kern" 1, "cv11" 1; /* cv11: Inter's single storey a, closer to the logo's lettering */
-}
-/* Under lg the fixed action bar covers the bottom of the page; reserve its
-   height so the footer credit is never hidden behind it. */
-@media (max-width: 63.99rem) {
-  body:has(.bar) {
-    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom));
-  }
-}
-::selection {
-  background: var(--color-green);
-  color: var(--color-ink);
-}
-img,
-video,
-picture {
-  display: block;
-  max-width: 100%;
-}
-a {
-  color: inherit;
-  text-decoration: none;
-}
-button {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-button:disabled {
-  cursor: not-allowed;
-}
-figure,
-blockquote {
-  margin: 0;
-}
-/* The one ring. Green on every ground, including the daylight sheet. */
-:focus-visible {
-  outline: 2px solid var(--color-green);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-/* Skip-link target: focus moves here, a ring around the whole landmark is not wanted. */
-main:focus {
-  outline: none;
-}
-details > summary {
-  list-style: none;
-  cursor: pointer;
-}
-details > summary::-webkit-details-marker {
-  display: none;
-}
-/* Screen reader only: the "opens Square" note, the stepper's frame label. */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* ---------- visibility helpers (beat the unlayered display rules) ---------- */
-@media (max-width: 63.99rem) {
-  .only-lg {
-    display: none !important;
-  }
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --header-h: 68px;
+  --bar-h: 58px;
+  --r-ui: 8px;
+  --r-card: 12px;
 }
 @media (min-width: 64rem) {
-  .under-lg {
-    display: none !important;
+  :root {
+    --header-h: 76px;
   }
-}
-/* JavaScript on: the head gate sets data-js="on" at first paint. Without it
-   the gallery filters, the stepper controls, the tier pills and the "Sending"
-   state are absent, and every device shows its complete no-script state. */
-html:not([data-js="on"]) .js-only {
-  display: none !important;
 }
 
-/* ---------- type, docs/DESIGN.md 2.3 ---------- */
-/* Inter Tight, 800, tight. The h1 reaches 112px at 1556px wide and sits at
-   104px on a 1440 screen, where the headline holds two lines across the
-   1224px content width. If the second line wraps on the built page, drop
-   7.2vw to 7vw (101px) and nothing else. */
-.t-h1 {
-  font-family: var(--font-head);
-  font-size: clamp(2.75rem, 7.2vw, 7rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 0.92;
-  text-wrap: balance;
-}
-/* Service, city, gallery, about and contact h1s sit one step down. */
-.t-h1-service {
-  font-size: clamp(2.5rem, 5.6vw, 4.75rem);
-  letter-spacing: -0.035em;
-  line-height: 0.94;
-}
-.t-h2 {
-  font-family: var(--font-head);
-  font-size: clamp(2rem, 4.4vw, 3.75rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 0.96;
-  text-wrap: balance;
-}
-.t-h3 {
-  font-family: var(--font-head);
-  font-size: 1.375rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-@media (min-width: 64rem) {
-  .t-h3 {
-    font-size: 1.5rem;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 20px);
+    background: #0b0c0d;
   }
-}
-/* The giant phone number: the shop panel, the menu sheet, the thank-you page. */
-.t-phone {
-  font-family: var(--font-head);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-/* The lede carries no colour of its own: ledes add .muted (silver on black,
-   steel on the sheet); a review quote is a lede in white. */
-.t-lede {
-  font-family: var(--font-sans);
-  font-size: clamp(1.125rem, 1.5vw, 1.3125rem);
-  font-weight: 400;
-  letter-spacing: -0.005em;
-  line-height: 1.45;
-  text-wrap: pretty;
-}
-.t-body {
-  font-family: var(--font-sans);
-  font-size: 17px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-.t-small {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1.45;
-}
-/* Labels are Inter now, not mono: form labels, keys in the shop panel and tier cards, as-of lines. */
-.t-label {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  line-height: 1.3;
-  color: var(--color-ash);
-}
-/* Tabular numbers inside Inter text: the phone in buttons and the header. */
-.t-num {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0;
-  white-space: nowrap;
-}
-/* Plex Mono: the chip voice. The label under a photo, the frame counter, the hours rows. */
-.t-mono {
-  font-family: var(--font-code);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  font-variant-numeric: tabular-nums;
-}
-.t-chip {
-  font-family: var(--font-code);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-}
-.t-wordmark {
-  font-family: var(--font-head);
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  white-space: nowrap;
-}
-.t-byline {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.2;
-  color: var(--color-ash);
-  white-space: nowrap;
-}
-.measure {
-  max-width: 36rem;
-}
-.measure-wide {
-  max-width: 44rem;
-}
-.muted {
-  color: var(--color-silver);
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #474c52;
+    background: #f4f5f6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* The fixed action bar covers the bottom of a phone; reserve its height. */
+  @media (max-width: 63.99rem) {
+    body:has(.mbar) {
+      padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom));
+    }
+  }
+  ::selection {
+    background: #32c246;
+    color: #06140a;
+  }
+  img,
+  picture,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  :focus-visible {
+    outline: 2px solid #32c246;
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+  main:focus {
+    outline: none;
+  }
+  summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
 }
 
-/* ---------- layout, docs/DESIGN.md 2.4 ---------- */
-.container {
-  width: 100%;
-  max-width: 1320px;
-  margin-inline: auto;
-  padding-inline: 20px;
-}
-@media (min-width: 48rem) {
-  .container {
-    padding-inline: 32px;
+@layer components {
+  /* ---------- planes ---------- */
+  .plane-dark {
+    --bg: #0b0c0d;
+    --panel: #131516;
+    --panel-2: #1b1d1f;
+    --rule: rgba(255, 255, 255, 0.11);
+    --rule-strong: rgba(255, 255, 255, 0.3);
+    --heading: #f5f6f7;
+    --body: #b9bdc3;
+    --key: #8b9097;
+    --link: #5bd66f;
+    --accent: #32c246;
+    background: var(--bg);
+    color: var(--body);
+    color-scheme: dark;
   }
-}
-@media (min-width: 64rem) {
-  .container {
-    padding-inline: 48px;
+  .plane-light {
+    --bg: #f4f5f6;
+    --panel: #ffffff;
+    --panel-2: #e9ebed;
+    --rule: rgba(11, 12, 13, 0.12);
+    --rule-strong: rgba(11, 12, 13, 0.34);
+    --heading: #0b0c0d;
+    --body: #474c52;
+    --key: #6a7077;
+    --link: #17752a;
+    --accent: #229a36;
+    background: var(--bg);
+    color: var(--body);
+    color-scheme: light;
   }
-}
-/* Below lg the grid is a plain block in DOM order; children space themselves
-   with margin utilities. At lg it is the 12-column grid, 24px gutters. */
-.grid-12 {
-  display: block;
-}
-@media (min-width: 64rem) {
-  .grid-12 {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: 24px;
+
+  /* ---------- layout ---------- */
+  .wrap {
+    width: 100%;
+    max-width: 1272px;
+    margin-inline: auto;
+    padding-inline: 20px;
   }
-}
-.section {
-  padding-block: 72px;
-}
-@media (min-width: 64rem) {
+  @media (min-width: 48rem) {
+    .wrap {
+      padding-inline: 32px;
+    }
+  }
+  @media (min-width: 64rem) {
+    .wrap {
+      padding-inline: 48px;
+    }
+  }
   .section {
-    padding-block: 128px;
+    padding-block: 72px;
   }
-}
-/* Adjacent black sections share one hairline, never a gap. The rule sits on
-   the section element so it runs the full viewport width. */
-.section-rule {
-  border-top: 1px solid var(--hairline);
-}
-/* The section heading row: h2 left, an optional action at the right, bottom aligned at lg. */
-.section-head {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-@media (min-width: 64rem) {
-  .section-head {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 48px;
+  @media (min-width: 64rem) {
+    .section {
+      padding-block: 112px;
+    }
   }
-  .section-head > :first-child {
-    flex: 0 1 62%;
+  /* Two bands on the same plane read as one: the second drops its top padding and its rule label does the dividing. */
+  .section.plane-light + .section.plane-light,
+  .section.plane-dark + .section.plane-dark {
+    padding-top: 0;
   }
-  .section-head > :last-child:not(:first-child) {
+
+  /* ---------- type ---------- */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.04;
+    color: var(--heading);
+    text-wrap: balance;
+  }
+  .display-xl {
+    font-size: clamp(2.625rem, 5.4vw, 4.75rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .display-lg {
+    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
+    line-height: 1;
+  }
+  .display-md {
+    font-size: clamp(1.875rem, 3.2vw, 2.75rem);
+    line-height: 1.04;
+  }
+  .display-sm {
+    font-size: clamp(1.375rem, 2vw, 1.625rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .accent {
+    color: var(--accent);
+  }
+  .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--key);
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--body);
+    text-wrap: pretty;
+  }
+  .prose {
+    max-width: 38rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--body);
+    text-wrap: pretty;
+  }
+  .prose > * + * {
+    margin-top: 1rem;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .link {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--link) 40%, transparent);
+    transition: text-decoration-color 0.18s var(--ease);
+  }
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+  /* A text action with an arrow: "See vinyl wraps". */
+  .arrow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--link);
+  }
+  .arrow-link svg {
     flex: none;
-    padding-bottom: 6px;
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.22s var(--ease);
   }
-}
-/* Grounds. The body is black; .on-black exists for the lightbox, the footer
-   and a black panel inside the daylight sheet. */
-.on-black {
-  background: var(--color-black);
-  color: var(--color-white);
-}
-.on-black .muted {
-  color: var(--color-silver);
-}
-.on-black .t-label,
-.on-black .t-byline {
-  color: var(--color-ash);
-}
-/* The daylight sheet: one per page, the quote section. Everything inside
-   swaps to its light variant through the rules marked "sheet" below. */
-.on-white {
-  background: var(--color-white);
-  color: var(--color-ink);
-  color-scheme: light;
-}
-.on-white .muted,
-.on-white .t-label,
-.on-white .t-byline {
-  color: var(--color-steel);
-}
-.on-white .section-rule {
-  border-top-color: transparent;
-}
-/* A raised charcoal panel: the shop sheet, tier cards, review cards, the timing block. */
-.panel {
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-card);
-  padding: 24px;
-}
-@media (min-width: 64rem) {
-  .panel {
-    padding: 28px;
+  a.arrow-link:hover svg,
+  a.card:hover .arrow-link svg {
+    transform: translateX(4px);
   }
-}
-/* Hairline rows: footer lists, the shop rows, coverage lists, FAQ, "Also" rows. */
-.ledger {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--hairline);
-}
-.ledger > * {
-  border-bottom: 1px solid var(--hairline);
-  padding: 14px 0;
-}
-.on-white .ledger {
-  border-top-color: var(--hairline-light);
-}
-.on-white .ledger > * {
-  border-bottom-color: var(--hairline-light);
-}
-/* Shop rows: a label column beside the value. */
-.sheet-row {
-  display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  column-gap: 12px;
-  align-items: start;
-}
-/* The numbered process: the only ordered list on the site. Number in green. */
-.process {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--hairline);
-}
-.process > li {
-  display: grid;
-  grid-template-columns: 48px minmax(0, 1fr);
-  column-gap: 16px;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--hairline);
-}
-.process-num {
-  font-family: var(--font-head);
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--color-green);
-  font-variant-numeric: tabular-nums;
-}
 
-/* ---------- header, docs/DESIGN.md 5.1 ---------- */
-/* Fixed over the page. Solid black with its hairline by default, which is
-   also the JavaScript-off state. With JavaScript the header starts
-   transparent over the hero and gains the black ground and the hairline once
-   the page has scrolled 24px (the client sets data-scrolled), 240ms. */
-.header {
-  position: fixed;
-  inset-inline: 0;
-  top: 0;
-  z-index: 50;
-  height: var(--nav-h);
-  background: var(--color-black);
-  border-bottom: 1px solid var(--hairline);
-  color: var(--color-white);
-  transition: background-color 240ms var(--ease-out), border-color 240ms var(--ease-out);
-}
-html[data-js="on"] .header:not([data-scrolled]):not([data-open]) {
-  background: transparent;
-  border-bottom-color: transparent;
-}
-/* The page starts under the fixed header; the hero photo runs behind it, everything else clears it. */
-.header-offset {
-  padding-top: var(--nav-h);
-}
-/* The lockup: the mark at 44px beside the wordmark and byline. 40px under md. */
-.lockup {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  /* Never squeezed by the header row: the wordmark keeps its width at lg. */
-  flex: none;
-}
-.logo-mark {
-  display: block;
-  height: 44px;
-  width: auto;
-}
-@media (max-width: 47.99rem) {
-  .logo-mark {
-    height: 40px;
+  /* ---------- the section rule: a label over a hairline with one green tick ---------- */
+  .rule-label {
+    position: relative;
+    padding-bottom: 0.875rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--rule);
   }
-}
-.lockup-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.nav-link {
-  display: inline-block;
-  padding: 6px 0;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.2;
-  /* One line each: "Paint protection film" never wraps at the lg floor. */
-  white-space: nowrap;
-  color: var(--color-silver);
-  box-shadow: inset 0 -2px 0 transparent;
-  transition: color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
-}
-.nav-link:hover {
-  color: var(--color-white);
-}
-.nav-link[aria-current="page"] {
-  color: var(--color-white);
-  box-shadow: inset 0 -2px 0 var(--color-green);
-}
-/* The phone menu: a native <details> so it opens with JavaScript off. The
-   summary is an outline pill; the sheet is a black layer under the header
-   that fills the screen and fades in from 8px above, 240ms. */
-.menu {
-  position: static;
-}
-.menu > summary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  padding: 0 14px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--radius-ui);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-white);
-  transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
-}
-.menu > summary:hover {
-  border-color: var(--color-white);
-  background: var(--white-wash);
-}
-.menu-sheet {
-  position: fixed;
-  top: var(--nav-h);
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 49;
-  overflow-y: auto;
-  background: var(--color-black);
-  border-top: 1px solid var(--hairline);
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
-}
-@starting-style {
-  .menu[open] .menu-sheet {
+  .rule-label::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 1.75rem;
+    height: 1px;
+    background: var(--accent);
+  }
+  @media (min-width: 64rem) {
+    .rule-label {
+      margin-bottom: 3rem;
+    }
+  }
+
+  /* ---------- section head ---------- */
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .head__intro {
+    max-width: 34rem;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--body);
+    text-wrap: pretty;
+  }
+  @media (min-width: 64rem) {
+    .head--split {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 3rem;
+      align-items: end;
+    }
+    .head--split .head__intro {
+      justify-self: end;
+      padding-bottom: 0.4rem;
+    }
+  }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 3.25rem;
+    padding: 0 1.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--r-ui);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease), color 0.18s var(--ease);
+  }
+  .btn--primary {
+    background: #32c246;
+    border-color: #32c246;
+    color: #06140a;
+  }
+  .btn--primary:hover {
+    background: #4ad35d;
+    border-color: #4ad35d;
+  }
+  .btn--ghost {
+    background: transparent;
+    border-color: var(--rule-strong);
+    color: var(--heading);
+  }
+  .btn--ghost:hover {
+    border-color: var(--heading);
+    background: color-mix(in srgb, var(--heading) 6%, transparent);
+  }
+  .btn--sm {
+    min-height: 2.75rem;
+    padding: 0 1.125rem;
+    font-size: 0.875rem;
+  }
+  .btn--block {
+    width: 100%;
+  }
+  .btn[disabled],
+  .btn[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* ---------- pictures ---------- */
+  .pic {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: var(--r-card);
+    background: var(--panel-2, #1b1d1f);
+  }
+  .pic img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .caption {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--key);
+  }
+
+  /* ---------- top bar and header ---------- */
+  .topbar {
+    display: none;
+  }
+  @media (min-width: 64rem) {
+    .topbar {
+      display: block;
+      background: #060707;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.75rem;
+      line-height: 1;
+      color: #8b9097;
+    }
+    .topbar__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      height: 2.375rem;
+    }
+    .topbar__right {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+    .topbar a {
+      color: #b9bdc3;
+      transition: color 0.16s var(--ease);
+    }
+    .topbar a:hover {
+      color: #ffffff;
+    }
+  }
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #0b0c0d;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .site-header__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: var(--header-h);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: none;
+    min-height: 2.75rem;
+  }
+  .brand__mark {
+    width: auto;
+    height: 2.5rem;
+  }
+  @media (min-width: 64rem) {
+    .brand__mark {
+      height: 2.875rem;
+    }
+  }
+  .brand__name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    color: #f5f6f7;
+  }
+  .brand__by {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    color: #8b9097;
+  }
+  .nav {
+    display: none;
+  }
+  @media (min-width: 70rem) {
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.125rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+  }
+  .nav__item {
+    position: relative;
+  }
+  .nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: var(--header-h);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    color: #b9bdc3;
+    box-shadow: inset 0 -2px 0 transparent;
+    transition: color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+  }
+  .nav__link svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    opacity: 0.7;
+    transition: transform 0.2s var(--ease);
+  }
+  .nav__link:hover,
+  .nav__item:focus-within > .nav__link {
+    color: #ffffff;
+  }
+  .nav__link[data-active="true"] {
+    color: #ffffff;
+    box-shadow: inset 0 -2px 0 #32c246;
+  }
+  .nav__item:hover > .nav__link svg,
+  .nav__item:focus-within > .nav__link svg {
+    transform: rotate(180deg);
+  }
+  .nav__menu {
+    position: absolute;
+    top: calc(100% - 6px);
+    left: 0;
+    min-width: 17rem;
+    padding: 0.5rem;
+    background: #131516;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--r-card);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
     opacity: 0;
-    transform: translateY(-8px);
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.16s var(--ease), transform 0.16s var(--ease), visibility 0.16s;
   }
-}
-.menu-row {
-  display: flex;
-  align-items: center;
-  min-height: 64px;
-  padding: 0 20px;
-  font-family: var(--font-head);
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: var(--color-white);
-}
-.menu-row[aria-current="page"] {
-  color: var(--color-green-text);
-}
-
-/* ---------- photo frame (Photo.tsx and Loop.tsx) ---------- */
-.photo {
-  border-radius: var(--radius-card);
-  background: var(--color-charcoal);
-  overflow: hidden;
-}
-.photo > img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ---------- buttons, docs/DESIGN.md 5.3 ---------- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: 48px;
-  padding: 0 22px;
-  border-radius: var(--radius-ui);
-  border: 1px solid transparent;
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out),
-    color 180ms var(--ease-out);
-}
-/* Green with ink text (9.4:1). White on green fails contrast, so the label is always ink. */
-.btn-solid {
-  background: var(--color-green);
-  border-color: var(--color-green);
-  color: var(--color-ink);
-}
-.btn-solid:hover {
-  background: var(--color-green-deep);
-  border-color: var(--color-green-deep);
-}
-.btn-outline {
-  background: transparent;
-  border-color: var(--hairline-strong);
-  color: var(--color-white);
-}
-.btn-outline:hover {
-  border-color: var(--color-white);
-  background: var(--white-wash);
-}
-.on-white .btn-outline {
-  color: var(--color-ink);
-  border-color: var(--hairline-light-strong);
-}
-.on-white .btn-outline:hover {
-  border-color: var(--color-ink);
-  background: var(--hairline-light);
-}
-/* Text buttons are green on black, deep green on the sheet, underlined on hover. */
-.btn-text {
-  height: auto;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--color-green-text);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  text-decoration-color: transparent;
-  transition: text-decoration-color 180ms var(--ease-out);
-}
-.btn-text:hover {
-  text-decoration-color: currentColor;
-}
-.on-white .btn-text {
-  color: var(--color-green-ink);
-}
-.btn-lg {
-  height: 56px;
-  padding: 0 28px;
-  font-size: 16px;
-}
-.btn-sm {
-  height: 40px;
-  padding: 0 16px;
-  font-size: 14px;
-}
-/* Round: the stepper and lightbox controls. 44px, a glyph inside. */
-.btn-round {
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border-radius: 22px;
-  border-color: var(--hairline-strong);
-  color: var(--color-white);
-}
-.btn-round:hover {
-  border-color: var(--color-white);
-  background: var(--white-wash);
-}
-.btn[aria-disabled="true"],
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ---------- links in prose ---------- */
-.link {
-  color: var(--color-green-text);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: rgba(91, 224, 122, 0.4);
-  transition: text-decoration-color 180ms var(--ease-out);
-}
-.link:hover {
-  text-decoration-color: currentColor;
-}
-.on-white .link {
-  color: var(--color-green-ink);
-  text-decoration-color: rgba(27, 127, 44, 0.4);
-}
-/* A quiet link: white text, hairline underline. The footer lists, the shop rows. */
-.link-quiet {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--hairline-strong);
-  transition: text-decoration-color 180ms var(--ease-out), color 180ms var(--ease-out);
-}
-.link-quiet:hover {
-  text-decoration-color: currentColor;
-}
-
-/* ---------- the card, docs/DESIGN.md 5.4 (charcoal, hairline, 6px) ---------- */
-.card {
-  display: block;
-  padding: 0;
-  margin: 0;
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  transition: border-color 200ms var(--ease-out);
-}
-.card:hover,
-.card-link:hover .card,
-.card-link:focus-visible .card {
-  border-color: var(--hairline-strong);
-}
-/* A linked card (gallery, recent work) draws its hover on the edge and the bar; focus draws the ring. */
-.card-link {
-  display: block;
-  height: 100%;
-  color: inherit;
-  text-decoration: none;
-  border-radius: var(--radius-card);
-}
-/* A linked card fills its grid cell as a column, the photo box keeps its
-   aspect and the strip takes the rest, so when one label in a row wraps to
-   two lines the cards in that row still end on one bottom edge; the extra
-   height is charcoal under the label. */
-.card-link > .card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.card-link > .card > .card-photo {
-  flex: none;
-}
-.card-link > .card > .chip-strip {
-  flex: 1 0 auto;
-}
-/* The photo box. It must carry an aspect ratio (an aspect utility or an
-   inline style) because its children fill it absolutely; that fixed box is
-   what makes layout shift impossible while the photo loads. */
-.card-photo {
-  position: relative;
-  overflow: hidden;
-  background: var(--color-charcoal);
-}
-.card-photo > * {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.card-photo img,
-.card-photo video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* The chip strip under a photo: a 6px bar in the car's own colour edge to
-   edge, then a 38px label row in mono. 44px in all, unless the left label
-   wraps; the card allows it. The bar rests at 85 percent and brightens to
-   full on hover; it also grows in from the left as the card enters the
-   viewport where the browser supports view timelines (see scroll-linked). */
-.chip-strip {
-  display: block;
-  background: var(--color-charcoal);
-}
-.chip-bar {
-  display: block;
-  width: 100%;
-  height: var(--chip-h);
-  background: var(--chip, var(--hairline-strong));
-  opacity: 0.85;
-  transform-origin: left center;
-  transition: opacity 200ms var(--ease-out);
-}
-.card:hover .chip-bar,
-.card-link:hover .chip-bar,
-.card-link:focus-visible .chip-bar {
-  opacity: 1;
-}
-/* The clear chip: the one chip that is not a colour, which is the point of PPF. */
-.chip-bar-clear {
-  background: transparent;
-  box-shadow: inset 0 0 0 1px var(--hairline-strong);
-  opacity: 1;
-}
-.chip-label {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px 12px;
-  min-height: 38px;
-  padding: 6px 14px;
-  font-family: var(--font-code);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-  color: var(--color-silver);
-}
-/* Left: finish, colour, vehicle. Never truncates; it wraps and the strip grows. */
-.chip-label > :first-child {
-  flex: 1 1 auto;
-  min-width: 0;
-  color: var(--color-silver);
-}
-/* Right: the setting and the frame counter. May ellipsis at narrow widths. */
-.chip-label > :last-child:not(:first-child) {
-  flex: 0 1 auto;
-  margin-left: auto;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  text-align: right;
-  color: var(--color-ash);
-}
-/* The quiet card: gallery cells keep the 4px bar and drop the label. */
-.card-quiet .chip-bar {
-  height: 4px;
-}
-.card-quiet .chip-label {
-  display: none;
-}
-/* An inline colour pill beside a finish name or a hero caption: 16 by 16, 4px radius. */
-.chip-pill {
-  display: inline-block;
-  flex: none;
-  width: 16px;
-  height: 16px;
-  border-radius: var(--radius-ui);
-  background: var(--chip, var(--hairline-strong));
-  vertical-align: middle;
-}
-.chip-pill-clear {
-  background: transparent;
-  box-shadow: inset 0 0 0 1px var(--hairline-strong);
-}
-/* A wide band photo standing alone (PPF, powder coat, the About Silverado). */
-.band {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-card);
-  background: var(--color-charcoal);
-}
-
-/* ---------- the hero, docs/DESIGN.md 5.9 and 7.1.1 (the cover) ---------- */
-/* Black ground under the fixed header. The h1 runs across the whole
-   container; beneath it the copy (sub, the four doors, nothing else) sits in
-   columns 1 to 5 and the photo box in columns 6 to 12 at 3:2; the facts row
-   closes the hero across all twelve columns. Under lg the order is h1, the
-   photo box at 4:5, the sub, two doors, the facts. Everything through the
-   facts row is on screen at 1440 by 900. */
-.hero {
-  position: relative;
-  background: var(--color-black);
-  color: var(--color-white);
-  padding-top: calc(var(--nav-h) + 16px);
-  padding-bottom: 40px;
-}
-@media (min-width: 64rem) {
-  .hero {
-    padding-top: calc(var(--nav-h) + 24px);
-    padding-bottom: 32px;
-  }
-}
-.hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: 16px;
-}
-@media (min-width: 64rem) {
-  .hero-grid {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: 24px;
-    row-gap: 24px;
-  }
-  .hero-grid > .hero-title {
-    grid-column: 1 / -1;
-  }
-  .hero-grid > .hero-copy {
-    grid-column: 1 / span 5;
-    grid-row: 2;
-    align-self: end;
-  }
-  .hero-grid > .hero-media {
-    grid-column: 6 / -1;
-    grid-row: 2;
-  }
-  .hero-grid > .facts {
-    grid-column: 1 / -1;
-  }
-}
-.hero-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-/* The photo box: 4:5 under lg (the portrait file), 3:2 at lg (the side
-   view). Radius, charcoal ground while the image arrives, the liner sheet
-   inside it, the caption pill over its bottom left corner. */
-.hero-media {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 4 / 5;
-  border-radius: var(--radius-card);
-  background: var(--color-charcoal);
-}
-@media (min-width: 64rem) {
-  .hero-media {
-    aspect-ratio: 3 / 2;
-  }
-}
-.hero-media img,
-.hero-media video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* The caption pill at the bottom left of the photo box: a chip pill and the
-   photo's label in mono, over the image. */
-.hero-caption {
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 32px;
-  padding: 0 12px 0 10px;
-  border-radius: var(--radius-ui);
-  background: rgba(20, 20, 20, 0.85);
-  border: 1px solid var(--hairline);
-  color: var(--color-silver);
-  font-family: var(--font-code);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  max-width: calc(100% - 24px);
-}
-/* At 320 the label is wider than the box; it ellipsizes inside the pill instead of being cut by the box edge. */
-.hero-caption > span:last-child {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-/* The facts row under the buttons: four cells, a hairline above, key over value. */
-.facts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 24px;
-  margin: 0;
-  padding-top: 20px;
-  border-top: 1px solid var(--hairline);
-}
-@media (min-width: 64rem) {
-  .facts {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-.facts dt {
-  font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: var(--color-ash);
-}
-.facts dd {
-  margin: 4px 0 0;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--color-silver);
-}
-
-/* ---------- the one page-load moment: the peel, docs/DESIGN.md 3.1 ---------- */
-/* Home hero only, every width, once per full load. The photo is painted in
-   its final box at 0 ms (it is the LCP; occlusion does not count against it).
-   A charcoal liner sheet with a 2px green seam on its left edge slides off it
-   to the right like the release liner coming off vinyl, while the headline
-   lines, the sub and the buttons rise 24px into place one after another and
-   the facts row fades up last. Transform, clip-path and opacity only. Every
-   rule is gated on html[data-motion="on"], which the inline head script sets
-   only when the visitor has not asked for reduced motion, so with JavaScript
-   off, in a crawler, or with reduced motion the finished hero is simply
-   there. Nothing here depends on image decode: if the photo is late, the
-   liner still peels and the photo pops in behind it. */
-@keyframes peel {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(102%);
-  }
-}
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
+  .nav__item:hover > .nav__menu,
+  .nav__item:focus-within > .nav__menu {
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
   }
-}
-@keyframes fade-up {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.peel {
-  display: none;
-}
-html[data-motion="on"] .peel {
-  display: block;
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: var(--color-charcoal);
-  border-left: 2px solid var(--color-green);
-  transform: translateX(0);
-  animation: peel var(--peel-ms) var(--ease-out) var(--peel-delay) both;
-  will-change: transform;
-  pointer-events: none;
-}
-/* Each rising element sets its own --rise-delay inline (docs/DESIGN.md 3.1 gives the schedule). */
-html[data-motion="on"] .rise {
-  animation: rise var(--rise-ms) var(--ease-out) var(--rise-delay, 220ms) both;
-}
-html[data-motion="on"] .fade-up {
-  animation: fade-up 400ms var(--ease-out) var(--rise-delay, 820ms) both;
-}
-/* The headline lines are inline-block spans so each can move on its own. */
-.rise-line {
-  display: inline-block;
-}
-@media (prefers-reduced-motion: reduce) {
-  .peel {
-    display: none !important;
-  }
-  .rise,
-  .fade-up {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-/* ---------- the action strip, docs/DESIGN.md 5.6 (four doors as buttons) ---------- */
-/* A row of 48px buttons: Call solid green, then Text, Book online and Get a
-   quote as outlines. Two by two under md, full width cells. */
-.strip {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-@media (min-width: 48rem) {
-  .strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-}
-.strip-cell {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 48px;
-  padding: 0 18px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--radius-ui);
-  background: transparent;
-  color: var(--color-white);
-  text-align: center;
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.2;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out),
-    color 180ms var(--ease-out);
-}
-@media (min-width: 48rem) {
-  .strip-cell {
-    padding: 0 22px;
-  }
-}
-/* 320 wide phones: two cells of 135px; "Call (248) 259-1617" needs the tighter step to fit inside its cell. */
-@media (max-width: 22.49rem) {
-  .strip-cell {
-    padding-inline: 12px;
-    font-size: 14px;
-  }
-}
-.strip-cell:hover {
-  border-color: var(--color-white);
-  background: var(--white-wash);
-}
-/* Cell 1, Call, is the solid cell. */
-.strip-cell-solid {
-  background: var(--color-green);
-  border-color: var(--color-green);
-  color: var(--color-ink);
-}
-.strip-cell-solid:hover {
-  background: var(--color-green-deep);
-  border-color: var(--color-green-deep);
-}
-.on-white .strip-cell {
-  color: var(--color-ink);
-  border-color: var(--hairline-light-strong);
-}
-.on-white .strip-cell:hover {
-  border-color: var(--color-ink);
-  background: var(--hairline-light);
-}
-.on-white .strip-cell-solid {
-  color: var(--color-ink);
-  border-color: var(--color-green);
-  background: var(--color-green);
-}
-/* Compact: Call and Get a quote only. */
-.strip-compact {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-/* Hero: under md only Call and Get a quote show in one row (the mobile bar
-   carries Text and Book), so the row fits above the fold on a 390 by 844. */
-@media (max-width: 47.99rem) {
-  .strip-hero > .strip-cell:nth-child(2),
-  .strip-hero > .strip-cell:nth-child(3) {
-    display: none;
-  }
-}
-/* "opens Square" is read, not seen. */
-.strip-note {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* ---------- the mobile action bar, docs/DESIGN.md 5.7 (the strip's fixed twin) ---------- */
-.bar {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 30;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  height: calc(var(--bar-h) + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
-  background: var(--color-black);
-  border-top: 1px solid var(--hairline);
-  transform: translateY(0);
-  transition: transform 240ms var(--ease-out);
-}
-/* Added by the client effect while any [data-strip] is on screen. */
-.bar-hidden {
-  transform: translateY(100%);
-}
-.bar-cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--bar-h);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-white);
-  text-decoration: none;
-  transition: background-color 160ms var(--ease-out);
-}
-.bar-cell + .bar-cell {
-  border-left: 1px solid var(--hairline);
-}
-.bar-cell:hover {
-  background: var(--color-charcoal);
-}
-.bar .strip-cell-solid,
-.bar-cell.strip-cell-solid {
-  background: var(--color-green);
-  color: var(--color-ink);
-  border-color: var(--color-green);
-}
-@media (min-width: 64rem) {
-  .bar {
-    display: none;
-  }
-}
-
-/* ---------- fields, docs/DESIGN.md 5.10 ---------- */
-.field {
-  display: block;
-  width: 100%;
-  height: 48px;
-  padding: 0 14px;
-  border-radius: var(--radius-ui);
-  border: 1px solid var(--hairline-strong);
-  background: var(--color-charcoal);
-  color: var(--color-white);
-  font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.5;
-  transition: border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out),
-    background-color 160ms var(--ease-out);
-}
-.field::placeholder {
-  color: var(--color-ash);
-  opacity: 1;
-}
-.field:hover {
-  border-color: var(--color-white);
-}
-.field:focus {
-  outline: none;
-  border-color: var(--color-green);
-  box-shadow: 0 0 0 3px var(--green-ring);
-}
-textarea.field {
-  height: auto;
-  min-height: 120px;
-  padding: 12px 14px;
-  resize: vertical;
-}
-.field-error,
-.field[aria-invalid="true"] {
-  border-color: var(--color-error);
-}
-.error-text {
-  color: var(--color-error);
-}
-.on-white .field {
-  background: var(--color-white);
-  color: var(--color-ink);
-  border-color: var(--hairline-light-strong);
-}
-.on-white .field::placeholder {
-  color: var(--color-steel);
-}
-.on-white .field:hover {
-  border-color: var(--color-ink);
-}
-.on-white .field:focus {
-  border-color: var(--color-green-deep);
-}
-.on-white .field-error,
-.on-white .field[aria-invalid="true"] {
-  border-color: var(--color-error-ink);
-}
-.on-white .error-text {
-  color: var(--color-error-ink);
-}
-
-/* ---------- chip checkboxes (the quote ticket) ---------- */
-/* A real checkbox, visually hidden; the label is the chip. Checked draws a
-   green edge and a green wash. The input may sit inside the label or
-   directly before it. */
-.chipbox {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--radius-ui);
-  background: var(--color-charcoal);
-  color: var(--color-white);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.3;
-  cursor: pointer;
-  user-select: none;
-  transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
-}
-.chipbox input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-.chipbox:hover {
-  border-color: var(--color-white);
-}
-.chipbox:has(input:checked),
-input:checked + .chipbox {
-  border-color: var(--color-green);
-  background: var(--green-wash);
-}
-.chipbox:has(input:focus-visible),
-input:focus-visible + .chipbox {
-  outline: 2px solid var(--color-green);
-  outline-offset: 3px;
-}
-.on-white .chipbox {
-  background: var(--color-white);
-  color: var(--color-ink);
-  border-color: var(--hairline-light-strong);
-}
-.on-white .chipbox:hover {
-  border-color: var(--color-ink);
-}
-.on-white .chipbox:has(input:checked),
-.on-white input:checked + .chipbox {
-  border-color: var(--color-green-deep);
-  background: var(--green-wash);
-}
-/* The ticket: a panel. On the daylight sheet it is a white card with a light
-   hairline. Conditional rows are revealed by :has() on the service
-   checkboxes, instantly, with no JavaScript. Lane E2 gives the Vinyl wrap
-   checkbox id="svc-wrap" and the Window tint checkbox id="svc-tint". */
-.ticket {
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-card);
-  padding: 24px;
-}
-@media (min-width: 64rem) {
-  .ticket {
-    padding: 32px;
-  }
-}
-.on-white .ticket {
-  background: var(--color-white);
-  border-color: var(--hairline-light);
-}
-.ticket-section {
-  border-top: 1px solid var(--hairline);
-  padding-top: 24px;
-  margin-top: 24px;
-}
-.on-white .ticket-section {
-  border-top-color: var(--hairline-light);
-}
-.rows-wrap,
-.rows-tint {
-  display: none;
-}
-.ticket:has(#svc-wrap:checked) .rows-wrap {
-  display: grid;
-}
-.ticket:has(#svc-tint:checked) .rows-tint {
-  display: grid;
-}
-
-/* ---------- the honest notice ---------- */
-/* Replaces the ticket when the Web3Forms key is absent, and stands in as the
-   error state. Error border so it reads as a flag, never green. */
-.notice {
-  background: var(--color-charcoal);
-  border: 1px solid var(--color-error);
-  border-radius: var(--radius-card);
-  padding: 24px;
-}
-.on-white .notice {
-  background: var(--color-white);
-  border-color: var(--color-error-ink);
-}
-
-/* ---------- segmented control, docs/DESIGN.md 4.4 (tier switcher, lightbox nothing else) ---------- */
-.seg {
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  gap: 3px;
-  padding: 3px;
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-card);
-}
-.seg-fluid {
-  display: grid;
-  width: 100%;
-}
-.seg > button {
-  height: 36px;
-  padding: 0 16px;
-  border-radius: var(--radius-ui);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-silver);
-  white-space: nowrap;
-  transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
-}
-.seg > button:hover {
-  color: var(--color-white);
-}
-.seg > button[aria-pressed="true"] {
-  background: var(--color-green);
-  color: var(--color-ink);
-}
-.seg > button:focus-visible {
-  outline-offset: -2px;
-}
-
-/* ---------- tint tier cards, docs/DESIGN.md 4.4 ---------- */
-/* Three spec cards. At lg they stand side by side and the active one is lit
-   (a 2px green top edge, full opacity; the others rest at 0.72). Under lg
-   with JavaScript only the active card shows, swapped by the pills with a
-   200ms fade; without JavaScript all three stack and the pills are absent. */
-.tier-cards {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-}
-@media (min-width: 64rem) {
-  .tier-cards {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-}
-.tier-card {
-  position: relative;
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-card);
-  padding: 22px 24px 8px;
-  box-shadow: inset 0 2px 0 transparent;
-  opacity: 1;
-  transition: box-shadow 200ms var(--ease-out), opacity 200ms var(--ease-out), border-color 200ms var(--ease-out);
-}
-.tier-card[data-active="true"] {
-  box-shadow: inset 0 2px 0 var(--color-green);
-  border-color: var(--hairline-strong);
-}
-@media (min-width: 64rem) {
-  /* 0.85, not 0.72: the ash 13px keys on a dimmed card composite to about 4.6:1 at 0.85 and 3.6:1 at 0.72. */
-  html[data-js="on"] .tier-card[data-active="false"] {
-    opacity: 0.85;
-  }
-  html[data-js="on"] .tier-card[data-active="false"]:hover {
-    opacity: 1;
-  }
-}
-@media (max-width: 63.99rem) {
-  html[data-js="on"] .tier-card[data-active="false"] {
-    display: none;
-  }
-}
-.tier-name {
-  font-family: var(--font-head);
-  font-size: 1.375rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--color-white);
-}
-.tier-rows {
-  margin: 16px 0 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--hairline);
-}
-.tier-row {
-  display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  column-gap: 12px;
-  align-items: baseline;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--hairline);
-}
-.tier-row:last-child {
-  border-bottom: 0;
-}
-.tier-row dt {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-ash);
-}
-.tier-row dd {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.35;
-  color: var(--color-white);
-  font-variant-numeric: tabular-nums;
-}
-.tiers-note {
-  margin-top: 12px;
-}
-
-/* ---------- the shade slider and ladder, docs/DESIGN.md 4.3 ---------- */
-/* One large pane under a black overlay whose opacity is --shade, set live by
-   the range input (no transition, it tracks the thumb). The ladder is the
-   row of five fixed panes on the tint page. */
-.ladder {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-@media (min-width: 48rem) {
-  .ladder {
-    grid-template-columns: repeat(var(--panes, 5), minmax(0, 1fr));
-    gap: 12px;
-  }
-}
-.pane {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: var(--radius-card);
-  border: 1px solid var(--hairline);
-  background: var(--color-charcoal);
-  color: var(--color-silver);
-}
-.pane-photo {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background: var(--color-black);
-}
-.slider-pane .pane-photo {
-  aspect-ratio: 4 / 3;
-}
-.pane-photo > * {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.pane-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* Pure black at the pane's opacity. No transition, so it tracks the thumb. */
-.pane-overlay {
-  position: absolute;
-  inset: 0;
-  background: var(--color-black);
-  opacity: var(--shade, 0);
-  pointer-events: none;
-}
-.pane-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 32px;
-  padding: 6px 12px;
-  background: var(--color-charcoal);
-  color: var(--color-ash);
-  font-family: var(--font-code);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-}
-/* The control row under the slider pane: label left, the range across, ticks beneath. */
-.shade-control {
-  padding: 16px 16px 14px;
-  background: var(--color-charcoal);
-}
-.shade-ticks {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  font-family: var(--font-code);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--color-ash);
-}
-/* The native range input: a 2px hairline track and a 22px round green thumb. */
-.shade-range {
-  -webkit-appearance: none;
-  appearance: none;
-  display: block;
-  width: 100%;
-  height: 24px;
-  margin: 0;
-  background: transparent;
-  cursor: pointer;
-}
-.shade-range::-webkit-slider-runnable-track {
-  height: 2px;
-  background: var(--hairline-strong);
-  border-radius: 1px;
-}
-.shade-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  margin-top: -10px;
-  border-radius: 11px;
-  border: 0;
-  background: var(--color-green);
-  transition: background-color 160ms var(--ease-out);
-}
-.shade-range::-webkit-slider-thumb:hover {
-  background: var(--color-green-text);
-}
-.shade-range::-moz-range-track {
-  height: 2px;
-  background: var(--hairline-strong);
-  border-radius: 1px;
-}
-.shade-range::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border-radius: 11px;
-  border: 0;
-  background: var(--color-green);
-}
-.shade-range:focus-visible {
-  outline: 2px solid var(--color-green);
-  outline-offset: 6px;
-}
-
-/* ---------- the finish picker, docs/DESIGN.md 4.2 ---------- */
-/* Rows on the left, one sticky 4:3 photo frame on the right that crossfades
-   to the finish under the pointer or focus. Under lg every row carries its
-   own photo and the frame is not rendered. */
-.picker {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
-}
-@media (min-width: 64rem) {
-  .picker {
-    grid-template-columns: 5fr 7fr;
-    gap: 32px;
-    align-items: start;
-  }
-}
-.picker-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--hairline);
-}
-.picker-row {
-  border-bottom: 1px solid var(--hairline);
-  padding: 20px 0;
-}
-.picker-row-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.picker-name {
-  font-family: var(--font-head);
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--color-silver);
-  transition: color 200ms var(--ease-out);
-}
-.picker-row[data-active="true"] .picker-name,
-.picker-row:hover .picker-name {
-  color: var(--color-white);
-}
-@media (max-width: 63.99rem) {
-  .picker-name {
-    color: var(--color-white);
-  }
-}
-.picker-thumb {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: var(--radius-card);
-  background: var(--color-charcoal);
-  margin-bottom: 14px;
-}
-@media (min-width: 64rem) {
-  .picker-thumb {
-    display: none;
-  }
-}
-.picker-frame {
-  display: none;
-}
-@media (min-width: 64rem) {
-  .picker-frame {
+  .nav__sub {
     display: block;
-    position: sticky;
-    top: calc(var(--nav-h) + 24px);
+    padding: 0.7rem 0.875rem;
+    border-radius: 6px;
+    transition: background-color 0.14s var(--ease);
   }
-}
-.picker-photo {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: var(--radius-card);
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-}
-.picker-photo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 320ms var(--ease-out);
-}
-.picker-photo img[data-active="true"] {
-  opacity: 1;
-}
-
-/* ---------- the set stepper, docs/DESIGN.md 4.5 ---------- */
-/* Without JavaScript the frames lay out as a two-column grid, all visible.
-   With JavaScript they stack in one box and crossfade on click or arrow
-   keys; the controls exist only then. */
-.set {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-html[data-js="on"] .set {
-  display: block;
-  position: relative;
-}
-.set-frame {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-card);
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-}
-.set-frame > .set-slide {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1 / 1;
-}
-html[data-js="on"] .set-frame > .set-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 240ms var(--ease-out);
-}
-html[data-js="on"] .set-frame > .set-slide:first-child {
-  position: relative;
-}
-html[data-js="on"] .set-frame > .set-slide[data-active="true"] {
-  opacity: 1;
-}
-.set-slide img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.set-ctrl {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 12px;
-}
-.set-counter {
-  font-family: var(--font-code);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--color-ash);
-  font-variant-numeric: tabular-nums;
-}
-.set-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-/* ---------- reviews, docs/DESIGN.md 4.8 ---------- */
-.reviews-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  align-items: start; /* a short quote does not stretch to its neighbour's height */
-}
-@media (min-width: 48rem) {
-  .reviews-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+  .nav__sub:hover,
+  .nav__sub:focus-visible {
+    background: rgba(255, 255, 255, 0.06);
   }
-}
-.review {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background: var(--color-charcoal);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-card);
-  padding: 24px;
-}
-.review-meta {
-  margin-top: auto;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-ash);
-}
-
-/* ---------- gallery filters, docs/DESIGN.md 7.4 ---------- */
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 8px 14px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--radius-ui);
-  background: transparent;
-  color: var(--color-silver);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.3;
-  cursor: pointer;
-  transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out), color 160ms var(--ease-out);
-}
-.chip:hover {
-  border-color: var(--color-white);
-  color: var(--color-white);
-}
-.chip[aria-pressed="true"] {
-  background: var(--color-green);
-  border-color: var(--color-green);
-  color: var(--color-ink);
-}
-/* The gallery is the one place a pressed chip is white, because the lime and
-   mint BMWs share that page and green never sits beside them. */
-.filters .chip[aria-pressed="true"] {
-  background: var(--color-white);
-  border-color: var(--color-white);
-  color: var(--color-ink);
-}
-
-/* ---------- scroll-snap row (recent work on phones and city pages) ---------- */
-/* Native snap, no arrows, no autoplay. Padding matches the container so the
-   first card aligns with the content column. At lg the row becomes a grid
-   through utilities on the component. */
-.snap-row {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scroll-padding-inline: 20px;
-  scrollbar-width: none;
-}
-.snap-row::-webkit-scrollbar {
-  display: none;
-}
-.snap-row > * {
-  flex: 0 0 72vw;
-  scroll-snap-align: start;
-}
-@media (min-width: 48rem) {
-  .snap-row {
-    gap: 16px;
-    scroll-padding-inline: 32px;
+  .nav__sub strong {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #f5f6f7;
   }
-  .snap-row > * {
-    flex-basis: 320px;
+  .nav__sub span {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: #8b9097;
   }
-}
-@media (min-width: 64rem) {
-  .snap-row {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
-    overflow: visible;
-    scroll-snap-type: none;
-  }
-  .snap-row > * {
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     flex: none;
   }
-}
-
-/* ---------- FAQ accordion, docs/DESIGN.md 4.9 ---------- */
-/* Native details inside a ledger. The plus glyph rotates 45 degrees and the
-   answer's height eases open where the browser can animate to auto
-   (interpolate-size); elsewhere it opens instantly, which is also the
-   reduced-motion state. */
-.faq {
-  interpolate-size: allow-keywords;
-}
-.faq > summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 60px;
-  padding: 14px 0;
-  font-family: var(--font-sans);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  color: var(--color-white);
-  transition: color 160ms var(--ease-out);
-}
-.faq > summary:hover {
-  color: var(--color-green-text);
-}
-.faq-plus {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  color: var(--color-green);
-  transition: transform 220ms var(--ease-out);
-}
-.faq[open] .faq-plus {
-  transform: rotate(45deg);
-}
-.faq::details-content {
-  height: 0;
-  overflow: hidden;
-  transition: height 260ms var(--ease-out), content-visibility 260ms allow-discrete;
-}
-.faq[open]::details-content {
-  height: auto;
-}
-.faq-answer {
-  padding-bottom: 22px;
-}
-
-/* ---------- lightbox, docs/DESIGN.md 5.12 ---------- */
-/* A native dialog. The backdrop is black at 96 percent; the dialog is
-   transparent over it, fades in over 200 ms, and the photo swaps with a
-   crossfade the component drives through opacity. */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100dvh;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  padding: 24px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--color-white);
-  opacity: 1;
-  transition: opacity 200ms var(--ease-out);
-}
-.lightbox[open] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-@starting-style {
-  .lightbox[open] {
-    opacity: 0;
+  .header-phone {
+    display: none;
   }
-}
-.lightbox::backdrop {
-  background: rgba(0, 0, 0, 0.96);
-}
-.lightbox img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: calc(100svh - 160px);
-  object-fit: contain;
-  border-radius: var(--radius-card);
-}
-body:has(.lightbox[open]) {
-  overflow: hidden;
-}
-
-/* ---------- the footer lockup ---------- */
-.footer-lockup {
-  display: block;
-  width: 160px;
-  height: 160px;
-}
-@media (min-width: 64rem) {
-  .footer-lockup {
-    width: 200px;
-    height: 200px;
-  }
-}
-
-/* ---------- scroll-linked motion, docs/DESIGN.md 3.3 (never hides content) ---------- */
-/* Only transform and clip-path, only inside a @supports guard, only with
-   motion allowed. Every element below is complete and fully visible in a
-   browser without view timelines, with reduced motion, and with JavaScript
-   off. The chip bar grows from the left as its card enters the viewport,
-   reading the card's own view timeline; a wide band photo settles its edges
-   from a 3 percent inset to none as it enters. Elements already past their
-   range at load sit at their final frame. */
-@keyframes chip-grow {
-  from {
-    transform: scaleX(0.12);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    html[data-motion="on"] .card {
-      view-timeline-name: --card;
-      view-timeline-axis: block;
+  @media (min-width: 80rem) {
+    .header-phone {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0 0.5rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #f5f6f7;
     }
-    html[data-motion="on"] .card .chip-bar {
-      animation: chip-grow linear both;
-      animation-timeline: --card;
-      animation-range: entry 0% entry 100%;
+  }
+  .header-quote {
+    display: none;
+  }
+  /* Narrow phones: the action bar at the bottom already carries Call, so the header keeps the logo and the menu. */
+  @media (max-width: 29.99rem) {
+    .header-call {
+      display: none;
     }
-    /* Integration: the settle runs on the photo box inside the card, not on
-       the card itself, so the colour bar and label beneath the photo are
-       never clipped while the band is entering (the figure's own overflow
-       and radius still round the corners). */
   }
-}
+  @media (min-width: 70rem) {
+    .header-quote {
+      display: inline-flex;
+    }
+    .header-call,
+    .menu {
+      display: none;
+    }
+  }
 
-/* ---------- reduced motion, docs/DESIGN.md 3.5 ---------- */
-/* The peel and the rises are handled above (they never exist). Everything
-   else collapses to an instant change: the bar, the menu, the FAQ glyph, the
-   lightbox fade, the crossfades, the button colours. Loop.tsx does not mount
-   its video. Scroll-linked animations are inside a no-preference query. */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+  /* The phone menu: a native <details> so it opens with JavaScript off. */
+  .menu__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--r-ui);
+    color: #f5f6f7;
   }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+  .menu__button svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
-  .faq::details-content {
-    transition: none;
+  .menu[open] .menu__open,
+  .menu:not([open]) .menu__close {
+    display: none;
   }
-}
+  .menu__sheet {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    z-index: 49;
+    overflow-y: auto;
+    padding: 0.5rem 20px calc(2rem + env(safe-area-inset-bottom));
+    background: #0b0c0d;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .menu__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: #f5f6f7;
+  }
+  .menu__link[data-active="true"] {
+    color: #5bd66f;
+  }
 
-/* ---------- integration pass (requests from lanes E2, C, B, D) ---------- */
-/* Lane E2: .on-black is declared before .panel at equal specificity, so a
-   panel that carries both painted charcoal. The shop panel on the daylight
-   sheet is black (docs/DESIGN.md 2.6). */
-.on-black.panel {
-  background: var(--color-black);
-}
-/* The black panel sits inside the one white section, so the sheet's light
-   variants (steel text, dark hairlines, deep green links) would otherwise win
-   inside it and fail contrast on black. Re-declare the black ground's own
-   colours for anything on black within the sheet. */
-.on-white .on-black .muted {
-  color: var(--color-silver);
-}
-.on-white .on-black .t-label,
-.on-white .on-black .t-byline {
-  color: var(--color-ash);
-}
-.on-white .on-black .ledger {
-  border-top-color: var(--hairline);
-}
-.on-white .on-black .ledger > * {
-  border-bottom-color: var(--hairline);
-}
-.on-white .on-black .link {
-  color: var(--color-green-text);
-  text-decoration-color: rgba(91, 224, 122, 0.4);
-}
-.on-white .on-black .btn-text {
-  color: var(--color-green-text);
-}
-.on-white .on-black .btn-outline,
-.on-white .on-black .strip-cell {
-  color: var(--color-white);
-  border-color: var(--hairline-strong);
-}
-.on-white .on-black .btn-outline:hover,
-.on-white .on-black .strip-cell:hover {
-  border-color: var(--color-white);
-  background: var(--white-wash);
-}
-/* Lane C: a ledger inside a panel ends at the panel padding, not at a
-   hairline hanging above it (the timing panel, the tint "Also" panel, the
-   shop panel's last row). */
-.panel > .ledger > :last-child {
-  border-bottom: 0;
-}
-/* Lane B: with JavaScript off a three frame set (the TRX) left one empty
-   cell in its two column grid; the odd last frame spans both columns at 2:1. */
-html:not([data-js="on"]) .set-frame > .set-slide:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-  aspect-ratio: 2 / 1;
-}
+  /* ---------- breadcrumbs ---------- */
+  .crumbs {
+    border-bottom: 1px solid var(--rule);
+    font-size: 0.8125rem;
+    line-height: 1;
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--key);
+  }
+  .crumbs a:hover {
+    color: var(--heading);
+  }
+  .crumbs [aria-current="page"] {
+    color: var(--heading);
+  }
 
-/* ---------- AI grounds and living photos, docs/DESIGN.md 10 (design lead, 2026-09-09) ---------- */
-/* A ground is a generated material photo (public/ai, docs/ASSETS_AI.md)
-   drawn behind a host at low opacity: a section, a panel, a mat under a
-   device, the footer, the lightbox, the menu sheet. The host carries .ground
-   and Ground.tsx (src/components/ui) renders the layer, .ground-media with a
-   <picture> or <img> inside, as the host's first child with the preset's
-   variables inline (constants GROUNDS). The layer sits at z-index -1 inside
-   the host's own stacking context, so it paints above the host's background
-   and beneath every in-flow child without touching the children. Grounds
-   are decoration: alt is empty, the layer is aria-hidden, nothing is ever
-   captioned. Copy that sits directly on a ground keeps the ground at 0.4 or
-   lower; ash labels never sit on one (docs/DESIGN.md 10.4 has the numbers).
-   Complete with JavaScript off and under reduced motion: the image is simply
-   there at its opacity, still. It may fade in (decoration), nothing else may. */
-:root {
-  --ground-opacity: 0.3; /* the whole layer, after the mask */
-  --ground-pos: 50% 50%; /* object-position of the image */
-  --ground-h: 100%; /* the layer's height; capped so a 1376px file never has to cover a tall section */
-  --drift-s: 24s; /* the ambient drift loop */
-  --gl0: 0%; /* where the left fade starts; transparent before it */
-  --gt0: 0%; /* where the top fade starts; transparent above it */
-  --gl: 0%; /* the opaque span: from --gl to --gr across, --gt to --gb down; the layer fades to nothing outside it */
-  --gr: 100%;
-  --gt: 0%;
-  --gb: 100%;
-}
-.ground {
-  position: relative;
-  isolation: isolate;
-}
-/* Fixed hosts keep their position; on them .ground only adds the stacking context. */
-.lightbox.ground,
-.menu-sheet.ground {
-  position: fixed;
-}
-.ground-media {
-  position: absolute;
-  inset: 0;
-  bottom: auto;
-  z-index: -1;
-  height: var(--ground-h);
-  max-height: 100%;
-  overflow: hidden;
-  border-radius: inherit;
-  opacity: var(--ground-opacity);
-  pointer-events: none;
-  user-select: none;
-  -webkit-mask-image: linear-gradient(to right, transparent var(--gl0), #000 var(--gl), #000 var(--gr), transparent 100%),
-    linear-gradient(to bottom, transparent var(--gt0), #000 var(--gt), #000 var(--gb), transparent 100%);
-  mask-image: linear-gradient(to right, transparent var(--gl0), #000 var(--gl), #000 var(--gr), transparent 100%),
-    linear-gradient(to bottom, transparent var(--gt0), #000 var(--gt), #000 var(--gb), transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-  transition: opacity 900ms var(--ease-out);
-}
-/* Anchored to the bottom of the host instead of the top (a roll under a panel's rows, streaks under a process). */
-.ground-media-b {
-  top: auto;
-  bottom: 0;
-}
-.ground-media > picture,
-.ground-media > img,
-.ground-media > picture > img {
-  display: block;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: var(--ground-pos);
-}
-/* A mirrored file: the picture element flips, not the image, so the drift keeps its own transform. */
-.ground-media > picture.ground-flip {
-  transform: scaleX(-1);
-}
-/* Under lg a preset may override its opacity, height, position and fade
-   (GroundSpec.small). Ground.tsx writes the same variables with an -sm
-   suffix; each falls back to the lg value, so a preset without `small` is
-   unchanged. Stays above @starting-style so the fade in still wins. */
-@media (max-width: 63.99rem) {
-  .ground-media {
-    height: var(--ground-h-sm, var(--ground-h));
-    opacity: var(--ground-opacity-sm, var(--ground-opacity));
-    -webkit-mask-image: linear-gradient(to right, transparent var(--gl0-sm, var(--gl0)), #000 var(--gl-sm, var(--gl)), #000 var(--gr-sm, var(--gr)), transparent 100%),
-      linear-gradient(to bottom, transparent var(--gt0-sm, var(--gt0)), #000 var(--gt-sm, var(--gt)), #000 var(--gb-sm, var(--gb)), transparent 100%);
-    mask-image: linear-gradient(to right, transparent var(--gl0-sm, var(--gl0)), #000 var(--gl-sm, var(--gl)), #000 var(--gr-sm, var(--gr)), transparent 100%),
-      linear-gradient(to bottom, transparent var(--gt0-sm, var(--gt0)), #000 var(--gt-sm, var(--gt)), #000 var(--gb-sm, var(--gb)), transparent 100%);
+  /* ---------- the hero: one implementation for every page that has one ---------- */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    min-height: min(46rem, calc(100svh - var(--header-h)));
+    overflow: hidden;
   }
-  .ground-media > picture > img,
-  .ground-media > img {
-    object-position: var(--ground-pos-sm, var(--ground-pos));
+  .hero--page {
+    min-height: min(38rem, calc(100svh - var(--header-h)));
   }
-}
-/* The lightbox caps every img at the viewport less the chrome (.lightbox img);
-   its ground is the one exception and fills the dialog. */
-.lightbox .ground-media img {
-  max-height: none;
-  border-radius: 0;
-}
-/* A background image is decoration, so it may fade in. Nothing else starts
-   invisible. The ground in a page's first section (the title block, the home
-   hero) is simply there at first paint: a first-screen image that animates in
-   from opacity 0 is timed by the browser at the end of its fade, which made
-   the decorative ground register as the LCP at about 950 ms on every page but
-   home. Grounds below the fold keep the fade. */
-@starting-style {
-  .ground-media:not(main > :first-child > .ground-media) {
-    opacity: 0;
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
   }
-}
-/* The ambient drift: transform only, 24 s (36 s on the footer ceiling), gated
-   on the head script's motion flag, so it never runs with JavaScript off or
-   under reduced motion. Scale stays above 1 so the drift never uncovers an edge. */
-@keyframes ground-drift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1.06);
+  .hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
   }
-  50% {
-    transform: translate3d(-1.6%, -1.2%, 0) scale(1.09);
+  /* Phones: the copy sits over the whole frame, so the scrim is even and deepens to the trust row. */
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(11, 12, 13, 0.62) 0%, rgba(11, 12, 13, 0.72) 45%, rgba(11, 12, 13, 0.95) 100%);
   }
-  100% {
-    transform: translate3d(0, 0, 0) scale(1.06);
+  .hero__body {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    padding-block: 3.5rem 2.5rem;
   }
-}
-html[data-motion="on"] .ground-media img.ground-drift {
-  animation: ground-drift var(--drift-s) ease-in-out infinite;
-  will-change: transform;
-}
-@media (prefers-reduced-motion: reduce) {
-  .ground-media img.ground-drift {
-    animation: none !important;
+  .hero__copy {
+    max-width: 46rem;
   }
-}
-/* A mat: a black plate with a hairline and the card radius that a device sits
-   on (the finish picker frame, the fleet pair, the reviews grid). The host
-   carries both classes, `ground ground-mat`, and the ground fills the plate. */
-.ground-mat {
-  padding: 12px;
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-card);
-  background: var(--color-black);
-}
-@media (min-width: 64rem) {
-  .ground-mat {
-    padding: 16px;
+  .hero__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: #d9dcdf;
   }
-}
-/* The panel-over-texture rule: a block of copy that has to sit where a ground
-   is brighter than 0.4 gets a 90 percent black panel. Cards, panels, review
-   cards, tier cards, the ticket, the notice and the panes already carry a
-   solid ground of their own and need nothing. */
-.ground-copy {
-  background: rgba(0, 0, 0, 0.9);
-  border-radius: var(--radius-card);
-  padding: 20px 24px;
-}
-/* The living slot in the finish picker: each frame is a slot (an <img>, or
-   Loop for a finish that has a living photo) that crossfades like the bare
-   images did. The poster inside a slot is always drawn; the slot carries the
-   opacity. Loop's own video opacity is left to Loop. */
-.picker-photo > .picker-slot {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 320ms var(--ease-out);
-}
-.picker-photo > .picker-slot[data-active="true"] {
-  opacity: 1;
-}
-.picker-slot > * {
-  width: 100%;
-  height: 100%;
-}
-.picker-slot img {
-  opacity: 1;
-  transition: none;
-}
-/* A ledger that runs in two columns at lg: the wrap types, the fleet rows,
-   the tint extras and the powder list no longer leave half the grid empty. */
-@media (min-width: 64rem) {
-  .ledger-cols {
+  /* The measure keeps every heading inside the dark side of the scrim. */
+  .hero__title {
+    max-width: 40rem;
+    margin-top: 1.125rem;
+    color: #ffffff;
+  }
+  .hero__title .accent {
+    color: #3fd155;
+  }
+  .hero__lead {
+    max-width: 34rem;
+    margin-top: 1.375rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: #e3e5e8;
+    text-wrap: pretty;
+  }
+  .hero__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .hero__trust {
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  @media (min-width: 40rem) {
+    .hero__actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+  @media (min-width: 48rem) {
+    .hero__media img {
+      object-position: var(--hero-focus, 50% 50%);
+    }
+    /* Wide screens: dark behind the copy at the left, the photograph clear at the right. */
+    .hero__scrim {
+      background:
+        linear-gradient(90deg, rgba(11, 12, 13, 0.93) 0%, rgba(11, 12, 13, 0.82) 30%, rgba(11, 12, 13, 0.4) 58%, rgba(11, 12, 13, 0.08) 100%),
+        linear-gradient(180deg, rgba(11, 12, 13, 0.35) 0%, rgba(11, 12, 13, 0) 26%, rgba(11, 12, 13, 0) 60%, rgba(11, 12, 13, 0.88) 100%);
+    }
+    .hero--heavy .hero__scrim {
+      background:
+        linear-gradient(90deg, rgba(11, 12, 13, 0.95) 0%, rgba(11, 12, 13, 0.88) 38%, rgba(11, 12, 13, 0.55) 70%, rgba(11, 12, 13, 0.3) 100%),
+        linear-gradient(180deg, rgba(11, 12, 13, 0.35) 0%, rgba(11, 12, 13, 0) 26%, rgba(11, 12, 13, 0) 60%, rgba(11, 12, 13, 0.9) 100%);
+    }
+    .hero__body {
+      padding-block: 5rem 4rem;
+    }
+    .hero__lead {
+      font-size: 1.1875rem;
+    }
+  }
+
+  /* ---------- the trust row on the hero's bottom edge ---------- */
+  .trust {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .trust > li {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: #d9dcdf;
+  }
+  .trust > li + li {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .trust a:hover {
+    color: #ffffff;
+  }
+  @media (min-width: 48rem) {
+    .trust {
+      flex-direction: row;
+      flex-wrap: wrap;
+      column-gap: 2.75rem;
+      padding-block: 0.5rem;
+    }
+    .trust > li + li {
+      border-top: 0;
+    }
+  }
+  .stars {
+    --stars-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 19'%3E%3Cpath d='M10 0l2.94 6.26 6.56.9-4.8 4.74 1.18 6.85L10 15.4l-5.88 3.35 1.18-6.85L.5 7.16l6.56-.9z'/%3E%3C/svg%3E");
+    position: relative;
+    display: inline-block;
+    flex: none;
+    width: 4.75rem;
+    height: 0.875rem;
+    background: rgba(255, 255, 255, 0.24);
+    -webkit-mask: var(--stars-mask) left center / 0.95rem 0.875rem repeat-x;
+    mask: var(--stars-mask) left center / 0.95rem 0.875rem repeat-x;
+  }
+  .stars::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: var(--stars-fill, 100%);
+    background: #3fd155;
+  }
+  .plane-light .stars {
+    background: rgba(11, 12, 13, 0.2);
+  }
+  .plane-light .stars::after {
+    background: #229a36;
+  }
+
+  /* ---------- page head: the title band on pages without a photo hero ---------- */
+  .pagehead {
+    padding-block: 3.5rem 3rem;
+  }
+  @media (min-width: 64rem) {
+    .pagehead {
+      padding-block: 5.5rem 4.5rem;
+    }
+  }
+
+  /* ---------- service cards ---------- */
+  .cards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 40rem) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+  @media (min-width: 64rem) {
+    .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+    transition: border-color 0.2s var(--ease);
+  }
+  a.card:hover {
+    border-color: var(--rule-strong);
+  }
+  .card__media {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--panel-2);
+  }
+  .card__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease);
+  }
+  a.card:hover .card__media img {
+    transform: scale(1.04);
+  }
+  .card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.375rem 1.375rem 0.875rem;
+  }
+  .card__num {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--link);
+    font-variant-numeric: tabular-nums;
+  }
+  .card__title {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.3125rem;
+    font-weight: 700;
+    letter-spacing: -0.012em;
+    line-height: 1.15;
+    color: var(--heading);
+  }
+  .card__text {
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .card__body .arrow-link {
+    margin-top: auto;
+  }
+  /* Phones: the card lies on its side, the photo at the left, so six fit in two screens. */
+  @media (max-width: 39.99rem) {
+    .cards--rows .card {
+      flex-direction: row;
+    }
+    .cards--rows .card__media {
+      flex: none;
+      width: 34%;
+      aspect-ratio: auto;
+    }
+    .cards--rows .card__body {
+      padding: 1rem 1rem 0.5rem;
+    }
+    .cards--rows .card__title {
+      font-size: 1.125rem;
+    }
+    .cards--rows .card__text {
+      font-size: 0.875rem;
+    }
+    .cards--rows .arrow-link {
+      display: block;
+      min-height: 0;
+      padding-bottom: 0.625rem;
+      font-size: 0.875rem;
+    }
+    .cards--rows .arrow-link svg {
+      display: inline;
+      margin-left: 0.375rem;
+      vertical-align: -0.2rem;
+    }
+  }
+
+  /* ---------- checks: what you get ---------- */
+  .checks {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  @media (min-width: 48rem) {
+    .checks {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 72rem) {
+    .checks {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .check {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    column-gap: 0.875rem;
+    align-items: start;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .check__mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 0.05rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--link);
+  }
+  .check__mark svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .check__title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    color: var(--heading);
+  }
+  .check__body {
+    margin-top: 0.4rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--body);
+  }
+
+  /* ---------- key and value rows ---------- */
+  .kv {
+    margin: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .kv__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .kv__row dt {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--key);
+  }
+  .kv__row dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--heading);
+  }
+  @media (min-width: 30rem) {
+    .kv__row {
+      grid-template-columns: 9.5rem minmax(0, 1fr);
+      gap: 1.25rem;
+      align-items: baseline;
+    }
+  }
+
+  /* ---------- two column bands ---------- */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+  .split > * {
+    min-width: 0;
+  }
+  @media (min-width: 64rem) {
+    .split {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4.5rem;
+      align-items: start;
+    }
+    .split--57 {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+    .split--75 {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+    .split--48 {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    }
+    .split--center {
+      align-items: center;
+    }
+  }
+
+  /* ---------- the review pulled beside the facts ---------- */
+  .quote {
+    margin: 0;
+    padding: 1.75rem;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+  }
+  .quote__text {
+    margin-top: 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--heading);
+    text-wrap: pretty;
+  }
+  .quote__by {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.875rem;
+    margin-top: 1.125rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--key);
+  }
+  .quote__by strong {
+    font-weight: 600;
+    color: var(--heading);
+  }
+
+  /* ---------- the work: photo grids ---------- */
+  .work {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 48px;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-  /* In a panel the last row loses its hairline; with an even count the left cell of the last pair is a last row too. */
-  .panel > .ledger-cols > :nth-last-child(2):nth-child(odd) {
+  .work > li {
+    min-width: 0;
+  }
+  .work figure {
+    margin: 0;
+  }
+  @media (min-width: 48rem) {
+    .work {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    .work--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* ---------- steps: how it works ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+  @media (min-width: 48rem) {
+    .steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.5rem;
+    }
+    .steps--4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 64rem) {
+    .steps--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2rem;
+    }
+  }
+  .step {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    counter-increment: step;
+  }
+  .step::before {
+    content: "0" counter(step);
+    display: block;
+    margin-bottom: 0.875rem;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--link);
+    font-variant-numeric: tabular-nums;
+  }
+  .step__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--heading);
+  }
+  .step__body {
+    max-width: 26rem;
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--body);
+  }
+
+  /* ---------- questions: details and summary, no JavaScript ---------- */
+  .faq {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .faq__item {
+    border-bottom: 1px solid var(--rule);
+  }
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 3.75rem;
+    padding-block: 1rem;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    color: var(--heading);
+  }
+  .faq__q::after {
+    content: "";
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+    background:
+      linear-gradient(var(--link), var(--link)) center / 100% 2px no-repeat,
+      linear-gradient(var(--link), var(--link)) center / 2px 100% no-repeat;
+    transition: transform 0.25s var(--ease);
+  }
+  .faq__item[open] .faq__q::after {
+    transform: rotate(45deg);
+  }
+  .faq__a {
+    max-width: 40rem;
+    padding-bottom: 1.375rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--body);
+  }
+
+  /* ---------- chips: the towns, the other services ---------- */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--heading);
+    transition: border-color 0.18s var(--ease);
+  }
+  a.chip:hover {
+    border-color: var(--link);
+  }
+  .chip__meta {
+    font-size: 0.75rem;
+    color: var(--key);
+  }
+
+  /* ---------- a second rule inside a section ---------- */
+  .subrule {
+    margin-top: 4rem;
+  }
+  @media (min-width: 64rem) {
+    .subrule {
+      margin-top: 5.5rem;
+    }
+  }
+
+  /* ---------- tiles: film tiers, coverage, setups ---------- */
+  .tiles {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .tiles--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+    .tiles--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+  .tile {
+    height: 100%;
+    padding: 1.625rem;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+  }
+  .tile--pick {
+    border-color: var(--accent);
+    box-shadow: inset 0 3px 0 var(--accent);
+  }
+  .tile__tag {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--link);
+  }
+  .tile__title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--heading);
+  }
+  .tile__text {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--body);
+  }
+  .tile .kv {
+    margin-top: 1.25rem;
+  }
+  .tile .kv__row {
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .tile .kv__row:last-child {
     border-bottom: 0;
+    padding-bottom: 0;
   }
-}
-/* Hover polish: a card's label brightens with its bar and its edge. */
-.chip-label > :first-child {
-  transition: color 200ms var(--ease-out);
-}
-.card:hover .chip-label > :first-child,
-.card-link:hover .chip-label > :first-child,
-.card-link:focus-visible .chip-label > :first-child {
-  color: var(--color-white);
+  .ticks {
+    display: grid;
+    gap: 0.625rem;
+    margin: 1.125rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ticks > li {
+    display: grid;
+    grid-template-columns: 1.125rem minmax(0, 1fr);
+    column-gap: 0.625rem;
+    align-items: start;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--heading);
+  }
+  .ticks svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.15rem;
+    color: var(--link);
+  }
+
+  /* ---------- the tint shade slider ---------- */
+  .shade {
+    overflow: hidden;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+  }
+  .shade__pane {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #0b0c0d;
+  }
+  .shade__pane img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .shade__overlay {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+    opacity: var(--shade, 0.5);
+    pointer-events: none;
+  }
+  .shade__control {
+    padding: 1.125rem 1.375rem 1.25rem;
+  }
+  .shade__ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--key);
+  }
+  .shade__range {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 1.75rem;
+    margin: 0.375rem 0 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .shade__range::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--rule-strong);
+  }
+  .shade__range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: -0.625rem;
+    border: 3px solid var(--panel);
+    border-radius: 999px;
+    background: #32c246;
+    box-shadow: 0 0 0 1px var(--rule-strong);
+  }
+  .shade__range::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--rule-strong);
+  }
+  .shade__range::-moz-range-thumb {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 3px solid var(--panel);
+    border-radius: 999px;
+    background: #32c246;
+  }
+
+  /* ---------- the close: the form beside the phone ---------- */
+  .callbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.125rem 1.375rem;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+    transition: border-color 0.18s var(--ease);
+  }
+  .callbox:hover {
+    border-color: var(--accent);
+  }
+  .callbox__k {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--key);
+  }
+  .callbox__n {
+    display: block;
+    margin-top: 0.3rem;
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+  }
+  .callbox svg {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--link);
+    transition: transform 0.22s var(--ease);
+  }
+  .callbox:hover svg {
+    transform: translateX(4px);
+  }
+  @media (min-width: 64rem) {
+    .close__aside {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+  .meta {
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.75;
+    color: var(--key);
+  }
+
+  /* The form is always a light panel, on either plane. */
+  .form {
+    --bg: #ffffff;
+    --panel: #ffffff;
+    --panel-2: #f4f5f6;
+    --rule: rgba(11, 12, 13, 0.12);
+    --rule-strong: rgba(11, 12, 13, 0.32);
+    --heading: #0b0c0d;
+    --body: #474c52;
+    --key: #6a7077;
+    --link: #17752a;
+    --accent: #229a36;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid rgba(11, 12, 13, 0.12);
+    border-radius: 14px;
+    color: var(--body);
+    color-scheme: light;
+  }
+  @media (min-width: 48rem) {
+    .form {
+      padding: 2.25rem;
+    }
+  }
+  .form__group + .form__group {
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--rule);
+  }
+  .form__legend {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--heading);
+  }
+  .form__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  @media (min-width: 40rem) {
+    .form__grid--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .form__label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--heading);
+  }
+  .form__label span {
+    font-weight: 400;
+    color: var(--key);
+  }
+  .field {
+    display: block;
+    width: 100%;
+    height: 3.125rem;
+    padding: 0 0.9rem;
+    background: #ffffff;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-ui);
+    font: inherit;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--heading);
+    transition: border-color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+  }
+  .field::placeholder {
+    color: #8b9097;
+    opacity: 1;
+  }
+  .field:hover {
+    border-color: #0b0c0d;
+  }
+  .field:focus {
+    outline: none;
+    border-color: #229a36;
+    box-shadow: 0 0 0 3px rgba(50, 194, 70, 0.28);
+  }
+  textarea.field {
+    height: auto;
+    min-height: 7.5rem;
+    padding: 0.8rem 0.9rem;
+    resize: vertical;
+  }
+  select.field {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230b0c0d' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 1rem;
+  }
+  .field[aria-invalid="true"] {
+    border-color: #b3261e;
+  }
+  .form__error {
+    margin-top: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #b3261e;
+  }
+  .form__note {
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    text-align: center;
+    color: var(--key);
+  }
+  .notice {
+    padding: 1rem 1.125rem;
+    border: 1px solid #b3261e;
+    border-radius: var(--r-ui);
+    background: #fdf3f2;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: #0b0c0d;
+  }
+  .notice strong {
+    display: block;
+    font-weight: 600;
+  }
+
+  /* ---------- footer ---------- */
+  .site-footer {
+    --bg: #070808;
+    padding-block: 4rem 2rem;
+    background: #070808;
+  }
+  @media (min-width: 64rem) {
+    .site-footer {
+      padding-block: 6rem 2.5rem;
+    }
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+  }
+  @media (min-width: 48rem) {
+    .footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 64rem) {
+    .footer__grid {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 2.4fr) minmax(0, 3.6fr) minmax(0, 2fr);
+      gap: 3.5rem;
+    }
+  }
+  .footer__logo {
+    width: 9.5rem;
+    height: auto;
+    margin-left: -0.5rem;
+  }
+  .footer__title {
+    padding-bottom: 0.875rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .footer__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .footer__list a {
+    display: flex;
+    align-items: center;
+    min-height: 2.5rem;
+    font-size: 0.9375rem;
+    color: #d9dcdf;
+    transition: color 0.16s var(--ease);
+  }
+  .footer__list a:hover {
+    color: #ffffff;
+  }
+  .footer__list a {
+    white-space: nowrap;
+  }
+  .footer__base {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.8125rem;
+    color: var(--key);
+  }
+  .footer__base a:hover {
+    color: #ffffff;
+  }
+  @media (min-width: 48rem) {
+    .footer__base {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  /* ---------- the phone action bar ---------- */
+  .mbar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.25fr;
+    height: calc(var(--bar-h) + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: #0b0c0d;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .mbar__cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: var(--bar-h);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #f5f6f7;
+  }
+  .mbar__cell + .mbar__cell {
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .mbar__cell svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  .mbar__cell--primary {
+    background: #32c246;
+    color: #06140a;
+  }
+  @media (min-width: 64rem) {
+    .mbar {
+      display: none;
+    }
+  }
+
+  /* ---------- skip link ---------- */
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    border-radius: var(--r-ui);
+    background: #32c246;
+    font-weight: 600;
+    color: #06140a;
+    transition: top 0.16s var(--ease);
+  }
+  .skip:focus {
+    top: 1rem;
+  }
 }

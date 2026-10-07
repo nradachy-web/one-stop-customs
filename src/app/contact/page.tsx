@@ -1,50 +1,84 @@
 import type { Metadata } from "next";
-import SectionHead from "@/components/ui/SectionHead";
-import Ground from "@/components/ui/Ground";
-import ActionStrip from "@/components/ui/ActionStrip";
-import ShopSheet from "@/components/ui/ShopSheet";
-import QuoteForm from "@/components/forms/QuoteForm";
-import { CONTACT } from "@/lib/constants";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import PageHead from "@/components/landing/PageHead";
+import { Faq } from "@/components/landing/blocks";
+import QuoteForm from "@/components/quote/QuoteForm";
+import { FaqSchema } from "@/components/seo/JsonLd";
+import Button, { ArrowLink } from "@/components/ui/Button";
+import { ArrowIcon } from "@/components/ui/Icons";
+import { KeyValues, Section } from "@/components/ui/Section";
+import { BRAND, FAQ } from "@/lib/constants";
+import { titleFor } from "@/lib/meta";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: CONTACT.metaTitle,
-  description: CONTACT.metaDescription,
+  title: titleFor("Get a free quote"),
+  description: "Get a free quote for a wrap, tint, paint protection film or powder coating. Call or text (248) 259-1617, book online, or send the form. Warren, by appointment.",
   path: "/contact/",
 });
 
-/**
- * Contact (docs/DESIGN.md 7.6): the quote leaf. A black title section (the
- * h1 and lede 40px under the header, 56px at lg, then the four doors 32px
- * below), then the page's one daylight sheet: the ticket in columns 1 to 7
- * and the black shop panel with its green Book online button in 8 to 12,
- * aligned to the ticket's top. QuoteForm reads ?service= in its own client
- * effect to pre-check a chip, and renders the honest notice instead of a
- * form when the Web3Forms key is absent at build time; the strip still
- * stands either way. The strip's Get a quote cell points at the sheet on
- * this page. Lane A's mobile action bar stays off this path. The hex
- * ceiling ground (docs/DESIGN.md 10.5) sits at the top right of the title
- * block, faded off the h1 and lede; the sheet stays white.
- */
 export default function ContactPage() {
   return (
     <>
-      <section id="contact" className="section ground pt-10! lg:pt-14!">
-        <Ground id="contact" />
-        <div className="container">
-          <SectionHead as="h1" title={CONTACT.h1} lede={CONTACT.lede} ledeClassName="measure-wide" />
-          <ActionStrip quoteHref="#quote" className="mt-8" />
-        </div>
-      </section>
+      <FaqSchema items={FAQ} path="/contact/" />
+      <Breadcrumbs trail={[{ label: "Contact", href: "/contact/" }]} />
+      <PageHead
+        label="Contact"
+        title="Get your free *quote*."
+        lead="Tell us about your vehicle and what you want done. We will get back to you fast with a free, no pressure quote."
+      />
 
-      <section id="quote" className="section on-white">
-        <div className="container">
-          <div className="grid-12">
-            <QuoteForm className="lg:col-span-7 lg:col-start-1 lg:self-start" />
-            <ShopSheet onBlack withBooking className="mt-10 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-start" />
+      <Section plane="light" id="quote">
+        <div className="split split--57">
+          <div>
+            <a href={BRAND.phoneHref} className="callbox mt-0!">
+              <span className="min-w-0">
+                <span className="callbox__k">Call or text</span>
+                <span className="callbox__n">{BRAND.phoneDisplay}</span>
+              </span>
+              <ArrowIcon />
+            </a>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <Button href={BRAND.phoneSms} tone="ghost">
+                Text us
+              </Button>
+              <Button href={BRAND.bookingUrl} tone="ghost">
+                Book online
+              </Button>
+            </div>
+            <KeyValues
+              className="mt-8"
+              rows={[
+                { k: "Shop", v: BRAND.address.full },
+                ...BRAND.hours.map((h) => ({ k: h.days, v: h.hours })),
+                { k: "Appointments", v: "By appointment only" },
+                {
+                  k: "Email",
+                  v: (
+                    <a href={BRAND.emailHref} className="link">
+                      {BRAND.email}
+                    </a>
+                  ),
+                },
+              ]}
+            />
+            <p className="mt-4">
+              <ArrowLink href={BRAND.address.mapUrl}>Get directions</ArrowLink>
+            </p>
           </div>
+          <QuoteForm source="/contact/" />
         </div>
-      </section>
+      </Section>
+
+      <Section plane="dark" label="Questions">
+        <div className="split split--48">
+          <div>
+            <h2 className="display display-md">Good to know.</h2>
+            <p className="prose mt-4">The short answers to what people ask before they book.</p>
+          </div>
+          <Faq items={FAQ} />
+        </div>
+      </Section>
     </>
   );
 }

@@ -4,7 +4,6 @@ import { BRAND, SITE_URL } from "@/lib/constants";
 /**
  * SEO helpers. next.config.ts sets trailingSlash: true, so every canonical,
  * sitemap entry and JSON-LD url must end with "/" (the root is just "/").
- * Anything else is a redirecting, non-canonical URL.
  */
 
 /** "/about", "/about/" and "about" all become "/about/". The root stays "/". */
@@ -23,19 +22,10 @@ const OG_IMAGE = { url: "/og-image.jpg", width: 1200, height: 630, alt: BRAND.le
 
 /**
  * Per-page metadata. metadataBase is set in layout.tsx, so the relative paths
- * here resolve to absolute URLs in the rendered tags. Pages that must stay out
- * of the index spread their own `robots` after this. Omit `path` for pages
+ * here resolve to absolute URLs in the rendered tags. Omit `path` for pages
  * with no real URL (the 404), which then carry no canonical and no og:url.
  */
-export function pageMeta({
-  title,
-  description,
-  path,
-}: {
-  title: string;
-  description: string;
-  path?: string;
-}): Metadata {
+export function pageMeta({ title, description, path }: { title: string; description: string; path?: string }): Metadata {
   const canonical = path === undefined ? undefined : canonicalPath(path);
   return {
     title,

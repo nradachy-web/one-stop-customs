@@ -1,37 +1,46 @@
 import type { Metadata } from "next";
-import SectionHead from "@/components/ui/SectionHead";
-import Ground from "@/components/ui/Ground";
-import GalleryGrid from "@/components/gallery/GalleryGrid";
-import { GALLERY, SEO, WORK } from "@/lib/constants";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import PageHead from "@/components/landing/PageHead";
+import { QuoteClose, WorkGrid } from "@/components/landing/blocks";
+import Button, { ArrowLink } from "@/components/ui/Button";
+import { Section } from "@/components/ui/Section";
+import { BRAND, QUOTE_CTA } from "@/lib/constants";
 import { titleFor } from "@/lib/meta";
+import { GALLERY_GROUPS } from "@/lib/photos";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: titleFor(GALLERY.tab),
-  description: SEO.gallery.description,
+  title: titleFor("Our work"),
+  description: "Wraps, stripes, printed commercial wraps, tint, paint protection film and powder coated wheels. Every photo is the shop's own work in Warren.",
   path: "/gallery/",
 });
 
-/**
- * The gallery (docs/DESIGN.md 7.4): every photo in the book on black. The
- * title block (the h1 and the count line in .t-label) sits in a .section
- * with 40px of top padding (56px at lg) under the fixed header; lane A's
- * <main class="header-offset"> clears the header itself. The grid beneath
- * carries its own filter row and lightbox. The section takes no rule; the
- * header's hairline is the boundary. The swatch fan ground (docs/DESIGN.md
- * 10.5) sits at the top right behind the count line and the filter row and
- * is gone before the grid, which stays on pure black.
- */
+/** The gallery: every photo, grouped by the kind of work, each with its caption. No filters, no lightbox. */
 export default function GalleryPage() {
   return (
-    <section id="gallery" className="section ground pt-10! lg:pt-14!">
-      <Ground id="gallery" />
-      <div className="container">
-        <SectionHead as="h1" title={GALLERY.h1}>
-          <p className="t-label mt-4">{GALLERY.countLine(WORK.length)}</p>
-        </SectionHead>
-        <GalleryGrid photos={WORK} className="mt-10 lg:mt-16" />
-      </div>
-    </section>
+    <>
+      <Breadcrumbs trail={[{ label: "Our work", href: "/gallery/" }]} />
+      <PageHead
+        label="Our work"
+        title="Real cars. Real *film*."
+        lead="Every photo here is the shop's own. Scroll the work, then tell us what you want yours to look like."
+      >
+        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+          <Button href="#quote">{QUOTE_CTA}</Button>
+          <ArrowLink href={BRAND.social.instagram}>See the latest on Instagram</ArrowLink>
+        </div>
+      </PageHead>
+
+      {GALLERY_GROUPS.map((g) => (
+        <Section key={g.id} plane="light" label={g.title}>
+          <p className="prose -mt-4 mb-8">{g.blurb}</p>
+          <WorkGrid ids={g.photoIds} />
+        </Section>
+      ))}
+
+      <Section plane="dark" label="Free quote" id="quote">
+        <QuoteClose source="/gallery/" />
+      </Section>
+    </>
   );
 }

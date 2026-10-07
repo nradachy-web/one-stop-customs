@@ -1,0 +1,618 @@
+{
+  "audi-rosegold-front": {
+    "w": 1440,
+    "h": 1081,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "audi-rosegold-wide": {
+    "w": 1439,
+    "h": 648,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "bmw-camo-blue": {
+    "w": 1440,
+    "h": 790,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "bmw-lime": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "bmw-mint-front": {
+    "w": 1440,
+    "h": 1085,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "camaro-black-rear": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "camaro-orange-hood": {
+    "w": 1104,
+    "h": 621,
+    "widths": [
+      480,
+      800,
+      1104
+    ],
+    "mobile": false
+  },
+  "camaro-red-convertible": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "camaro-red-front": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "challenger-blue": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "charger-pink": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "charger-red-stripes": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "charger-white-red": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "charger-white-side": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "chrysler300-black-portrait": {
+    "w": 1280,
+    "h": 1600,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "chrysler300-black-side": {
+    "w": 1280,
+    "h": 1600,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "commercial-blazer-pink": {
+    "w": 1600,
+    "h": 745,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
+  },
+  "commercial-tesla-homes-front": {
+    "w": 1600,
+    "h": 1136,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
+  },
+  "commercial-tesla-homes": {
+    "w": 1600,
+    "h": 1200,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "corvette-black-front": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
+  "corvette-black-rear": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
+  "corvette-black-side": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
+  "corvette-black-wide": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
+  "crown-grey-rear": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "cybertruck-black": {
+    "w": 1600,
+    "h": 961,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
+  },
+  "denali-black-front": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "denali-black-wide": {
+    "w": 1440,
+    "h": 500,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "durango-black-rear": {
+    "w": 1440,
+    "h": 1317,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "durango-black-red-front": {
+    "w": 1440,
+    "h": 1319,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "escalade-black-window": {
+    "w": 1440,
+    "h": 1082,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "escalade-white-front": {
+    "w": 1440,
+    "h": 1083,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "grandcherokee-white": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "home-deck-tint": {
+    "w": 1248,
+    "h": 448,
+    "widths": [
+      480,
+      800,
+      1200,
+      1248
+    ],
+    "mobile": true
+  },
+  "home-front-tint": {
+    "w": 600,
+    "h": 450,
+    "widths": [
+      480,
+      600
+    ],
+    "mobile": false
+  },
+  "huracan-red-square": {
+    "w": 1200,
+    "h": 1200,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": true
+  },
+  "kitchen-wrap": {
+    "w": 900,
+    "h": 509,
+    "widths": [
+      480,
+      800,
+      900
+    ],
+    "mobile": false
+  },
+  "maserati-blue-rear": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "maserati-blue-side": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "modely-satin-grey": {
+    "w": 1600,
+    "h": 970,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
+  },
+  "mustang-white-shop": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": true
+  },
+  "porsche-911-black-front": {
+    "w": 1080,
+    "h": 810,
+    "widths": [
+      480,
+      800,
+      1080
+    ],
+    "mobile": false
+  },
+  "porsche-911-black": {
+    "w": 1440,
+    "h": 1082,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "powdercoat-wheel-spray": {
+    "w": 1600,
+    "h": 431,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
+  },
+  "ppf-headlight-wide": {
+    "w": 1600,
+    "h": 581,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
+  },
+  "rangerover-purple": {
+    "w": 1206,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "sclass-white-front": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "sclass-white-side": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "silverado-black": {
+    "w": 1440,
+    "h": 1082,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "tint-hands": {
+    "w": 1600,
+    "h": 1053,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
+  },
+  "trx-yellow-front": {
+    "w": 1440,
+    "h": 1085,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "trx-yellow-portrait": {
+    "w": 1299,
+    "h": 1600,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "trx-yellow-side": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "trx-yellow-wide": {
+    "w": 1440,
+    "h": 648,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "urus-black-rear": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "urus-grey-front": {
+    "w": 1440,
+    "h": 1085,
+    "widths": [
+      480,
+      800,
+      1200,
+      1440
+    ],
+    "mobile": true
+  },
+  "wagoneer-grey-front": {
+    "w": 1440,
+    "h": 1083,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "wagoneer-grey-side": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "wall-wrap": {
+    "w": 1290,
+    "h": 746,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "x6-black-front": {
+    "w": 1440,
+    "h": 1083,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "x6-black-rear": {
+    "w": 1440,
+    "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  }
+}

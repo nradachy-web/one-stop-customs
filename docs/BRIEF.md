@@ -1,5 +1,10 @@
 # One Stop Customs by Ricky Wraps, website redesign brief (September 2026)
 
+> October 2026 note: sections 1, 2, 5 and 6 (the facts, the services, the rules, the gates) are
+> still the source of truth. The design direction is now `docs/DESIGN.md` (v4, structure first,
+> on the Petty Shine band pattern). Sections 7 and 8 describe the first build and are history;
+> the superseded design canons and plans are in `docs/archive/`.
+
 Modern Apex Strategies is rebuilding the website for One Stop Customs by Ricky Wraps (rebranding from Ricky Wraps), a Metro Detroit vinyl wrap,
 window tint, paint protection film and powder coating shop. Nick's instruction: "same level as the
 one you just did for Bubbles", "make it wonderful", hosted on GitHub Pages. Bubbles Auto Spa
