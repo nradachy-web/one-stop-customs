@@ -37,7 +37,8 @@ export default function ShopSheet({ onBlack = false, withBooking = false, classN
     <div className={cn("panel ground", onBlack && "on-black", className)}>
       <Ground id="shopPanel" />
       <p className="t-label">Call or text</p>
-      <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white">
+      {/* Sized to its five columns at lg (the full .t-phone clamp overruns the 317px content box at 1024 and only clears from about 1300px); the same container-sized clamp as the FAQ aside. */}
+      <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white lg:text-[clamp(2rem,3.4vw,3.5rem)]!">
         {BRAND.phoneDisplay}
       </a>
       <p className="t-small muted mt-3">

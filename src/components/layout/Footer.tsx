@@ -26,6 +26,8 @@ function Row({ href, label }: { href: string; label: string }) {
 }
 
 /** A shop row: 44px tall, the value a quiet link where it is one. */
+/** The link fills the row for the thumb without moving the text: padding inside the row's own padding (the ShopSheet TAP pattern). */
+const TAP = "link-quiet inline-block py-3 -my-3";
 function ShopRow({ children, className }: { children: React.ReactNode; className?: string }) {
   return <li className={cn("t-small flex min-h-11 flex-col justify-center py-2!", className)}>{children}</li>;
 }
@@ -86,7 +88,7 @@ export default function Footer() {
             <p className="t-label mb-3">Shop</p>
             <ul className="ledger">
               <ShopRow>
-                <a href={BRAND.address.mapUrl} {...EXTERNAL} className="link-quiet">
+                <a href={BRAND.address.mapUrl} {...EXTERNAL} className={TAP}>
                   {BRAND.address.full}
                 </a>
               </ShopRow>
@@ -102,17 +104,17 @@ export default function Footer() {
                 <p className="mt-2">{BRAND.byAppointment}</p>
               </ShopRow>
               <ShopRow>
-                <a href={BRAND.phoneHref} className="link-quiet">
+                <a href={BRAND.phoneHref} className={TAP}>
                   <PhoneText label={CTA.callOrText} />
                 </a>
               </ShopRow>
               <ShopRow>
-                <a href={BRAND.phoneSms} className="link-quiet">
+                <a href={BRAND.phoneSms} className={TAP}>
                   <PhoneText label={CTA.text} />
                 </a>
               </ShopRow>
               <ShopRow>
-                <a href={BRAND.emailHref} className="link-quiet break-words">
+                <a href={BRAND.emailHref} className={cn(TAP, "break-words")}>
                   {BRAND.email}
                 </a>
               </ShopRow>

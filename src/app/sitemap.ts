@@ -4,8 +4,8 @@ import { canonicalUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-/** A fixed build date, so the file does not churn on every build. */
-const LAST_MODIFIED = "2026-09-08";
+/** A fixed date, so the file does not churn on every build. Bump it with every content commit. */
+const LAST_MODIFIED = "2026-09-09";
 
 /**
  * Every indexable route with its trailing slash (docs/DESIGN.md 7): home, the

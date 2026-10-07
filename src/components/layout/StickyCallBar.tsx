@@ -71,9 +71,11 @@ export default function StickyCallBar() {
 function Cell({ door }: { door: Door }) {
   const classes = cn("bar-cell", door.id === "call" && "strip-cell-solid");
   if (door.external) {
+    // Same screen reader note as the strip's twin cell ("opens Square", .strip-note is sr-only).
     return (
       <a href={door.href} target="_blank" rel="noopener noreferrer" className={classes}>
         {door.short}
+        {door.note ? <span className="strip-note">{door.note}</span> : null}
       </a>
     );
   }

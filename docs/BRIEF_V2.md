@@ -43,7 +43,7 @@ maps the changes onto the existing files.
   (IBM Plex Mono 500 at 12px) and nowhere else. No condensed display faces, no variable-axis
   tricks. See the four-way comparison the lead already made: Inter Tight won.
 - **Logo:** the One Stop Customs mark sits in the header on every page: `public/logo-mark.png`
-  (transparent, flags and car, 897x633) at 44px tall beside the wordmark "One Stop Customs"
+  (transparent, flags and car, 187x132) at 44px tall beside the wordmark "One Stop Customs"
   with "by Ricky Wraps" beneath it. The full lockup `public/logo-transparent.png` (mark plus its
   own lettering) is used large in the footer and may appear in the hero at the design lead's
   discretion. Both are green and silver and only sit on black or charcoal.

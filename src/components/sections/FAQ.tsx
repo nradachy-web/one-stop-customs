@@ -40,7 +40,8 @@ export default function FAQ({ items, tab = SERVICE_TEMPLATE.faqTab, title = SERV
       <div className="container">
         <SectionHead tab={tab} title={title} />
         <div className="grid-12">
-          <div className="ledger mt-10 lg:col-span-8 lg:mt-12">
+          {/* mt-10! and lg:mt-12!: .ledger sets margin 0 unlayered in globals, so the utilities need the ! suffix to keep the 40/48px head-to-device space every other section keeps. */}
+          <div className="ledger mt-10! lg:col-span-8 lg:mt-12!">
             {items.map((item) => (
               <details key={item.q} className="faq py-0!">
                 <summary>
@@ -53,8 +54,8 @@ export default function FAQ({ items, tab = SERVICE_TEMPLATE.faqTab, title = SERV
               </details>
             ))}
           </div>
-          {/* lg:mt-0: the ledger keeps margin 0 from globals (its top rule sits under the heading), so the aside starts level with it. */}
-          <div className="mt-10 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-start">
+          {/* The same top margin as the ledger, so the aside starts level with the first question. */}
+          <div className="mt-10 lg:col-span-4 lg:col-start-9 lg:mt-12 lg:self-start">
             <p className="t-label">Call or text</p>
             {/* Sized to its four columns at lg (the full .t-phone clamp overruns a 392px cell); the shop panel keeps the full size. */}
             <a href={BRAND.phoneHref} className="t-phone mt-2 inline-block text-white lg:text-[clamp(2rem,3.3vw,3rem)]!">

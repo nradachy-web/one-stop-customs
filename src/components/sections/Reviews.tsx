@@ -23,9 +23,28 @@ interface ReviewsProps {
  *
  * `tab` is passed for the v1 SectionHead signature and renders nothing in v2.
  */
+/**
+ * The four home cards, picked by name rather than by position: the four
+ * shortest 5 star quotes, so the two by two grid stays level and the copy
+ * stays calm. Text stays verbatim from reviews.ts; only the selection is a
+ * choice. A name that is no longer in the list is skipped and the list is
+ * topped up in order, so a refresh never leaves a hole.
+ */
+const HOME_PICK: readonly string[] = ["Fadi A.", "Steve G.", "Donielle H.", "Kimonike T."];
+
+function pick(count: 2 | 4) {
+  if (count !== 4) return REVIEWS.items.slice(0, count);
+  const chosen = HOME_PICK.map((name) => REVIEWS.items.find((r) => r.name === name)).filter((r) => r !== undefined);
+  for (const r of REVIEWS.items) {
+    if (chosen.length >= count) break;
+    if (!chosen.includes(r)) chosen.push(r);
+  }
+  return chosen.slice(0, count);
+}
+
 export default function Reviews({ count, className }: ReviewsProps) {
   const copy = HOME_SECTIONS.reviews;
-  const items = REVIEWS.items.slice(0, count);
+  const items = pick(count);
 
   return (
     <section id={copy.id} className={cn("section section-rule", className)}>

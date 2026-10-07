@@ -114,7 +114,7 @@ Sentence case everywhere, including buttons, pills, nav links and cells. No uppe
 ### 2.5 Photo sizing rules
 
 - A photo is never displayed wider than its native pixel width. The 1224px content width makes this true for every 1440px file at full width; the 1206px Range Rover and the 1104px Camaro hood are only used in 4:3 frames of 7 columns or less (704px); the 600px home-front-tint is only used in a card capped at 600px; the 900px kitchen wrap in a card capped at 900px.
-- Boxes are fixed per placement so there is no layout shift: hero 4:5 under lg and 3:2 at lg; picker frame 4:3; set frames 1:1; finish and fleet cards 4:3; covers 4:5; gallery cells 1:1 (wide files at 2:1 over two columns); bands at native aspect at lg and 2:1 under md; the timelapse 9:16; the slider pane 4:3; ladder panes 4:5. `object-fit: cover` with an `object-position` stored per photo (default 50% 50%) and per placement crop hints in the component where a box is not the photo's own shape.
+- Boxes are fixed per placement so there is no layout shift: hero 4:5 under md and 3:2 from md (the portrait file stays under lg); picker frame 4:3; set frames 1:1; finish and fleet cards 4:3; covers 4:5; gallery cells 1:1 (wide files at 2:1 over two columns); bands at native aspect at lg and 2:1 under md; the timelapse 9:16; the slider pane 4:3; ladder panes 4:5. `object-fit: cover` with an `object-position` stored per photo (default 50% 50%) and per placement crop hints in the component where a box is not the photo's own shape.
 - Every img has explicit width and height, `loading="lazy"` except the hero, `decoding="async"` except the hero. Only the hero image is `priority`.
 - No thumbnail renditions. No page shows more than ten lazy cards above its FAQ except the gallery.
 
@@ -252,7 +252,7 @@ All dimensions exact. Shared infrastructure that stays as it is: `Photo.tsx`, `L
 ### 5.1 Header (Navbar)
 
 - 72px tall, `position: fixed; inset-inline: 0; top: 0; z-index: 50`. Black with a hairline bottom edge; with JavaScript it starts transparent and gains the black ground and the hairline after 24px of scroll (`data-scrolled`, set by a tiny client child, 240 ms) and whenever the menu is open (`data-open`). The page starts under it: the home hero pads itself by `--nav-h` plus 24px; every other page's `<main>` carries `.header-offset`.
-- Left: the lockup as a link to "/" (`.lockup`, min-height 44px, gap 12px): `public/logo-mark.png` (897x633, transparent, the flags and the car in green and silver) at 44px tall and 62px wide (`.logo-mark`, `alt` from `LOGO.mark.alt`, eager), then the text stack: "One Stop Customs" in `.t-wordmark` white over "by Ricky Wraps" in `.t-byline` ash, 3px apart. Under md the mark is 40px tall (57px wide). The lockup is about 200px wide at 390.
+- Left: the lockup as a link to "/" (`.lockup`, min-height 44px, gap 12px): `public/logo-mark.png` (187x132, transparent, the flags and the car in green and silver, exported at three times its rendered size) at 44px tall and 62px wide (`.logo-mark`, `alt` from `LOGO.mark.alt`, eager), then the text stack: "One Stop Customs" in `.t-wordmark` white over "by Ricky Wraps" in `.t-byline` ash, 3px apart. Under md the mark is 40px tall (57px wide). The lockup is about 200px wide at 390.
 - Centre at lg: the six nav links (`.nav-link`, Inter 500 14px silver, 28px apart, white on hover; the current page white with the 2px green underline). Wraps, Tint, Paint protection film, Powder coating, Gallery, About. Commercial wraps and building tint are reached from the Wraps and Tint pages, the home page, the footer and the menu.
 - Right at lg: "(248) 259-1617" as a tel link in Inter 600 15px white with `.t-num`, 24px gap, then a green `.btn.btn-sm` "Get a quote" (40px, 14px) to /contact/.
 - Under lg: the lockup left; at right "(248) 259-1617" (Inter 600 15px, hidden under 384px) and the Menu pill (`.menu > summary`, 40px, outline, "Menu" or "Close"). The menu is a `<details>`: the sheet (`.menu-sheet`) is a fixed black layer from under the header to the bottom of the screen, hairline top, with the nine `MENU_LINKS` as 64px rows in Inter Tight 800 32px white (the current page in green-text), then 24px, the action strip (two by two), then the giant phone number as a tel link with "Call or text" above it, then the address and hours in `.t-small` silver. The header gets `data-open` while it is open.
@@ -303,11 +303,11 @@ Native `<dialog class="lightbox on-black">`, full viewport, padding 24px; the ph
 ### 5.9 Hero (Hero)
 
 `<section class="hero">` (padding-top `--nav-h` plus 16px, 24px at lg; padding-bottom 40px, 32px at lg) holding a `.container` and a `.hero-grid`:
-- `.hero-title`: the h1 in `.t-h1`, two `.rise-line` spans from `HERO.headlineLines`. Columns 1 to 12 at lg (2 lines, 104px, about 191px tall). At 390 it wraps to three lines at 44px (about 122px).
-- `.hero-media`: the photo box, columns 6 to 12 at lg (704px wide, 3:2, 469px tall) holding a `<picture>`: trx-yellow-side.webp (1440x1080, object-position 60% 50%) at `min-width: 64rem`, trx-yellow-portrait.webp (1299x1600, object-position 50% 60%) beneath it, `priority`; the `.peel` sheet; and the caption pill `.hero-caption` at 12px from the left and bottom edges: the chip pill in the photo's colour (#F2B10C at lg, #E4AE14 under lg) and the photo's label in `.t-chip` ("Gloss, yellow, black hood. Ram TRX"), on charcoal at 85 percent with a hairline. Under lg the box is 4:5 (350 by 437 at 390) and comes directly after the h1.
-- `.hero-copy`: columns 1 to 5 at lg (496px), bottom aligned to the photo box, a 24px stack: the sub in `.t-lede.muted` (3 lines at 1440), then `<ActionStrip variant="hero" quoteHref="#quote" />` (wraps to two rows of two at 496px: Call and Text on the first, Book online and Get a quote on the second). Under lg the copy follows the photo box: the sub (about 6 lines at 390), then Call and Get a quote in one row.
+- `.hero-title`: the h1 in `.t-h1`, two `.rise-line` spans from `HERO.headlineLines`. Columns 1 to 12 at lg (2 lines, 104px, about 191px tall). At 390 it wraps to four lines at 44px ("The wrap / and tint shop / on Eight Mile / in Warren.", about 162px).
+- `.hero-media`: the photo box, columns 6 to 12 at lg (704px wide, 3:2, 469px tall) holding a `<picture>`: trx-yellow-side.webp (1440x1080, object-position 60% 50%) at `min-width: 64rem`, trx-yellow-portrait.webp (1299x1600, object-position 50% 60%) beneath it, `priority`; the `.peel` sheet; and the caption pill `.hero-caption` at 12px from the left and bottom edges: the chip pill in the photo's colour (#F2B10C at lg, #E4AE14 under lg) and the photo's label in `.t-chip` ("Gloss, yellow, black hood. Ram TRX"), on charcoal at 85 percent with a hairline. Under lg the box comes directly after the h1: 4:5 under md (350 by 437 at 390) and 3:2 from md (704 by 469 at 768, `md:aspect-3/2!` on the box in Hero.tsx), because a 4:5 box at 768 is 880px tall and the whole tablet fold would be the photo with no copy or button on it; the portrait file at 50% 60% still holds the whole truck at 3:2 there.
+- `.hero-copy`: columns 1 to 5 at lg (496px), bottom aligned to the photo box, a 24px stack: the sub in `.t-lede.muted` (5 lines at 1440, about 145px; the copy is the law, so the ground stays open between the h1 and the sub), then `<ActionStrip variant="hero" quoteHref="#quote" />` (wraps to two rows of two at 496px: Call and Text on the first, Book online and Get a quote on the second). Under lg the copy follows the photo box: the sub (about 6 lines at 390), then Call and Get a quote in one row.
 - `.facts`: columns 1 to 12, the four cells of `HERO.facts` (two by two under lg), `.fade-up`.
-- Fold at 1440 by 900: header 72, 24, h1 191, 24, the photo box 469 and the copy beside it, 24, the facts row about 64, 32: everything through the facts row is on screen. At 390 by 844: header, h1, the whole truck, the sub, and the top of the button row.
+- Fold at 1440 by 900: header 72, 24, h1 191, 24, the photo box 469 and the copy beside it, 24, the facts row about 64, 32: everything through the facts row is on screen. At 768 by 1024: header, h1, the 3:2 box, the sub, the four buttons and the facts row, everything through the facts row is on screen above the fixed bar. At 390 by 844: header, h1 (four lines), the whole truck, and the first two lines of the sub above the fixed bar; the button row is one scroll down and Call is in the bar.
 
 ### 5.10 Tier switcher, slider, picker, stepper, panel, reviews, FAQ
 
@@ -339,7 +339,8 @@ Sections in order. Every section is `.section.section-rule` on black unless stat
 
 1. Hero (the cover). `id="top"`. As 5.9. Photos: trx-yellow-side.webp at lg, trx-yellow-portrait.webp under lg. Copy: h1 `HERO.headline` in two spans, sub `HERO.sub`, the hero strip, the facts. Motion: the peel and the rises (3.1). The caption pill reads the photo's label and chip.
    - 1440: header 72; h1 columns 1 to 12 at 104px, 2 lines; the sub and the strip in columns 1 to 5, bottom aligned; the photo box columns 6 to 12 at 704 by 469; the facts row across 1 to 12.
-   - 390: header 72; h1 3 lines at 44px; the photo box 350 by 437; the sub; Call and Get a quote in one row; the facts two by two.
+   - 768: header 72; h1 2 lines; the photo box 704 by 469 (3:2 from md); the sub; the strip in one row; the facts two by two, all on the fold.
+   - 390: header 72; h1 4 lines at 44px; the photo box 350 by 437; the sub; Call and Get a quote in one row; the facts two by two.
 
 2. Finishes. `id="wraps"`.
    - Purpose: teach the vocabulary the shop quotes in and show it on real cars under the pointer.
@@ -437,7 +438,7 @@ Metadata title "Car wraps and window tint for {City} | One Stop Customs by Ricky
 
 `/about/`. h1 "One Stop Customs, by Ricky Wraps." Lede: `ABOUT.lede`.
 
-- Copy in columns 1 to 6, three paragraphs in `.t-body` silver; mustang-white-shop.webp as a 4:5 card in columns 8 to 12 (#E2E0D8, "White. Ford Mustang", "Inside the shop", object-position 50% 60%); then silverado-black.webp as a `.band.mask-settle` card across columns 1 to 12 at native aspect (#0F1218, "Gloss, black. Chevy Silverado", "Inside the shop"); then the shop panel in columns 1 to 5 with the action strip beside it in 7 to 12; then two review cards. No FAQ, no daylight sheet.
+- Copy in columns 1 to 6, three paragraphs in `.t-body` silver; mustang-white-shop.webp as a 4:5 card in columns 8 to 12 (#E2E0D8, "White. Ford Mustang", "Inside the shop", object-position 50% 60%); then silverado-black.webp as a `.band.mask-settle` card across columns 1 to 12 at native aspect (#0F1218, "Gloss, black. GMC Denali", "Inside the shop"); then the shop panel in columns 1 to 5 with the action strip beside it in 7 to 12; then two review cards. No FAQ, no daylight sheet.
 
 ### 7.6 Contact
 
@@ -457,7 +458,7 @@ Chip hexes are starting values: the saturated cars were sampled by k-means on th
 
 | file | px | chip | label left | label right | service / finish / colour | used in v2 |
 |---|---|---|---|---|---|---|
-| trx-yellow-wide.webp | 1440x648 | #F4B30C | Gloss, yellow, black hood. Ram TRX | On the lot, 01/04 | wraps / gloss / colour | og-image; gallery (2 columns) |
+| trx-yellow-wide.webp | 1440x648 | #F4B30C | Gloss, yellow, black hood. Ram TRX | On the lot, 01/04 | wraps / gloss / colour | gallery (2 columns) |
 | trx-yellow-side.webp | 1440x1080 | #F2B10C | Gloss, yellow, black hood. Ram TRX | On the lot, 02/04 | wraps / gloss / colour | Home hero at lg (3:2, 60% 50%); TRX stepper frame 3; gallery |
 | trx-yellow-front.webp | 1440x1085 | #F2BD1A | Gloss, yellow, black hood. Ram TRX | On the lot, 03/04 | wraps / gloss / colour | TRX stepper frame 2; city cover: Warren; gallery |
 | trx-yellow-portrait.webp | 1299x1600 | #E4AE14 | Gloss, yellow, black hood. Ram TRX | On the lot, 04/04 | wraps / gloss / colour | Home hero under lg (4:5, 50% 60%); TRX stepper frame 1; gallery |
@@ -491,7 +492,7 @@ Chip hexes are starting values: the saturated cars were sampled by k-means on th
 | porsche-911-black-front.webp | 1080x810 | #0F1218 | Gloss, black. Porsche 911 | On the lot, 02/02 | wraps / gloss / black | Gallery |
 | denali-black-front.webp | 1440x1080 | #17191C | Gloss, black. GMC Denali | On the lot, 01/02 | wraps / gloss / black | Gallery |
 | denali-black-wide.webp | 1440x500 | #17191C | Gloss, black. GMC Denali | On the lot, 02/02 | wraps / gloss / black | Gallery (2 columns) |
-| silverado-black.webp | 1440x1082 | #0F1218 | Gloss, black. Chevy Silverado | Inside the shop | wraps / gloss / black | About band; gallery |
+| silverado-black.webp | 1440x1082 | #0F1218 | Gloss, black. GMC Denali | Inside the shop | wraps / gloss / black | About band; gallery |
 | urus-black-rear.webp | 1440x1080 | #2A2B2C | Satin, black. Lamborghini Urus | On the street | wraps / satin / black | City work strip; gallery |
 | x6-black-front.webp | 1440x1083 | #1B1E20 | Gloss, black. BMW X6 | On the lot, 01/02 | wraps / gloss / black | Gallery |
 | x6-black-rear.webp | 1440x1080 | #1E2124 | Gloss, black. BMW X6 | On the street, 02/02 | wraps / gloss / black | Gallery |
@@ -509,7 +510,7 @@ Chip hexes are starting values: the saturated cars were sampled by k-means on th
 | commercial-tesla-homes-front.webp | 1600x1136 | #D2661A | Printed. Tesla Model 3, Homes.com | Inside the shop, 01/02 | commercial / printed / colour | Commercial page pair; gallery |
 | commercial-tesla-homes.webp | 1600x1200 | #CD6117 | Printed. Tesla Model 3, Homes.com | Inside the shop, 02/02 | commercial / printed / colour | Home fleet; commercial page pair; gallery |
 | commercial-blazer-pink.webp | 1600x745 | #E38CD6 | Printed. Chevy Blazer EV, WeDriveFor | Inside the shop | commercial / printed / colour | Home fleet; commercial page cover (band); gallery (2 columns) |
-| escalade-black-window.webp | 1440x1082 | #23272B | Tinted glass. Cadillac Escalade | Close up | tint / none / black | Tint page cover (4:5, 55% 50%); gallery |
+| escalade-black-window.webp | 1440x1082 | #23272B | Tinted glass. GMC Denali | Close up | tint / none / black | Tint page cover (4:5, 55% 50%); gallery |
 | tint-hands.webp | 1600x1053 | #1A1F23 | Window film, trimmed by hand. Door glass | Close up | tint / none / black | Tint page card (4:5, 55% 50%); gallery |
 | home-deck-tint.webp | 1248x448 | #5A6B70 | Window film. Sliding glass doors | On a back deck | buildings / none / grey | Buildings page cover (band); gallery (2 columns) |
 | home-front-tint.webp | 600x450 | #6D8A9B | Window film. Front windows | A house | buildings / none / grey | Buildings page (capped at 600px); gallery (1 column, never spans) |
@@ -519,9 +520,9 @@ Chip hexes are starting values: the saturated cars were sampled by k-means on th
 | wall-wrap.webp | 1290x746 | #6E9BD1 | Printed, blue floral. Hallway wall | In a hallway | other / printed / colour | Wraps page "Other things we wrap" (35% 50%); gallery |
 | wrap-timelapse-poster.webp | 900x1600 | #6B7075 | Satin, gray. Range Rover quarter panel | In a driveway | not in WORK | Poster for the timelapse card only |
 
-Logo files: `public/logo-mark.png` (897x633, transparent) in the header at 44px tall; `public/logo-transparent.png` (1024x1024, transparent) in the footer at 200px; `public/logo.png` (1024 square on black) stays the JSON-LD image and the source of the icons.
+Logo files: `public/logo-mark.png` (187x132, transparent, three times the 62x44 header slot) in the header at 44px tall; `public/logo-transparent.png` (1024x1024, transparent) in the footer at 200px; `public/logo.png` (1024 square on black) stays the JSON-LD image and the source of the icons, which are palette PNGs (64 colours) so the favicon is a few tens of KB. `public/og-image.jpg` (1200x630) is the black card drawn by `scripts/make-og.py`: the transparent lockup at left, then a short green rule, "One Stop Customs by Ricky Wraps" in silver, HERO.headline in Inter Tight 800 white and CTA.callOrText in silver; every string is read from constants.ts, never typed in the script.
 
-Gallery-only (never on a content page): bmw-lime, bmw-mint-front, audi-rosegold-wide, camaro-red-convertible, charger-white-side, durango-black-red-front, durango-black-rear, porsche-911-black-front, denali-black-front, denali-black-wide, x6-black-front, x6-black-rear, chrysler300-black-portrait, chrysler300-black-side, camaro-black-rear, wagoneer-grey-front, wagoneer-grey-side, sclass-white-side, escalade-white-front, grandcherokee-white, crown-grey-rear, maserati-blue-rear, trx-yellow-wide (also the og-image).
+Gallery-only (never on a content page): bmw-lime, bmw-mint-front, audi-rosegold-wide, camaro-red-convertible, charger-white-side, durango-black-red-front, durango-black-rear, porsche-911-black-front, denali-black-front, denali-black-wide, x6-black-front, x6-black-rear, chrysler300-black-portrait, chrysler300-black-side, camaro-black-rear, wagoneer-grey-front, wagoneer-grey-side, sclass-white-side, escalade-white-front, grandcherokee-white, crown-grey-rear, maserati-blue-rear, trx-yellow-wide.
 
 City cover rotation (4:5 cards): Warren trx-yellow-front; Detroit charger-pink; Royal Oak audi-rosegold-front; Sterling Heights challenger-blue; Eastpointe huracan-red-square; Roseville maserati-blue-side; Madison Heights modely-satin-grey; Hazel Park camaro-red-front; Ferndale charger-white-red; Troy sclass-white-front; Southfield urus-grey-front; Grosse Pointe porsche-911-black.
 
@@ -615,8 +616,8 @@ Grounds (host, preset, what it does; sizes at 1440 and 390 are in docs/PREMIUM_P
 
 Living photos (all through `Loop` in a 16:9 box, poster first, muted, on screen only, the caption from the WORK entry):
 
-- `LIVING.rangerover`, "Satin, purple. Range Rover", "Inside the shop": the vinyl wraps page cover (columns 7 to 12 at lg, 600 by 338; 350 by 197 at 390), `priority` so the poster is the page's LCP; `LIVING_NOTE` beneath. Gate: the readable plate; if Nick pulls it, the cover falls back to charger-red-stripes and the Satin picker row to audi-rosegold-front.
-- `LIVING.charger`, "Gloss, pink. Dodge Charger", "On the street": the Gloss slot of the finish picker frame at lg on home and the wraps page (the default frame, alive under no pointer; a hover on another finish crossfades to a still), and the Detroit city cover at every width.
+- `LIVING.rangerover`, "Satin, purple. Range Rover", "Inside the shop": the vinyl wraps page cover (columns 7 to 12 at lg, 600 by 338; 350 by 197 at 390), `priority` so the poster is the page's LCP; `LIVING_NOTE` beneath in `.t-small` silver, not `.t-label` (the cell sits on `titleWraps`, where ash measured 2.67:1 at 1440; silver clears 5.9:1 per 10.4). Gate: the readable plate; if Nick pulls it, the cover falls back to charger-red-stripes and the Satin picker row to audi-rosegold-front.
+- `LIVING.charger`, "Gloss, pink. Dodge Charger", "On the street": the Gloss slot of the finish picker frame at lg on home and the wraps page (the default frame, alive under no pointer; a hover on another finish crossfades to a still), and the Detroit city cover at every width (`LIVING_NOTE` beneath in the same `.t-small` silver, since it sits on `titleCity`).
 - `LIVING.powder`, "Powder, blue. Wheel in the booth", "Close up": the home powder coating section in place of the still band (columns 1 to 12, 1224 by 689 at 1440; 350 by 197 at 390), `LIVING_NOTE` beneath. The powder page keeps the still band as its cover.
 
 ### 10.6 Motion

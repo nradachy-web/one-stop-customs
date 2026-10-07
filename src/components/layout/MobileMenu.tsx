@@ -127,8 +127,8 @@ export default function MobileMenu() {
 
   return (
     <details ref={ref} className="menu lg:hidden" onToggle={(e) => setOpen(e.currentTarget.open)}>
-      {/* .menu > summary is 40px unlayered; the phone tap target wants 44. */}
-      <summary ref={summaryRef} className="h-11! min-w-11" aria-label={MENU.ariaLabel}>
+      {/* .menu > summary is 40px unlayered; the phone tap target wants 44. No aria-label: the visible Menu or Close names it. */}
+      <summary ref={summaryRef} className="h-11! min-w-11">
         {open ? MENU.close : MENU.open}
       </summary>
 

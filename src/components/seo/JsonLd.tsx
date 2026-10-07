@@ -1,5 +1,4 @@
 import { BRAND, BUSINESS_DESCRIPTION, CITIES, SITE_URL } from "@/lib/constants";
-import { asset } from "@/lib/asset";
 import { canonicalUrl } from "@/lib/seo";
 
 /**
@@ -23,8 +22,9 @@ export default function JsonLd() {
     url: canonicalUrl("/"),
     telephone: BRAND.phoneTel,
     email: BRAND.email,
-    image: `${SITE_URL}${asset("/logo.png")}`,
-    logo: `${SITE_URL}${asset("/logo.png")}`,
+    // From the domain root like every other absolute URL here, never through asset(): the preview base path is not part of the production domain.
+    image: `${SITE_URL}/logo.png`,
+    logo: `${SITE_URL}/logo.png`,
     address: {
       "@type": "PostalAddress",
       streetAddress: BRAND.address.street,

@@ -522,6 +522,8 @@ html[data-js="on"] .header:not([data-scrolled]):not([data-open]) {
   align-items: center;
   gap: 12px;
   min-height: 44px;
+  /* Never squeezed by the header row: the wordmark keeps its width at lg. */
+  flex: none;
 }
 .logo-mark {
   display: block;
@@ -545,6 +547,8 @@ html[data-js="on"] .header:not([data-scrolled]):not([data-open]) {
   font-size: 14px;
   font-weight: 500;
   line-height: 1.2;
+  /* One line each: "Paint protection film" never wraps at the lg floor. */
+  white-space: nowrap;
   color: var(--color-silver);
   box-shadow: inset 0 -2px 0 transparent;
   transition: color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
@@ -771,9 +775,25 @@ html[data-js="on"] .header:not([data-scrolled]):not([data-open]) {
 /* A linked card (gallery, recent work) draws its hover on the edge and the bar; focus draws the ring. */
 .card-link {
   display: block;
+  height: 100%;
   color: inherit;
   text-decoration: none;
   border-radius: var(--radius-card);
+}
+/* A linked card fills its grid cell as a column, the photo box keeps its
+   aspect and the strip takes the rest, so when one label in a row wraps to
+   two lines the cards in that row still end on one bottom edge; the extra
+   height is charcoal under the label. */
+.card-link > .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.card-link > .card > .card-photo {
+  flex: none;
+}
+.card-link > .card > .chip-strip {
+  flex: 1 0 auto;
 }
 /* The photo box. It must carry an aspect ratio (an aspect utility or an
    inline style) because its children fill it absolutely; that fixed box is
@@ -983,6 +1003,13 @@ html[data-js="on"] .header:not([data-scrolled]):not([data-open]) {
   font-weight: 500;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  max-width: calc(100% - 24px);
+}
+/* At 320 the label is wider than the box; it ellipsizes inside the pill instead of being cut by the box edge. */
+.hero-caption > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* The facts row under the buttons: four cells, a hairline above, key over value. */
 .facts {
@@ -1129,6 +1156,13 @@ html[data-motion="on"] .fade-up {
 @media (min-width: 48rem) {
   .strip-cell {
     padding: 0 22px;
+  }
+}
+/* 320 wide phones: two cells of 135px; "Call (248) 259-1617" needs the tighter step to fit inside its cell. */
+@media (max-width: 22.49rem) {
+  .strip-cell {
+    padding-inline: 12px;
+    font-size: 14px;
   }
 }
 .strip-cell:hover {
@@ -1478,8 +1512,9 @@ input:focus-visible + .chipbox {
   border-color: var(--hairline-strong);
 }
 @media (min-width: 64rem) {
+  /* 0.85, not 0.72: the ash 13px keys on a dimmed card composite to about 4.6:1 at 0.85 and 3.6:1 at 0.72. */
   html[data-js="on"] .tier-card[data-active="false"] {
-    opacity: 0.72;
+    opacity: 0.85;
   }
   html[data-js="on"] .tier-card[data-active="false"]:hover {
     opacity: 1;
@@ -2248,9 +2283,14 @@ html:not([data-js="on"]) .set-frame > .set-slide:last-child:nth-child(odd) {
   max-height: none;
   border-radius: 0;
 }
-/* A background image is decoration, so it may fade in. Nothing else starts invisible. */
+/* A background image is decoration, so it may fade in. Nothing else starts
+   invisible. The ground in a page's first section (the title block, the home
+   hero) is simply there at first paint: a first-screen image that animates in
+   from opacity 0 is timed by the browser at the end of its fade, which made
+   the decorative ground register as the LCP at about 950 ms on every page but
+   home. Grounds below the fold keep the fade. */
 @starting-style {
-  .ground-media {
+  .ground-media:not(main > :first-child > .ground-media) {
     opacity: 0;
   }
 }

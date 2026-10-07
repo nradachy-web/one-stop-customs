@@ -3,8 +3,12 @@ import { FORM, QUOTE_OPTIONS, SERVICE_TEMPLATE } from "@/lib/constants";
 import { canonicalUrl } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
-/** Read at build time. Empty means QuoteForm renders the notice and never mounts this. */
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
+/**
+ * Read at build time, trimmed the same way QuoteForm reads it, so the key that
+ * decides the form exists is the key that gets posted. Empty means QuoteForm
+ * renders the notice and never mounts this.
+ */
+const ACCESS_KEY = (process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "").trim();
 
 export type QuoteFieldErrors = Partial<Record<"name" | "phone", string>>;
 

@@ -41,7 +41,7 @@ export default function FilterChips({ active, onChange, counts, className }: Fil
             className="chip max-lg:min-h-11!"
           >
             {f.label}
-            <span className="sr-only">, {count} photos</span>
+            <span className="sr-only">, {count} {count === 1 ? "photo" : "photos"}</span>
           </button>
         );
       })}

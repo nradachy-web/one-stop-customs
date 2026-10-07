@@ -8,6 +8,13 @@ import { cn } from "@/lib/utils";
 interface SetStepperProps {
   /** One of SETS: the frames of a walk-around set that share a 1:1 box. */
   set: (typeof SETS)[number];
+  /**
+   * Eager first frame. Off by default: every frame is lazy, so a stepper far
+   * below the fold (home, Recent work) never hoists an image preload into the
+   * head ahead of the hero (docs/DESIGN.md 10, "nothing is preloaded"). No
+   * current caller sets it.
+   */
+  priority?: boolean;
   className?: string;
 }
 
@@ -36,22 +43,25 @@ function Chevron({ flip = false }: { flip?: boolean }) {
  * The walk-around set stepper (docs/DESIGN.md 4.5): one 1:1 frame holding a
  * set's frames stacked, the active one at full opacity, and a control row
  * beneath: the counter in mono ash, the frame's label, and two round
- * Previous and Next buttons. Click or tap on the frame advances; the left
- * and right arrow keys step while the frame or a control has focus; both
- * ends wrap. The crossfade is 240 ms on opacity, in globals.css.
+ * Previous and Next buttons. Click or tap on the frame advances (pointer
+ * only: the frame is not a button, so the active image keeps its alt in the
+ * accessibility tree and there is one control named Next, not two); the
+ * left and right arrow keys, Home and End step while a control has focus;
+ * both ends wrap. The crossfade is 240 ms on opacity, in globals.css.
  *
  * Without JavaScript `.set` lays the frames out as a two column grid inside
  * the bordered box, all visible, and the controls (`.js-only`) are absent.
  * The `.set` class sits on the frame element itself so that grid rule wraps
  * the slides, not the frame and its control row. The server render is that
- * complete state; `live` flips after mount to make the frame focusable.
+ * complete state; `live` flips after mount to wire the tap and hide the
+ * inactive slides from assistive tech.
  */
-export default function SetStepper({ set, className }: SetStepperProps) {
+export default function SetStepper({ set, priority = false, className }: SetStepperProps) {
   const frames = set.photoIds.map((id) => photo(id));
   const count = frames.length;
   const [index, setIndex] = useState(0);
   // `live` is false in the server render and during hydration, true after:
-  // the frame becomes a focusable button only once the client is in charge.
+  // the frame takes its tap handler only once the client is in charge.
   const live = useSyncExternalStore(noopSubscribe, getClientSnapshot, getServerSnapshot);
   const liveId = useId();
   const current = frames[index];
@@ -83,24 +93,7 @@ export default function SetStepper({ set, className }: SetStepperProps) {
       aria-label={groupLabel}
       onKeyDown={onKeyDown}
     >
-      <div
-        className="set set-frame"
-        onClick={live ? () => step(1) : undefined}
-        onKeyDown={
-          live
-            ? (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  step(1);
-                }
-              }
-            : undefined
-        }
-        tabIndex={live ? 0 : undefined}
-        role={live ? "button" : undefined}
-        aria-label={live ? STEPPER.next : undefined}
-        aria-describedby={live ? liveId : undefined}
-      >
+      <div className="set set-frame" onClick={live ? () => step(1) : undefined}>
         {frames.map((p, i) => {
           const isActive = i === index;
           return (
@@ -111,7 +104,7 @@ export default function SetStepper({ set, className }: SetStepperProps) {
                 alt={p.alt}
                 width={p.width}
                 height={p.height}
-                loading={i === 0 ? "eager" : "lazy"}
+                loading={priority && i === 0 ? "eager" : "lazy"}
                 decoding="async"
                 style={{ objectPosition: p.position ?? "50% 50%" }}
               />
@@ -122,12 +115,12 @@ export default function SetStepper({ set, className }: SetStepperProps) {
 
       <div className="set-ctrl js-only">
         <span className="set-counter">{STEPPER.counter(index + 1, count)}</span>
-        <span className="t-chip muted min-w-0 flex-1 truncate">{current.label}</span>
+        <span className="t-chip muted min-w-0 flex-1">{current.label}</span>
         <div className="set-buttons">
-          <button type="button" className="btn btn-outline btn-round" onClick={() => step(-1)} aria-label={STEPPER.previous}>
+          <button type="button" className="btn btn-outline btn-round" onClick={() => step(-1)} aria-label={STEPPER.previous} aria-describedby={liveId}>
             <Chevron />
           </button>
-          <button type="button" className="btn btn-outline btn-round" onClick={() => step(1)} aria-label={STEPPER.next}>
+          <button type="button" className="btn btn-outline btn-round" onClick={() => step(1)} aria-label={STEPPER.next} aria-describedby={liveId}>
             <Chevron flip />
           </button>
         </div>

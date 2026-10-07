@@ -7,7 +7,7 @@ export const dynamic = "force-static";
 /**
  * NEXT_PUBLIC_BASE_PATH is set only by the GitHub Pages preview build
  * (deploy.yml). That preview stays out of the index: a blanket disallow and
- * no sitemap. The domain cutover drops the variable and adds public/CNAME,
+ * no Sitemap line (sitemap.xml is still emitted, with production URLs). The domain cutover drops the variable and adds public/CNAME,
  * which flips this to allow everything with no code change. /thank-you/ is
  * not disallowed on purpose: a crawler has to fetch it to read its noindex.
  */

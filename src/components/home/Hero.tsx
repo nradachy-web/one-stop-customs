@@ -35,10 +35,15 @@ const SIDE_POSITION = "60% 50%";
 /**
  * The cover (docs/DESIGN.md 5.9 and 7.1.1): the headline across the whole
  * container, the sub and the four doors beside a framed 3:2 photo box at lg,
- * the facts row across the bottom. Under lg the order is h1, the 4:5 box
+ * the facts row across the bottom. Under lg the order is h1, the photo box
  * with the whole truck, the sub, Call and Get a quote, the facts two by two.
- * DOM order is h1, media, copy, facts (the phone order); .hero-grid places
- * them at lg and bottom aligns the copy to the box.
+ * The box is 4:5 under md and 3:2 from md (`md:aspect-3/2!`, the utility
+ * winning over the unlayered .hero-media rule on purpose): at 768 by 1024 a
+ * 4:5 box is 704 by 880 and the whole tablet fold is the photo, at 3:2 it is
+ * 704 by 469 and the sub, the buttons and the facts row are on screen with
+ * the whole truck still in frame. DOM order is h1, media, copy, facts (the
+ * phone order); .hero-grid places them at lg and bottom aligns the copy to
+ * the box.
  *
  * The one page-load moment lives here and nowhere else. The photo is painted
  * in its final box at 0 ms (eager, sync decode, high fetch priority: it is
@@ -56,6 +61,11 @@ const SIDE_POSITION = "60% 50%";
  * facts never sit on it. Eager with low fetch priority (the truck stays the
  * LCP); the tall file under lg. Drift is transform only and gated on the
  * motion flag like the peel.
+ *
+ * The two preloads are the hero's own: React does not preload an img inside
+ * <picture>, so each is scoped by media to the one file that width shows
+ * (the side view at lg, the portrait under it) and React hoists them into
+ * the head. They are the only image preloads on the page.
  */
 export default function Hero() {
   const side = photo(HERO.photoId);
@@ -68,6 +78,8 @@ export default function Hero() {
 
   return (
     <section id="top" aria-labelledby="hero-title" className="hero ground">
+      <link rel="preload" as="image" href={asset(side.src)} media="(min-width: 64rem)" fetchPriority="high" />
+      <link rel="preload" as="image" href={asset(portrait.src)} media="(max-width: 63.99rem)" fetchPriority="high" />
       <Ground id="hero" priority />
       <div className="container">
         <div className="hero-grid">
@@ -88,7 +100,7 @@ export default function Hero() {
             ))}
           </h1>
 
-          <div className="hero-media" style={mediaStyle}>
+          <div className="hero-media md:aspect-3/2!" style={mediaStyle}>
             <picture>
               <source media="(min-width: 64rem)" srcSet={asset(side.src)} width={side.width} height={side.height} />
               <img

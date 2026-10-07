@@ -23,6 +23,9 @@ interface TierTableProps {
  * only from TINT_TIERS: "Ask" where the brief has no figure, "Quoted per
  * vehicle" in every Price row. The footnote prints beneath.
  *
+ * The pill wrapper is `role="group"` so its "Film" label is actually exposed
+ * (a bare div is generic and cannot take an accessible name).
+ *
  * The pills are `.js-only`, so without JavaScript all three cards show with
  * Black carbon lit and nothing is missing. The server render carries the
  * default `data-active` and `aria-pressed`. Keyboard: Tab reaches each pill;
@@ -70,7 +73,7 @@ export default function TierTable({ tiers = TINT_TIERS, className }: TierTablePr
   return (
     <div className={cn("min-w-0", className)} role="group" aria-label={TIER_SWITCH.ariaLabel}>
       <div className="js-only grid lg:flex">
-        <div className="seg" aria-label={TIER_SWITCH.legend} onKeyDown={onKeyDown}>
+        <div className="seg" role="group" aria-label={TIER_SWITCH.legend} onKeyDown={onKeyDown}>
           {tiers.columns.map((column, i) => {
             const key = tiers.keys[i];
             return (

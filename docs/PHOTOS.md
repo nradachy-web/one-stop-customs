@@ -21,7 +21,7 @@ All files live in `public/photos/*.webp` (1600px long side max). Every photo is 
 | porsche-911-black-front.webp | 1080x810 | 1080x810 | 190 | Black Porsche 911 front three-quarter by the garage door |
 | challenger-blue.webp | 1440x1080 | 1440x1080 | 235 | Blue Dodge Challenger front three-quarter outside the shop |
 | urus-black-rear.webp | 1440x1080 | 1440x1080 | 318 | Satin black Lamborghini Urus, rear view on the street |
-| silverado-black.webp | 1440x1082 | 1440x1082 | 324 | Gloss black Chevy Silverado inside the shop |
+| silverado-black.webp | 1440x1082 | 1440x1082 | 324 | Gloss black GMC Denali pickup inside the shop |
 | maserati-blue-side.webp | 1440x1080 | 1440x1080 | 226 | Light blue Maserati GranTurismo, side view on the street |
 | wagoneer-grey-front.webp | 1440x1083 | 1440x1083 | 207 | Grey Jeep Grand Wagoneer, front view outside the shop |
 | charger-white-red.webp | 1440x1080 | 1440x1080 | 155 | White Dodge Charger with red stripes, front three-quarter, evening |
@@ -44,7 +44,7 @@ All files live in `public/photos/*.webp` (1600px long side max). Every photo is 
 | camaro-red-convertible.webp | 1440x1080 | 1440x1080 | 285 | Red Chevy Camaro convertible, rear three-quarter |
 | durango-black-rear.webp | 1440x1317 | 1440x1317 | 411 | Black Dodge Durango with red accents, rear view inside the shop |
 | grandcherokee-white.webp | 1440x1080 | 1440x1080 | 186 | White Jeep Grand Cherokee L, side view outside the shop |
-| escalade-black-window.webp | 1440x1082 | 1440x1082 | 162 | Black Cadillac Escalade, tinted rear door glass close up |
+| escalade-black-window.webp | 1440x1082 | 1440x1082 | 162 | Tinted rear door glass on a black GMC Denali pickup, close up |
 | chrysler300-black-side.webp | 1280x1600 | 1440x1800 | 197 | Black Chrysler 300, side view, portrait |
 | x6-black-front.webp | 1440x1083 | 1440x1083 | 233 | Black BMW X6, front view outside the shop |
 | maserati-blue-rear.webp | 1440x1080 | 1440x1080 | 248 | Light blue Maserati GranTurismo, rear three-quarter on the street |

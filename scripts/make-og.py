@@ -1,53 +1,51 @@
 #!/usr/bin/env python3
 """Render public/og-image.jpg (1200 by 630) for One Stop Customs by Ricky Wraps.
 
-The card is typographic, no photo: the paper ground, a white swatch face with a
-1px liner edge, the wordmark in Bricolage Grotesque (opsz 96, wdth 78, wght 800,
-the .t-wordmark axes), "by Ricky Wraps" and the shop line in IBM Plex Mono
-Medium, and one liner hairline. Colours are the tokens in src/app/globals.css.
-No green: the logo colour marks state on the site and an OG card has no state.
+The v2 "Liner off" card (docs/DESIGN.md, Logo files): true black, the full
+transparent lockup (public/logo-transparent.png) at left, and at right a short
+green rule, "One Stop Customs by Ricky Wraps" in Inter 500 silver, the hero
+headline in Inter Tight 800 white on its two lines, and "Call or text ..." in
+Inter 500 silver. Colours are the tokens in src/app/globals.css (black, silver,
+green). The green is the one accent, as it is on the site.
 
-Fonts: pass a directory holding Bricolage.ttf (the variable file from the
-Google Fonts repo) and PlexMono-Medium.ttf as --fonts. The script downloads
-them into that directory with curl when they are missing, and falls back to a
-bold system sans and a system mono only if the download fails, saying so.
+Every string is read from src/lib/constants.ts at run time (BRAND.name,
+BRAND.byline, HERO.headlineLines, CTA.callOrText), never typed here, so the
+card cannot drift from the site's copy.
+
+Fonts: pass a directory holding InterTight.ttf and Inter.ttf (the variable
+files from the Google Fonts repo) as --fonts. The script downloads them into
+that directory with curl when they are missing and stops with a message if the
+download fails: the card is never drawn in a fallback face.
 
     python3 scripts/make-og.py --fonts /path/to/fonts --out public/og-image.jpg
 """
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CONSTANTS = os.path.join(REPO, "src", "lib", "constants.ts")
+LOCKUP = os.path.join(REPO, "public", "logo-transparent.png")
+
 W, H = 1200, 630
-PAPER = (0xF3, 0xF1, 0xEC)
-WHITE = (0xFF, 0xFF, 0xFF)
-LINER = (0xD8, 0xD5, 0xCE)
-INK = (0x14, 0x14, 0x12)
-GRAPHITE = (0x55, 0x53, 0x4E)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+SILVER = (0xC9, 0xCC, 0xD1)
+GREEN = (0x32, 0xC2, 0x46)
 
-BRICOLAGE_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/bricolagegrotesque/BricolageGrotesque%5Bopsz%2Cwdth%2Cwght%5D.ttf"
-PLEX_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/ibmplexmono/IBMPlexMono-Medium.ttf"
-
-# The site's own strings (src/lib/constants.ts). Kept verbatim here because the
-# script runs outside the TypeScript build.
-NAME = "One Stop Customs"
-BYLINE = "by Ricky Wraps"
-LINE_1 = "Vinyl wraps, window tint, paint protection film, powder coating"
-LINE_2 = "13417 E Eight Mile Rd, Warren, MI 48089"
-LINE_3 = "Call or text (248) 259-1617"
-
-MAC_SANS_BOLD = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
-MAC_MONO = "/System/Library/Fonts/Menlo.ttc"
+INTER_TIGHT_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/intertight/InterTight%5Bwght%5D.ttf"
+INTER_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf"
 
 
 def fetch(url: str, path: str) -> bool:
     try:
-        subprocess.run(["curl", "-sSL", "-o", path, url], check=True, timeout=60)
-        return os.path.getsize(path) > 10000
+        subprocess.run(["curl", "-sSL", "-o", path, url], check=True, timeout=120)
+        return os.path.getsize(path) > 100000
     except Exception:
         if os.path.exists(path):
             os.remove(path)
@@ -56,94 +54,120 @@ def fetch(url: str, path: str) -> bool:
 
 def load_fonts(font_dir: str):
     os.makedirs(font_dir, exist_ok=True)
-    bric_path = os.path.join(font_dir, "Bricolage.ttf")
-    plex_path = os.path.join(font_dir, "PlexMono-Medium.ttf")
-    fell_back = []
+    tight_path = os.path.join(font_dir, "InterTight.ttf")
+    inter_path = os.path.join(font_dir, "Inter.ttf")
+    missing = []
+    if not os.path.exists(tight_path) and not fetch(INTER_TIGHT_URL, tight_path):
+        missing.append("InterTight.ttf")
+    if not os.path.exists(inter_path) and not fetch(INTER_URL, inter_path):
+        missing.append("Inter.ttf")
+    if missing:
+        sys.exit(f"font download failed for {', '.join(missing)}; put the files in {font_dir} and rerun")
 
-    if not os.path.exists(bric_path) and not fetch(BRICOLAGE_URL, bric_path):
-        fell_back.append("Bricolage Grotesque (using Arial Bold)")
-        bric_path = MAC_SANS_BOLD
-    if not os.path.exists(plex_path) and not fetch(PLEX_URL, plex_path):
-        fell_back.append("IBM Plex Mono (using Menlo)")
-        plex_path = MAC_MONO
-
-    def bricolage(size: int):
-        f = ImageFont.truetype(bric_path, size)
-        try:
-            # Axis order in the file: Optical size, Weight, Width. The wordmark axes.
-            f.set_variation_by_axes([96, 800, 78])
-        except Exception:
-            pass
+    def display(size: int, weight: int = 800):
+        f = ImageFont.truetype(tight_path, size)
+        f.set_variation_by_axes([weight])  # axis: wght
         return f
 
-    def plex(size: int):
-        return ImageFont.truetype(plex_path, size)
+    def body(size: int, weight: int = 500):
+        f = ImageFont.truetype(inter_path, size)
+        f.set_variation_by_axes([min(max(size, 14), 32), weight])  # axes: opsz, wght
+        return f
 
-    return bricolage, plex, fell_back
+    return display, body
+
+
+def read_constants() -> dict:
+    """The site's own strings, read out of constants.ts (a TS file, so by regex)."""
+    src = open(CONSTANTS, encoding="utf-8").read()
+
+    def string_field(block: str, key: str) -> str:
+        m = re.search(rf'^\s*{key}:\s*"((?:[^"\\]|\\.)*)"', block, re.M)
+        if not m:
+            sys.exit(f"could not read {key} from constants.ts")
+        return m.group(1)
+
+    def block(name: str) -> str:
+        m = re.search(rf"^export const {name} = \{{(.*?)^\}}", src, re.M | re.S)
+        if not m:
+            sys.exit(f"could not find export const {name} in constants.ts")
+        return m.group(1)
+
+    brand, hero, cta = block("BRAND"), block("HERO"), block("CTA")
+    lines = re.search(r"headlineLines:\s*\[(.*?)\]", hero, re.S)
+    if not lines:
+        sys.exit("could not read HERO.headlineLines from constants.ts")
+    headline_lines = re.findall(r'"((?:[^"\\]|\\.)*)"', lines.group(1))
+    headline = string_field(hero, "headline")
+    if " ".join(headline_lines) != headline:
+        sys.exit("HERO.headlineLines joined with a space must equal HERO.headline")
+    return {
+        "brand": f'{string_field(brand, "name")} {string_field(brand, "byline")}',
+        "headline_lines": headline_lines,
+        "phone": string_field(cta, "callOrText"),
+    }
+
+
+def draw_tracked(d: ImageDraw.ImageDraw, xy, text: str, font, fill, tracking_em: float = 0.0) -> float:
+    """Letter spacing by hand (Pillow has no tracking): kerned pair advance plus tracking."""
+    x, y = xy
+    track = font.size * tracking_em
+    for i, ch in enumerate(text):
+        d.text((x, y), ch, font=font, fill=fill)
+        if i + 1 < len(text):
+            nxt = text[i + 1]
+            x += font.getlength(ch + nxt) - font.getlength(nxt) + (0 if " " in (ch, nxt) else track)
+        else:
+            x += font.getlength(ch)
+    return x
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fonts", required=True, help="directory for the downloaded TTFs")
-    ap.add_argument("--out", default="public/og-image.jpg")
+    ap.add_argument("--out", default=os.path.join(REPO, "public", "og-image.jpg"))
     args = ap.parse_args()
 
-    bricolage, plex, fell_back = load_fonts(args.fonts)
-    for note in fell_back:
-        print(f"WARNING: font download failed for {note}", file=sys.stderr)
+    display, body = load_fonts(args.fonts)
+    copy = read_constants()
 
-    im = Image.new("RGB", (W, H), PAPER)
+    im = Image.new("RGB", (W, H), BLACK)
     d = ImageDraw.Draw(im)
 
-    # The swatch face: a white card with a 1px liner edge, inset 48px on the paper.
-    inset = 48
-    d.rectangle([inset, inset, W - inset - 1, H - inset - 1], fill=WHITE, outline=LINER, width=1)
+    # The lockup at left, 424px square, centred vertically.
+    L = 424
+    lockup = Image.open(LOCKUP).convert("RGBA").resize((L, L), Image.LANCZOS)
+    lx, ly = 56, (H - L) // 2
+    im.paste(lockup, (lx, ly), lockup)
 
-    pad = 64
-    x = inset + pad
+    # The copy block at right: rule, brand line, headline (two lines at 0.95), phone line.
+    x0 = lx + L + 52
+    brand_font = body(22, 500)
+    head_font = display(58, 800)
+    phone_font = body(24, 500)
+    line_h = int(head_font.size * 0.95)
+    block_h = 2 + 28 + brand_font.size + 20 + line_h * 2 + 28 + phone_font.size
+    y = (H - block_h) // 2
 
-    # Wordmark, letter-spaced -0.02em like .t-wordmark.
-    name_font = bricolage(148)
-    y = inset + pad - 10
-    track = -0.02 * 148
-    cx = x
-    for ch in NAME:
-        d.text((cx, y), ch, font=name_font, fill=INK)
-        cx += d.textlength(ch, font=name_font) + track
-    name_h = name_font.getbbox("O")[3]
+    d.rectangle([x0, y, x0 + 64, y + 2], fill=GREEN)
+    y += 2 + 28
 
-    # Byline in mono, graphite, 0.04em tracking.
-    by_font = plex(38)
-    y = y + name_h + 30
-    cx = x
-    for ch in BYLINE:
-        d.text((cx, y), ch, font=by_font, fill=GRAPHITE)
-        cx += d.textlength(ch, font=by_font) + 0.04 * 38
+    draw_tracked(d, (x0, y), copy["brand"], brand_font, SILVER)
+    y += brand_font.size + 20
 
-    # One hairline across the face.
-    y = y + 38 + 40
-    d.line([(x, y), (W - inset - pad, y)], fill=LINER, width=1)
+    right = 0.0
+    for line in copy["headline_lines"]:
+        right = max(right, draw_tracked(d, (x0 - 3, y), line, head_font, WHITE, -0.03))
+        y += line_h
+    y += 28
 
-    # The shop lines in mono, 0.01em tracking like .t-mono. The size steps down
-    # until the longest line fits inside the face with the same padding both sides.
-    max_w = W - 2 * (inset + pad)
-    size = 26
-    while size > 18:
-        line_font = plex(size)
-        widest = max(sum(d.textlength(ch, font=line_font) + 0.01 * size for ch in t) for t in (LINE_1, LINE_2, LINE_3))
-        if widest <= max_w:
-            break
-        size -= 1
-    y += 34
-    for text in (LINE_1, LINE_2, LINE_3):
-        cx = x
-        for ch in text:
-            d.text((cx, y), ch, font=line_font, fill=INK if text != LINE_1 else GRAPHITE)
-            cx += d.textlength(ch, font=line_font) + 0.01 * size
-        y += int(size * 1.6)
+    draw_tracked(d, (x0, y), copy["phone"], phone_font, SILVER)
+
+    if right > W - 40:
+        sys.exit(f"headline runs to {round(right)}px of {W}; shorten the lines or the size")
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
-    im.save(args.out, "JPEG", quality=88, optimize=True, progressive=True)
+    im.save(args.out, "JPEG", quality=90, optimize=True, subsampling=0)
     print(f"wrote {args.out} ({os.path.getsize(args.out)} bytes)")
     return 0
 

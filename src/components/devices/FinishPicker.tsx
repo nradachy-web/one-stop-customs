@@ -98,7 +98,7 @@ export default function FinishPicker({ items = FINISHES, seeLink = true, classNa
                   {item.name}
                 </Link>
               </div>
-              <p className="t-body muted mt-2">{FINISH_PICKER.bodyFor(item.name)}</p>
+              {FINISH_PICKER.bodyFor(item.name) ? <p className="t-body muted mt-2">{FINISH_PICKER.bodyFor(item.name)}</p> : null}
               {last && (
                 <Link href={FINISH_PICKER.seeHref} className="btn btn-text mt-3">
                   {FINISH_PICKER.seeLabel}

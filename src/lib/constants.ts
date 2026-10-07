@@ -365,7 +365,7 @@ export const WORK: readonly WorkPhoto[] = [
   { id: "porsche-911-black-front", src: `${P}porsche-911-black-front.webp`, width: 1080, height: 810, alt: "Black Porsche 911, front three quarter view by a garage door", chip: "#0F1218", label: "Gloss, black. Porsche 911", setting: "On the lot, 02/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "porsche", index: 2, count: 2 } },
   { id: "denali-black-front", src: `${P}denali-black-front.webp`, width: 1440, height: 1080, alt: "Gloss black GMC Denali pickup, front three quarter view", chip: "#17191C", label: "Gloss, black. GMC Denali", setting: "On the lot, 01/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "denali", index: 1, count: 2 } },
   { id: "denali-black-wide", src: `${P}denali-black-wide.webp`, width: 1440, height: 500, alt: "Gloss black GMC Denali pickup, wide crop on the lot", chip: "#17191C", label: "Gloss, black. GMC Denali", setting: "On the lot, 02/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "denali", index: 2, count: 2 } },
-  { id: "silverado-black", src: `${P}silverado-black.webp`, width: 1440, height: 1082, alt: "Gloss black GMC Denali pickup inside the shop", chip: "#0F1218", label: "Gloss, black. GMC Denali", setting: "Inside the shop", service: "wraps", finish: "gloss", colour: "black" },
+  { id: "silverado-black", src: `${P}silverado-black.webp`, width: 1440, height: 1082, alt: "Gloss black GMC Denali pickup in a car wash bay", chip: "#0F1218", label: "Gloss, black. GMC Denali", setting: "In a wash bay", service: "wraps", finish: "gloss", colour: "black" },
   { id: "urus-black-rear", src: `${P}urus-black-rear.webp`, width: 1440, height: 1080, alt: "Satin black Lamborghini Urus, rear view on the street", chip: "#2A2B2C", label: "Satin, black. Lamborghini Urus", setting: "On the street", service: "wraps", finish: "satin", colour: "black" },
   { id: "x6-black-front", src: `${P}x6-black-front.webp`, width: 1440, height: 1083, alt: "Black BMW X6, front view on the lot", chip: "#1B1E20", label: "Gloss, black. BMW X6", setting: "On the lot, 01/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "x6", index: 1, count: 2 } },
   { id: "x6-black-rear", src: `${P}x6-black-rear.webp`, width: 1440, height: 1080, alt: "Black BMW X6, rear view on the street", chip: "#1E2124", label: "Gloss, black. BMW X6", setting: "On the street, 02/02", service: "wraps", finish: "gloss", colour: "black", set: { id: "x6", index: 2, count: 2 } },
@@ -469,6 +469,7 @@ export const GALLERY_ONLY: readonly string[] = [
   "porsche-911-black-front", "denali-black-front", "denali-black-wide", "x6-black-front", "x6-black-rear",
   "chrysler300-black-portrait", "chrysler300-black-side", "camaro-black-rear", "wagoneer-grey-front", "wagoneer-grey-side",
   "sclass-white-side", "escalade-white-front", "grandcherokee-white", "crown-grey-rear", "maserati-blue-rear", "trx-yellow-side",
+  "silverado-black",
 ] as const;
 
 // ---------------- Finishes (the wrap vocabulary) ----------------
@@ -494,6 +495,8 @@ export const WRAP_FINISHES: readonly { name: string; body: string; photoId?: str
   { name: "Chrome", body: "A mirror finish. Ask to see the swatches." },
   { name: "Color flip", body: "A color that shifts as you walk around the car. Ask to see the swatches." },
   { name: "Printed", body: "Camo, Bape style and custom designs, drawn in house and printed on the film. The blue camo BMW.", photoId: "bmw-camo-blue" },
+  { name: "Stripes", body: "A second color laid over the first. The red Charger with black stripes.", photoId: "charger-red-stripes" },
+  { name: "Partial", body: "One panel or a few, not the whole car. The Camaro's black hood.", photoId: "camaro-orange-hood" },
 ] as const;
 
 export const WRAP_TYPES: readonly string[] = [
@@ -700,7 +703,7 @@ export const RECENT_WORK: readonly string[] = [
 
 /** The logo files (docs/BRIEF_V2.md, Logo). The mark sits in the header at 44px tall; the full lockup is the footer's. */
 export const LOGO = {
-  mark: { src: "/logo-mark.png", width: 897, height: 633, alt: "One Stop Customs mark, two checkered flags over a car" },
+  mark: { src: "/logo-mark.png", width: 187, height: 132, alt: "One Stop Customs mark, two checkered flags over a car" },
   lockup: { src: "/logo-transparent.png", width: 1024, height: 1024, alt: "One Stop Customs Auto Spa logo" },
 } as const;
 
@@ -804,7 +807,7 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     photoIds: ["charger-red-stripes", "charger-pink", "rangerover-purple", "cybertruck-black", "bmw-camo-blue", "camaro-orange-hood", "kitchen-wrap", "wall-wrap"],
     quotePreset: "wrap",
     metaTitle: "Vinyl wraps in Warren | One Stop Customs by Ricky Wraps",
-    metaDescription: "Full color change, partial wraps, stripes, hoods, roofs and printed designs in Avery Dennison and 3M film at 13417 E Eight Mile Rd in Warren. Quoted per vehicle. Call or text (248) 259-1617.",
+    metaDescription: "Color change, partial wraps, stripes and printed designs in Avery Dennison and 3M film at 13417 E Eight Mile Rd in Warren. Call or text (248) 259-1617.",
   },
   commercial: {
     id: "commercial",
@@ -815,7 +818,7 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     descriptor: "Printed graphics, fleets",
     oneLine: "Your logo, contact info and colors printed and laid on one van or the whole fleet.",
     lede: `Full color printed graphics, logos and contact info, partial fleet wraps, in-house graphic design. ${AT_SHOP}`,
-    intro: "The Homes.com Tesla and the WeDriveFor Blazer in the photos were printed and laid in this shop. Send the logo files and the message, the layout is drawn in house, and the vehicle leaves carrying it. When the campaign or the lease ends, the wrap comes off.",
+    intro: "The Homes.com Tesla and the WeDriveFor Blazer in the photos were designed in house and laid in this shop. Send the logo files and the message, the layout is drawn in house, and the vehicle leaves carrying it. When the campaign or the lease ends, the wrap comes off.",
     included: FLEET_ROWS,
     cover: { photoId: "commercial-blazer-pink", kind: "band" },
     choose: {
@@ -834,7 +837,7 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     photoIds: ["commercial-blazer-pink", "commercial-tesla-homes-front", "commercial-tesla-homes"],
     quotePreset: "commercial",
     metaTitle: "Commercial and fleet wraps in Warren | One Stop Customs by Ricky Wraps",
-    metaDescription: "Full color printed graphics, logos, contact info and partial fleet wraps with in-house graphic design at 13417 E Eight Mile Rd in Warren. Quoted per vehicle. Call or text (248) 259-1617.",
+    metaDescription: "Printed fleet graphics, logos and contact info with in-house design at 13417 E Eight Mile Rd in Warren. Quoted per vehicle. Call or text (248) 259-1617.",
   },
   tint: {
     id: "tint",
@@ -845,7 +848,7 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     descriptor: "Three films, quoted per vehicle",
     oneLine: "Standard, black carbon or ceramic film on any window, cut and laid by hand.",
     lede: `Three films: standard dyed film, black carbon and ceramic. Windshield and sunroof film, tint removal and colored film. Mobile tint is available by appointment, ask when you book. ${AT_SHOP}`,
-    intro: "Tint is two choices: how dark and which film. The shade is yours to pick inside what Michigan allows on each window. The film decides how much heat stays out and how long the warranty runs, and the table lays the three side by side.",
+    intro: "Tint is two choices: how dark and which film. The shade is yours to pick inside what Michigan allows on each window. The film decides how much heat stays out and how long the warranty runs, and the three films sit side by side below.",
     included: [
       "Standard dyed film",
       "Black carbon film",
@@ -876,7 +879,7 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     photoIds: ["escalade-black-window", "tint-hands"],
     quotePreset: "tint",
     metaTitle: "Window tinting in Warren | One Stop Customs by Ricky Wraps",
-    metaDescription: "Standard, black carbon and ceramic window tint, windshield and sunroof film and tint removal at 13417 E Eight Mile Rd in Warren. Quoted per vehicle. Call or text (248) 259-1617.",
+    metaDescription: "Standard, black carbon and ceramic window tint, windshield film and tint removal at 13417 E Eight Mile Rd in Warren. Call or text (248) 259-1617.",
   },
   ppf: {
     id: "ppf",
@@ -909,7 +912,7 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     photoIds: ["ppf-headlight-wide"],
     quotePreset: "ppf",
     metaTitle: "Paint protection film in Warren | One Stop Customs by Ricky Wraps",
-    metaDescription: "XPEL paint protection film, clear, matte or colored, front end or full body, at 13417 E Eight Mile Rd in Warren. Self healing, quoted per vehicle. Call or text (248) 259-1617.",
+    metaDescription: "XPEL paint protection film, clear, matte or colored, front end or full body, at 13417 E Eight Mile Rd in Warren. Call or text (248) 259-1617.",
   },
   buildings: {
     id: "buildings",
@@ -941,8 +944,8 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     ],
     photoIds: ["home-deck-tint", "home-front-tint"],
     quotePreset: "buildings",
-    metaTitle: "Commercial and residential window tinting in Warren | One Stop Customs by Ricky Wraps",
-    metaDescription: "Dual reflective, colored, blackout, decorative and privacy window film for storefronts, offices and homes across Metro Detroit, from 13417 E Eight Mile Rd in Warren. Call or text (248) 259-1617.",
+    metaTitle: "Building window film in Warren | One Stop Customs by Ricky Wraps",
+    metaDescription: "Dual reflective, colored, blackout, decorative and privacy film for storefronts, offices and homes, from the shop in Warren. Call or text (248) 259-1617.",
   },
   powder: {
     id: "powder",
@@ -969,7 +972,7 @@ export const SERVICE_PAGES: Readonly<Record<ServiceId, ServiceSpec>> = {
     photoIds: ["powdercoat-wheel-spray"],
     quotePreset: "powder",
     metaTitle: "Powder coating in Warren | One Stop Customs by Ricky Wraps",
-    metaDescription: "Powder coated wheels at 13417 E Eight Mile Rd in Warren: tires off and remounted, sandblasting, 1 to 2 day turnaround. Quoted per vehicle. Call or text (248) 259-1617.",
+    metaDescription: "Powder coated wheels at 13417 E Eight Mile Rd in Warren: tires off and remounted, sandblasting, 1 to 2 days. Call or text (248) 259-1617.",
   },
 };
 
@@ -1020,7 +1023,7 @@ export const CITY_COPY = {
     `One Stop Customs by Ricky Wraps is at 13417 E Eight Mile Rd in Warren, by appointment. ${city.name} customers bring the car to the shop; mobile tint is available by appointment, ask when you book. Vinyl wraps, window tint, XPEL paint protection film, commercial wraps and powder coated wheels, quoted per vehicle.`,
   title: (city: City) => `Car wraps and window tint for ${city.name} | ${BASE_TITLE}`,
   description: (city: City) =>
-    `Vinyl wraps, window tint, XPEL paint protection film and powder coated wheels for ${city.name} drivers at 13417 E Eight Mile Rd in Warren, by appointment. Call or text (248) 259-1617.`,
+    `Wraps, tint, XPEL paint protection film and powder coated wheels for ${city.name} drivers, at 13417 E Eight Mile Rd in Warren. Call or text (248) 259-1617.`,
   path: (city: City) => `/wraps-and-tint/${city.slug}/`,
   chooseTab: "Choose",
   chooseTitle: "Pick a finish. Pick a film.",
@@ -1111,7 +1114,8 @@ export const ABOUT = {
     "The shop wraps and tints cars, lays XPEL paint protection film, prints and installs commercial wraps, puts window film on storefronts, offices and homes, and powder coats wheels. The film is Avery Dennison and 3M, with hundreds of colors in stock and the graphic design done in house.",
     "Everything runs by appointment and is quoted per vehicle. Call or text (248) 259-1617, book online, or find the work as it happens on Instagram at @rickywraps and @onestopcustoms.autospa.",
   ],
-  photoIds: { side: "mustang-white-shop", below: "silverado-black" },
+  /** The band is a frame of the shop's own bay (the Window Tinting banner and the sign are in it); silverado-black is a wash bay elsewhere and stays gallery only. */
+  photoIds: { side: "mustang-white-shop", below: "charger-red-stripes" },
 } as const;
 
 export const CONTACT = {
@@ -1119,7 +1123,7 @@ export const CONTACT = {
   h1: "Get a quote.",
   lede: "Tell us the car and what you want. Call or text (248) 259-1617, book online, or send the ticket and Ricky replies from the same number.",
   metaTitle: `Get a quote | ${BASE_TITLE}`,
-  metaDescription: "Send the quote ticket, call or text (248) 259-1617, or book online. Vinyl wraps, window tint, paint protection film and powder coating at 13417 E Eight Mile Rd in Warren, by appointment.",
+  metaDescription: "Send the quote ticket, call or text (248) 259-1617, or book online. Wraps, tint, paint protection film and powder coating in Warren, by appointment.",
 } as const;
 
 export const THANK_YOU = {
@@ -1162,7 +1166,7 @@ export const REVIEW_SUMMARY = {
 export const SEO: Readonly<Record<string, { title: string; description: string; path?: string }>> = {
   home: {
     title: HOME_TITLE,
-    description: "Vinyl wraps, window tint, XPEL paint protection film and powder coating at 13417 E Eight Mile Rd in Warren, by appointment. Avery Dennison and 3M films. Call or text (248) 259-1617.",
+    description: "Vinyl wraps, window tint, XPEL paint protection film and powder coating at 13417 E Eight Mile Rd in Warren, by appointment. Call or text (248) 259-1617.",
     path: "/",
   },
   wraps: { title: SERVICE_PAGES.wraps.metaTitle, description: SERVICE_PAGES.wraps.metaDescription, path: SERVICE_PAGES.wraps.path },
@@ -1370,10 +1374,12 @@ export const GROUNDS: Readonly<Record<GroundId, GroundSpec>> = {
   ppf: { asset: "squeegee", opacity: 0.34, position: "100% 0%", fade: { left: "45%", bottom: "60%" }, height: "560px" },
   watch: { asset: "lightStreaks", opacity: 0.3, position: "100% 100%", fade: { left: "30%", top: "40%" }, height: "620px", anchor: "bottom" },
   fleetMat: { asset: "carbon", opacity: 0.5, position: "50% 50%" },
-  powder: { asset: "powderCloud", opacity: 0.5, position: "100% 0%", fade: { left: "30%", bottom: "65%" }, height: "640px", drift: true },
+  // 0.5 at left 30% measured 3.3:1 for the silver lede (the particles reach L 0.146, brighter than the 10.4 table assumed); 0.36 with the fade black to 55% clears the lede, and under lg the cloud is smaller and dimmer still.
+  powder: { asset: "powderCloud", opacity: 0.36, position: "100% 0%", fade: { left: "55%", bottom: "65%" }, height: "640px", drift: true, small: { opacity: 0.28, position: "100% 0%", height: "420px", fade: { left: "55%", bottom: "55%" } } },
   recentWork: { asset: "chromePanel", opacity: 0.4, position: "100% 0%", fade: { left: "45%", bottom: "55%" }, height: "520px" },
   reviewsMat: { asset: "carbon", opacity: 0.45, position: "50% 50%" },
-  shopPanel: { asset: "carbon", opacity: 0.32, position: "50% 100%", fade: { top: "30%" }, height: "60%", anchor: "bottom" },
+  // 0.32 faded from 30% measured 3.8 to 4.4:1 for the ash keys on the charcoal panel (About, thank you); 0.22 faded from 45% keeps the weave under the hours rows only.
+  shopPanel: { asset: "carbon", opacity: 0.22, position: "50% 100%", fade: { top: "45%" }, height: "60%", anchor: "bottom" },
   footer: { asset: "hexLights", opacity: 0.28, position: "50% 0%", fade: { bottom: "40%" }, height: "clamp(180px, 20vw, 288px)", drift: true, driftSeconds: 36 },
   // Shell
   lightbox: { asset: "satinBlack", tall: "satinBlackTall", opacity: 0.24, position: "50% 50%", drift: true },
@@ -1386,12 +1392,13 @@ export const GROUNDS: Readonly<Record<GroundId, GroundSpec>> = {
   notFound: { asset: "greenPeel", opacity: 0.3, position: "50% 45%", fade: { bottom: "55%" }, height: "640px", drift: true },
   // Service and city title blocks, and the process on service pages
   titleWraps: { asset: "satinPurple", opacity: 0.36, position: "60% 40%", fade: { left: "45%", bottom: "70%" } },
-  titleCommercial: { asset: "chromePanel", opacity: 0.4, position: "100% 20%", fade: { left: "50%", bottom: "60%" }, height: "520px" },
+  // A band cover's lede runs to column 8 (x 812 at 1440), so the left fade ends past it; 0.4 at 50% measured 3.6:1 for the lede on the highlight. Under lg the panel sits behind the h1 only.
+  titleCommercial: { asset: "chromePanel", opacity: 0.3, position: "100% 20%", fade: { left: "64%", bottom: "60%" }, height: "520px", small: { opacity: 0.24, height: "400px", fade: { bottom: "40%" } } },
   // The roll lies in the lower left under the actions (the cover card at right is solid and would hide it); the top fade starts below the lede.
   titleTint: { asset: "windowFilmRoll", opacity: 0.36, position: "0% 100%", fade: { topFrom: "45%", top: "62%", right: "60%" }, small: { opacity: 0.3 } },
   titlePpf: { asset: "squeegee", opacity: 0.36, position: "100% 0%", fade: { left: "45%", bottom: "65%" }, height: "520px" },
   titleBuildings: { asset: "windowFilmRoll", opacity: 0.3, position: "100% 40%", fade: { left: "50%", bottom: "65%" }, height: "520px", flip: true },
-  titlePowder: { asset: "powderCloud", opacity: 0.5, position: "100% 0%", fade: { left: "35%", bottom: "65%" }, height: "560px", drift: true },
+  titlePowder: { asset: "powderCloud", opacity: 0.36, position: "100% 0%", fade: { left: "60%", bottom: "65%" }, height: "560px", drift: true, small: { opacity: 0.28 } },
   titleCity: { asset: "satinBlack", tall: "satinBlackTall", opacity: 0.3, position: "70% 35%", fade: { left: "40%", bottom: "70%" } },
   process: { asset: "lightStreaks", opacity: 0.3, position: "0% 100%", fade: { right: "55%", top: "45%" }, height: "560px", anchor: "bottom" },
 } as const;

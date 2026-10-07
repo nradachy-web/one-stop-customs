@@ -88,8 +88,11 @@ export interface TitleBlockProps {
  * Living covers (vinyl wraps, Detroit): a chip cover whose photo has a clip
  * in LIVING_BY_PHOTO renders as that living photo in a 16:9 box in the same
  * cell (600 by 338 at lg, 350 by 197 at 390), the poster eager as the page's
- * LCP, the caption from the WORK entry, and LIVING_NOTE beneath. Nothing
- * city or service specific decides it: the lookup does.
+ * LCP, the caption from the WORK entry, and LIVING_NOTE beneath in `.t-small`
+ * silver, not ash: the note sits on the title ground (satin purple at 0.36 on
+ * wraps, satin black on Detroit), where ash fails and silver clears 5.9:1
+ * (docs/DESIGN.md 10.1 rule 3, 10.4). Nothing city or service specific
+ * decides it: the lookup does.
  *
  * Band covers (commercial, paint protection film, buildings, powder): the h1
  * and lede in columns 1 to 8, the strip on its own row beneath, then the
@@ -117,7 +120,7 @@ export function TitleBlock({ title, lede, cover, ground, quoteHref = "#quote", n
           {living ? (
             <div className={cn("mt-6 lg:mt-0", COVER_CELL)}>
               <SwatchCard photo={living} aspect="16/9" priority />
-              <p className="t-label mt-3">{LIVING_NOTE}</p>
+              <p className="t-small muted mt-3">{LIVING_NOTE}</p>
             </div>
           ) : chip ? (
             <SwatchCard
