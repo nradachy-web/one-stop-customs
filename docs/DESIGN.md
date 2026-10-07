@@ -66,7 +66,13 @@ Gallery, about and contact open with a dark title band (`PageHead`) instead of a
 - **Form** (`quote/QuoteForm.tsx`): always a light panel. Vehicle, service, name, phone,
   optional email and note. Posts to Web3Forms by fetch; if the key is missing or the send
   fails the visitor is told so and given the phone number. Never a fake success.
-- **Shade slider** (`tint/ShadeSlider.tsx`): tint page only.
+- **Tint preview** (`tint/TintVisualizer.tsx`): tint page only. Brought over from the Midwest
+  Tint and Detail site at Nick's request (October 7): two studio renders of one sedan, clear
+  glass and tinted glass, crossfaded by a slider and six shade buttons (Clear, 50, 35, 20, 15
+  and 5 percent), so only the windows change. The renders are illustrations, not the shop's
+  photos: sources in `art-src/`, renditions in `public/art/` from `scripts/make-art.mjs`,
+  outside the photo registry and the gallery, and the note under the controls says
+  "Simulated preview on a studio render, not a customer's car".
 
 Radii are 8px on controls and 12px on cards and photos. Hairlines only; one soft shadow, on
 the navigation menu. Motion is hover only (card photo scale, arrow nudge, menu fade). Nothing
@@ -94,3 +100,5 @@ businesses' signage; the gallery shows every photo as it is.
   still point at rickywrapsllc.com until a One Stop Customs domain is chosen.
 - Ricky to confirm the Warren address, whether Royal Oak is still a location, and the tint
   warranty terms.
+- Ricky to confirm the shades he stocks. The tint preview shows the common ones (50, 35, 20,
+  15 and 5 percent); trim the list in `TintVisualizer.tsx` if his differ.

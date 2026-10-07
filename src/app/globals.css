@@ -1382,81 +1382,176 @@
     color: var(--link);
   }
 
-  /* ---------- the tint shade slider ---------- */
-  .shade {
+  /* ---------- the tint preview: a clear render and a tinted render, crossfaded ---------- */
+  .viz {
     overflow: hidden;
     background: var(--panel);
     border: 1px solid var(--rule);
     border-radius: var(--r-card);
   }
-  .shade__pane {
+  /* The render leaves a lot of empty studio above the car. Phones trim the
+     sides a little so the car fills the frame; wide screens trim the top. */
+  .viz__stage {
     position: relative;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    background: #0b0c0d;
+    background: #cfd2d5;
   }
-  .shade__pane img {
+  .viz__stage img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: 50% 60%;
   }
-  .shade__overlay {
+  .viz__tinted {
+    transition: opacity 0.5s var(--ease);
+  }
+  .viz__readout {
     position: absolute;
-    inset: 0;
-    background: #000000;
-    opacity: var(--shade, 0.5);
-    pointer-events: none;
-  }
-  .shade__control {
-    padding: 1.125rem 1.375rem 1.25rem;
-  }
-  .shade__ticks {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
+    left: 0.75rem;
+    top: 0.75rem;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    background: rgba(11, 12, 13, 0.86);
     font-size: 0.75rem;
     font-weight: 500;
-    color: var(--key);
+    line-height: 1.2;
+    color: #b9bdc3;
   }
-  .shade__range {
+  .viz__readout strong {
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+  }
+  .viz__controls {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  /* The track runs from clear glass to limo, so the control reads before it is touched. */
+  .viz__range {
     -webkit-appearance: none;
     appearance: none;
     display: block;
     width: 100%;
     height: 1.75rem;
-    margin: 0.375rem 0 0;
+    margin: 0.5rem 0 0;
     background: transparent;
     cursor: pointer;
   }
-  .shade__range::-webkit-slider-runnable-track {
-    height: 4px;
-    border-radius: 2px;
-    background: var(--rule-strong);
+  .viz__range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #d9dcdf, #0b0c0d);
   }
-  .shade__range::-webkit-slider-thumb {
+  .viz__range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 1.5rem;
     height: 1.5rem;
-    margin-top: -0.625rem;
-    border: 3px solid var(--panel);
+    margin-top: -0.5625rem;
+    border: 3px solid #32c246;
     border-radius: 999px;
-    background: #32c246;
-    box-shadow: 0 0 0 1px var(--rule-strong);
+    background: #ffffff;
   }
-  .shade__range::-moz-range-track {
-    height: 4px;
-    border-radius: 2px;
-    background: var(--rule-strong);
+  .viz__range::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #d9dcdf, #0b0c0d);
   }
-  .shade__range::-moz-range-thumb {
-    width: 1.25rem;
-    height: 1.25rem;
-    border: 3px solid var(--panel);
+  .viz__range::-moz-range-thumb {
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 3px solid #32c246;
     border-radius: 999px;
-    background: #32c246;
+    background: #ffffff;
+  }
+  .viz__chips {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .viz__chip {
+    min-height: 3.5rem;
+    padding: 0.5rem 0.25rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-ui);
+    background: var(--panel);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.18s var(--ease), background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+  }
+  .viz__chip strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--heading);
+  }
+  .viz__chip span {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--key);
+  }
+  .viz__chip:hover {
+    border-color: var(--heading);
+  }
+  .viz__chip[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  .viz__foot {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+  .viz__note {
+    max-width: 34rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--key);
+  }
+  @media (min-width: 40rem) {
+    .viz__chips {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .viz__foot {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .viz__foot .btn {
+      flex: none;
+    }
+  }
+  @media (min-width: 48rem) {
+    .viz__stage {
+      aspect-ratio: 21 / 9;
+    }
+    .viz__stage img {
+      object-position: 50% 82%;
+    }
+    .viz__readout {
+      left: 1.25rem;
+      top: 1.25rem;
+    }
+    .viz__controls {
+      padding: 1.75rem 2rem 2rem;
+    }
   }
 
   /* ---------- the close: the form beside the phone ---------- */

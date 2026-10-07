@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ServiceLanding from "@/components/landing/ServiceLanding";
 import { Ticks } from "@/components/landing/blocks";
-import ShadeSlider from "@/components/tint/ShadeSlider";
+import TintVisualizer from "@/components/tint/TintVisualizer";
 import { RuleLabel, SectionHead } from "@/components/ui/Section";
 import { pageMeta } from "@/lib/seo";
 import { SERVICES } from "@/lib/services";
@@ -43,23 +43,23 @@ function Detail() {
       <p className="caption">Warranty terms are confirmed with your quote.</p>
 
       <RuleLabel className="subrule">Shades</RuleLabel>
-      <div className="split split--center">
-        <ShadeSlider photoId="maserati-blue-side" />
-        <div>
-          <h2 className="display display-md">How dark do you want it?</h2>
-          <p className="prose mt-4">
-            Drag the slider to get a feel for light, medium and dark glass. Michigan sets a limit for each window, and we will tell you what is allowed on yours before any film goes on.
-          </p>
-          <p className="label mt-8">Also available</p>
-          <ul className="chips mt-3">
-            {ALSO.map((a) => (
-              <li key={a}>
-                <span className="chip">{a}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <SectionHead
+        align="split"
+        title="Preview your shade."
+        intro="Slide through the shades to see how dark your glass could go. Michigan sets a limit for each window, and we will tell you what is allowed on yours before any film goes on."
+      />
+      <div className="mt-8 lg:mt-12">
+        <TintVisualizer />
       </div>
+
+      <p className="label mt-10">Also available</p>
+      <ul className="chips mt-3">
+        {ALSO.map((a) => (
+          <li key={a}>
+            <span className="chip">{a}</span>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
