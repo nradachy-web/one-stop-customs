@@ -42,11 +42,11 @@ everything else. Sentence case everywhere. Labels are Inter 600 at 12px, upperca
 Home: hero, services (light), why this shop and the work (dark), how it works plus the towns
 plus the form (light), footer (dark).
 
-Service page (`src/components/landing/ServiceLanding.tsx`, one template for all six): hero,
+Service page (`src/components/landing/ServiceLanding.tsx`, one template for all nine): hero,
 what you get (light), why here with facts, a photo and one review (dark), the service's own
 detail (light), how it works plus questions plus towns (dark), the form (light).
 
-City page (`src/app/wraps-and-tint/[city]/page.tsx`): hero, the six services (light), why
+City page (`src/app/wraps-and-tint/[city]/page.tsx`): hero, the nine services (light), why
 this shop (dark), getting here plus how it works (light), questions (dark), the form (light).
 
 Gallery, about and contact open with a dark title band (`PageHead`) instead of a photo hero.
@@ -74,6 +74,18 @@ Gallery, about and contact open with a dark title band (`PageHead`) instead of a
   outside the photo registry and the gallery, and the note under the controls says
   "Simulated preview on a studio render, not a customer's car".
 
+- **Prices** (`PriceTiles` and `PriceList` in `landing/blocks.tsx`): a priced option as a tile
+  (small label, the number in Inter Tight, an optional second price line, what it covers) and
+  add ons as a name and a price on a hairline. Used only where Ricky gave the number.
+- **Starlight preview** (`starlight/StarlightBuilder.tsx`): starlight page only. The tint
+  preview's frame over a drawn headliner: a slider from 500 to 1,000 stars, three count
+  buttons, a shooting stars switch and a live price ($600 for 500 stars, $1 a star after
+  that, shooting stars add $200). It is a drawing and says so under the controls.
+- **Star field art** (`public/stars/`, from `scripts/make-stars.mjs`, read through
+  `src/lib/stars.ts`): the hero and the card for the starlight page, because the shop has not
+  sent a photo of a finished headliner yet. A service record with `art: "stars"` and no
+  `heroPhoto` gets it. Replace it with a real photo as soon as one arrives.
+
 Radii are 8px on controls and 12px on cards and photos. Hairlines only; one soft shadow, on
 the navigation menu. Motion is hover only (card photo scale, arrow nudge, menu fade). Nothing
 is hidden until scroll and everything reads with JavaScript off.
@@ -82,7 +94,10 @@ is hidden until scroll and everything reads with JavaScript off.
 
 The free quote voice used across Nick's client sites: "Get a free quote", "Tell us about your
 vehicle", fast, free, no pressure, "book your spot". Never "get a number", "in writing" or
-"quoted on your vehicle". No prices, no years in business, no counts, no guarantees. Reviews
+"quoted on your vehicle". No years in business, no counts, no guarantees. Prices appear only
+where Ricky sent them for the site (October 7, 2026: paint protection film, kill switches,
+starlight headliners and the detailing menu), in his numbers and with his conditions; every
+other service is still a free quote. Reviews
 are verbatim, five star, from `docs/REVIEWS.json` only. "The shop you know as Ricky Wraps"
 appears once on the home page and once on About.
 
@@ -100,5 +115,12 @@ businesses' signage; the gallery shows every photo as it is.
   still point at rickywrapsllc.com until a One Stop Customs domain is chosen.
 - Ricky to confirm the Warren address, whether Royal Oak is still a location, and the tint
   warranty terms.
+- Detailing: the menu Ricky sent is a flyer for Pull From Under LLC Auto Detailing with its
+  own phone number (313-930-0142) and Instagram. The page presents the packages as One Stop
+  Customs detailing and routes to the shop's number and form. Ricky to confirm that is right,
+  or whether Pull From Under should be named and detailing calls sent to that number.
+- Photos: no photo exists yet of a starlight headliner, a kill switch install or a detail in
+  progress. The starlight page runs on a drawing; the other two use the shop's own vehicle
+  photos. Ask Ricky for real ones.
 - Ricky to confirm the shades he stocks. The tint preview shows the common ones (50, 35, 20,
   15 and 5 percent); trim the list in `TintVisualizer.tsx` if his differ.

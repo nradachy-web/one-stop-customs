@@ -10,13 +10,13 @@ import { pageMeta } from "@/lib/seo";
    THE HOME PAGE, four bands:
 
      1  hero     one photo, one heading, one paragraph, two actions
-     2  light    the six services, on the shop's own photography
+     2  light    the nine services, on the shop's own photography
      3  dark     why this shop: the facts, one review, the work
      4  light    how it works, the towns, and the form itself
    ========================================================================== */
 
 const DESCRIPTION =
-  "Vinyl wraps, window tint, XPEL paint protection film and powder coating at 13417 E Eight Mile Rd in Warren, by appointment. Free quotes. Call or text (248) 259-1617.";
+  "Vinyl wraps, window tint, XPEL paint protection film, detailing, starlight headliners and kill switches at 13417 E Eight Mile Rd in Warren, by appointment. Free quotes. Call or text (248) 259-1617.";
 
 export const metadata: Metadata = pageMeta({ title: HOME_TITLE, description: DESCRIPTION, path: "/" });
 
@@ -39,13 +39,13 @@ export default function HomePage() {
         focus="50% 78%"
         eyebrow="Vinyl wraps · Window tint · Paint protection film"
         title="Wrap it. Tint it.|*Protect it.*"
-        lead="One Stop Customs is the shop you know as Ricky Wraps, on Eight Mile in Warren. Color change wraps, window tint, XPEL paint protection film and powder coated wheels, all by appointment. Get a free quote for your vehicle."
+        lead="One Stop Customs is the shop you know as Ricky Wraps, on Eight Mile in Warren. Color change wraps, window tint, XPEL paint protection film, detailing and custom work, all by appointment. Get a free quote for your vehicle."
         size="xl"
         ariaLabel={`${BRAND.name} ${BRAND.byline}`}
       />
 
       <Section plane="light" label="Services">
-        <SectionHead align="split" title="One shop. Six services." intro="Every job is priced for your vehicle. Free quotes, fast, no pressure." />
+        <SectionHead align="split" title="One shop. Nine services." intro="Wrap it, tint it, protect it, detail it. Free quotes, fast, no pressure." />
         <ServiceCards className="mt-8 lg:mt-12" />
       </Section>
 

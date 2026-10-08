@@ -52,7 +52,7 @@ export default function AboutPage() {
       </Section>
 
       <Section plane="light" label="Services">
-        <SectionHead align="split" title="One shop. Six services." intro="Every job is priced for your vehicle. Free quotes, fast, no pressure." />
+        <SectionHead align="split" title="One shop. Nine services." intro="Wrap it, tint it, protect it, detail it. Free quotes, fast, no pressure." />
         <ServiceCards className="mt-8 lg:mt-12" />
       </Section>
 

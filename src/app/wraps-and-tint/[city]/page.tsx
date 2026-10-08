@@ -11,7 +11,7 @@ import { pageMeta } from "@/lib/seo";
 
 /* ============================================================================
    THE CITY PAGE, one template behind all twelve towns. The same bands as a
-   service page, with the six services where the checks would be and the
+   service page, with the nine services where the checks would be and the
    way to the shop where the service detail would be.
    ========================================================================== */
 
@@ -73,7 +73,7 @@ export default async function CityPage({ params }: CityPageProps) {
       />
 
       <Section plane="light" label="Services">
-        <SectionHead align="split" title={`What ${city.name} drivers come in for.`} intro="Every job is priced for your vehicle. Free quotes, fast, no pressure." />
+        <SectionHead align="split" title={`What ${city.name} drivers come in for.`} intro="Wrap it, tint it, protect it, detail it. Free quotes, fast, no pressure." />
         <ServiceCards className="mt-8 lg:mt-12" />
       </Section>
 

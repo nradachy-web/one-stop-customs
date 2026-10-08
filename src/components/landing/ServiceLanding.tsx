@@ -9,11 +9,12 @@ import { KeyValues, RuleLabel, Section, SectionHead } from "@/components/ui/Sect
 import { BRAND } from "@/lib/constants";
 import { photo } from "@/lib/photos";
 import type { Service } from "@/lib/services";
+import { STAR_ART } from "@/lib/stars";
 
 /* ============================================================================
    THE SERVICE PAGE
 
-   One template behind all six services. Six bands, in this order, the
+   One template behind all nine services. Six bands, in this order, the
    planes alternating so each band reads as its own thought:
 
      1  hero          photo, one heading, one paragraph, two actions, trust row
@@ -35,7 +36,7 @@ interface ServiceLandingProps {
 }
 
 export default function ServiceLanding({ service: s, detail, detailLabel }: ServiceLandingProps) {
-  const proof = photo(s.proofPhoto);
+  const proof = s.proofPhoto ? photo(s.proofPhoto) : null;
 
   return (
     <>
@@ -46,6 +47,7 @@ export default function ServiceLanding({ service: s, detail, detailLabel }: Serv
 
       <LandingHero
         photoId={s.heroPhoto}
+        art={s.heroPhoto ? undefined : STAR_ART.hero}
         photoIdMobile={s.heroPhotoMobile}
         focus={s.heroFocus}
         heavy={s.heroHeavy}
@@ -67,11 +69,13 @@ export default function ServiceLanding({ service: s, detail, detailLabel }: Serv
             <KeyValues rows={s.proofRows} className="mt-8" />
           </div>
           <div>
-            <figure>
-              <Pic id={s.proofPhoto} ratio={s.proofRatio ?? "4 / 3"} sizes="(min-width: 1024px) 560px, 100vw" />
-              <figcaption className="caption">{proof.caption}</figcaption>
-            </figure>
-            {s.reviewName ? <ReviewQuote name={s.reviewName} className="mt-6" /> : null}
+            {proof ? (
+              <figure>
+                <Pic id={proof.id} ratio={s.proofRatio ?? "4 / 3"} sizes="(min-width: 1024px) 560px, 100vw" />
+                <figcaption className="caption">{proof.caption}</figcaption>
+              </figure>
+            ) : null}
+            {s.reviewName ? <ReviewQuote name={s.reviewName} className={proof ? "mt-6" : undefined} /> : null}
           </div>
         </div>
       </Section>

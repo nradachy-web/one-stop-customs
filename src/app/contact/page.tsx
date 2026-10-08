@@ -13,7 +13,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: titleFor("Get a free quote"),
-  description: "Get a free quote for a wrap, tint, paint protection film or powder coating. Call or text (248) 259-1617, book online, or send the form. Warren, by appointment.",
+  description: "Get a free quote for a wrap, tint, paint protection film, a detail, a starlight headliner or a kill switch. Call or text (248) 259-1617, book online, or send the form. Warren, by appointment.",
   path: "/contact/",
 });
 

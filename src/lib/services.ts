@@ -1,13 +1,20 @@
 import { BASE_TITLE, REVIEW_SUMMARY, type FaqItem } from "@/lib/constants";
 
 /**
- * The six service pages, one record each. ServiceLanding.tsx renders every
+ * The nine service pages, one record each. ServiceLanding.tsx renders every
  * one of them from this file, so new service copy goes here and never in a
  * page file. A heading may carry one *starred* word, which the hero prints
  * in the accent green.
+ *
+ * Prices: only the ones Ricky sent for the site on October 7, 2026 (paint
+ * protection film, kill switches, starlight headliners, detailing). Every
+ * other service is still quoted per vehicle.
  */
 
-export type ServiceId = "wraps" | "tint" | "ppf" | "commercial" | "buildings" | "powder";
+export type ServiceId = "wraps" | "tint" | "ppf" | "commercial" | "buildings" | "powder" | "detailing" | "starlight" | "killswitch";
+
+/** A drawn stand in for a service with no photo of its own yet. Files in public/stars, from scripts/make-stars.mjs. */
+export type ServiceArt = "stars";
 
 export interface Service {
   id: ServiceId;
@@ -18,12 +25,14 @@ export interface Service {
   navNote: string;
   /** The card on the home and city pages. */
   blurb: string;
-  cardPhoto: string;
+  /** A photo id, or leave it out and set `art` for a service with no photo yet. */
+  cardPhoto?: string;
   cardPos?: string;
+  art?: ServiceArt;
   eyebrow: string;
   h1: string;
   lead: string;
-  heroPhoto: string;
+  heroPhoto?: string;
   /** A different frame for phones, where the box is portrait. Defaults to heroPhoto. */
   heroPhotoMobile?: string;
   /** object-position at 768 and up. */
@@ -35,7 +44,7 @@ export interface Service {
   proofHeading: string;
   proofIntro: string;
   proofRows: readonly { k: string; v: string }[];
-  proofPhoto: string;
+  proofPhoto?: string;
   proofRatio?: string;
   reviewName?: string;
   faqs: readonly FaqItem[];
@@ -154,7 +163,7 @@ export const SERVICE_LIST: readonly Service[] = [
     cardPos: "18% 50%",
     eyebrow: "Paint protection film · XPEL",
     h1: "Rock chips stop *here*.",
-    lead: "XPEL paint protection film over the panels that take the hits, so chips and scratches land on the film and not on your paint. Clear, matte or colored, front end or full body. Get a free quote for your vehicle.",
+    lead: "XPEL paint protection film over the panels that take the hits, so chips and scratches land on the film and not on your paint. A full front end in gloss film is $1,900 and full body starts at $3,900. Get a free quote for your vehicle.",
     heroPhoto: "ppf-headlight-wide",
     heroFocus: "0% 50%",
     heroHeavy: true,
@@ -163,17 +172,18 @@ export const SERVICE_LIST: readonly Service[] = [
       { title: "Takes the chips and scratches", body: "Rocks, road debris and scuffs hit the film. The paint underneath stays the way it left the factory." },
       { title: "Heals itself", body: "Light scratches and swirl marks in the film settle out with heat from the sun or a warm garage." },
       { title: "Clear, matte or colored", body: "Keep the paint's own look, turn the finish matte, or change the color with film thick enough to protect it." },
-      { title: "Front end or full body", body: "Cover the bumper, hood, fenders and mirrors, or cover every painted panel." },
+      { title: "Front end or full body", body: "Cover the bumper, hood, fenders and mirrors for $1,900 in gloss film, or cover every painted panel starting at $3,900." },
       { title: "XPEL film", body: "A film brand you can look up. Ask about the film warranty with your quote." },
-      { title: "Long term protection", body: "This is not a wax or a spray. The film stays on the car and keeps working." },
+      { title: "Long term protection", body: "This is not a wax or a spray. The film stays on the car, resists stains and UV, and keeps working." },
     ],
     proofHeading: "Why film it here.",
     proofIntro: "XPEL film, installed in our Warren shop by appointment, with the coverage and the warranty confirmed for your vehicle before any work starts.",
     proofRows: [
       { k: "Film", v: "XPEL paint protection film" },
       { k: "Finishes", v: "Clear, matte or colored" },
-      { k: "Front end", v: "Bumper, hood, fenders and mirrors" },
-      { k: "Full body", v: "Every painted panel" },
+      { k: "Front end", v: "Bumper, hood, fenders and mirrors, $1,900 in gloss film" },
+      { k: "Full body", v: "Every painted panel, starting at $3,900" },
+      { k: "Upgrades", v: "Matte film adds $500, colored film adds $1,000" },
       { k: "Warranty", v: "Confirmed with your quote" },
       REVIEWS_ROW,
     ],
@@ -187,11 +197,14 @@ export const SERVICE_LIST: readonly Service[] = [
       { q: "Front end or full body?", a: "Front end covers the bumper, hood, fenders and mirrors, the panels that take the most hits. Full body covers every painted panel." },
       { q: "Which film do you use?", a: "XPEL paint protection film." },
       { q: "How long does it last?", a: "It is long term protection. Ask about the film warranty with your quote." },
-      { q: "How much does paint protection film cost?", a: PRICE_ANSWER },
+      {
+        q: "How much does paint protection film cost?",
+        a: "A full front end in gloss film is $1,900: the front bumper, front fenders, side mirrors and the full hood. Full body gloss film starts at $3,900. Matte film adds $500 and colored film adds $1,000. Final pricing may vary depending on the vehicle size, body style and film selection, so get a free quote for yours.",
+      },
     ],
     quoteKey: "ppf",
     metaTitle: `Paint protection film in Warren, MI | ${BASE_TITLE}`,
-    metaDescription: "XPEL paint protection film, clear, matte or colored, front end or full body, at 13417 E Eight Mile Rd in Warren. Free quotes. Call or text (248) 259-1617.",
+    metaDescription: "XPEL paint protection film at 13417 E Eight Mile Rd in Warren. Full front end $1,900, full body from $3,900, matte and colored film available. Call or text (248) 259-1617.",
   },
   {
     id: "commercial",
@@ -331,6 +344,142 @@ export const SERVICE_LIST: readonly Service[] = [
     quoteKey: "powder",
     metaTitle: `Powder coating in Warren, MI | ${BASE_TITLE}`,
     metaDescription: "Powder coated wheels at 13417 E Eight Mile Rd in Warren: tires off and remounted, sandblasting, 1 to 2 days. Free quotes. Call or text (248) 259-1617.",
+  },
+  {
+    id: "detailing",
+    path: "/auto-detailing/",
+    name: "Auto detailing",
+    navNote: "Washes, interior, exterior and full details",
+    blurb: "Six packages from a $25 quick wash to a premium full detail, for cars, trucks, SUVs, vans and fleets.",
+    cardPhoto: "denali-black-front",
+    cardPos: "40% 55%",
+    eyebrow: "Auto detailing · Metro Detroit",
+    h1: "Clean inside.|Clean *outside*.",
+    lead: "Six detailing packages, from a quick wash to a premium full detail, for cars, trucks, SUVs, vans and fleets. Mobile and shop service is available across Metro Detroit. Prices start at $25.",
+    heroPhoto: "denali-black-front",
+    heroFocus: "50% 58%",
+    checksHeading: "What detailing gets you.",
+    checks: [
+      { title: "Six packages with a starting price", body: "Quick wash, wash and interior refresh, interior detail, exterior detail, full detail and premium full detail. Every one is listed below with what it covers." },
+      { title: "Inside and out", body: "Interior work covers the vacuum, shampoo, steam cleaning and conditioning. Exterior work covers the hand wash, clay, sealant and trim." },
+      { title: "A price for your size of vehicle", body: "Each package lists a car price and an SUV or truck price, so there is no guessing." },
+      { title: "Mobile or at the shop", body: "Mobile and shop service is available across Metro Detroit. Ask when you book." },
+      { title: "Add ons for the tough stuff", body: "Pet hair, heavy stains, odors, cloudy headlights, engine bays and more are priced as add ons." },
+      { title: "Flexible scheduling", body: "Pick a day that works for you when you book." },
+    ],
+    proofHeading: "One stop for the whole car.",
+    proofIntro: "Book a detail on its own, or pair it with tint, film or a wrap and take care of the whole car with one shop.",
+    proofRows: [
+      { k: "Packages", v: "Six, starting at $25" },
+      { k: "Most popular", v: "Full detail, inside and out, starting at $175" },
+      { k: "Vehicles", v: "Cars, trucks, SUVs, vans and fleets" },
+      { k: "Service", v: "Mobile and shop, across Metro Detroit" },
+      { k: "Scheduling", v: "Flexible" },
+      REVIEWS_ROW,
+    ],
+    proofPhoto: "corvette-black-side",
+    reviewName: "Kimonike T.",
+    faqs: [
+      { q: "How much does detailing cost?", a: "A quick wash starts at $25, a wash and interior refresh at $50, an exterior detail at $100, an interior detail at $125, a full detail at $175 and a premium full detail at $250. SUVs and trucks run a little higher on most packages." },
+      { q: "What is in each package?", a: "Every package on this page lists what it covers, from the quick wash to the premium full detail." },
+      { q: "What does the premium full detail add?", a: "Everything in the full detail, plus the engine bay, heavy stain treatment, pet hair treatment, deeper steam and extraction, clay treatment, paint sealant, trim restoration and enhanced wheel and tire care." },
+      { q: "Do you come to me?", a: "Mobile and shop service is available across Metro Detroit. Ask when you book." },
+      { q: "Is there a charge for a very dirty vehicle?", a: "An excessive dirt fee of $25 to $75 or more can apply, and biohazard cleanup starts at $100. Tell us what you are dealing with and we will tell you up front." },
+      { q: "Do you detail trucks, vans and fleets?", a: "Yes. Cars, trucks, SUVs, vans and fleets." },
+      { q: "How do I book a detail?", a: "Send the form on this page, or call or text (248) 259-1617 and pick a day that works." },
+    ],
+    quoteKey: "detailing",
+    metaTitle: `Auto detailing in Warren and Metro Detroit | ${BASE_TITLE}`,
+    metaDescription: "Auto detailing from a $25 quick wash to a premium full detail. Mobile and shop service across Metro Detroit for cars, trucks, SUVs, vans and fleets. Call or text (248) 259-1617.",
+  },
+  {
+    id: "starlight",
+    path: "/starlight-headliner/",
+    name: "Starlight headliners",
+    navNote: "500 stars and up, color changing option",
+    blurb: "A night sky in the roof of your cabin. Starts at $600 for 500 stars, with color changing shooting stars available.",
+    art: "stars",
+    eyebrow: "Starlight headliners · Warren, MI",
+    h1: "A night sky|above every *seat*.",
+    lead: "A starlight headliner puts hundreds of points of light in the roof of your cabin. It starts at $600 for 500 stars, and you choose how full you want it. Color changing shooting stars are available.",
+    checksHeading: "What a starlight headliner gets you.",
+    checks: [
+      { title: "500 stars to start", body: "The base headliner is 500 stars for $600." },
+      { title: "As full as you want it", body: "Stars are $1 each after the first 500, so you decide how full the headliner looks." },
+      { title: "700 and 1,000 star options", body: "700 stars adds $200 to the base. 1,000 stars adds $500." },
+      { title: "Color changing shooting stars", body: "Add RGB color changing shooting stars for $200." },
+      { title: "A price you know up front", body: "The price follows the star count, so the number is set before any work starts." },
+      { title: "By appointment", body: "Tell us the vehicle and the look you want, and we will set a day for it." },
+    ],
+    proofHeading: "Priced by the star.",
+    proofIntro: "Pick the star count and you have the price. Slide through the counts in the preview below to see how full each one looks.",
+    proofRows: [
+      { k: "Base", v: "500 stars, $600" },
+      { k: "700 stars", v: "$800" },
+      { k: "1,000 stars", v: "$1,100" },
+      { k: "Extra stars", v: "$1 per star after the first 500" },
+      { k: "Shooting stars", v: "RGB color changing, add $200" },
+      REVIEWS_ROW,
+    ],
+    reviewName: "Kimonike T.",
+    faqs: [
+      { q: "What is a starlight headliner?", a: "Small points of light set into the headliner, so the roof of the cabin looks like a night sky." },
+      { q: "How much does a starlight headliner cost?", a: "It starts at $600 for 500 stars. Stars are $1 each after that, depending on how full you want the headliner. 700 stars is $800 and 1,000 stars is $1,100." },
+      { q: "How many stars should I get?", a: "It depends on how full you want the headliner to look. 500 is the base, and 700 and 1,000 are the next steps up. The preview on this page shows the difference." },
+      { q: "Can the stars change color?", a: "Yes. RGB color changing shooting stars are available for $200 more." },
+      { q: "Can you do my vehicle?", a: "Tell us the year, make and model and we will confirm it with your free quote." },
+      { q: "How do I book?", a: "Send the form on this page, or call or text (248) 259-1617. The shop runs by appointment." },
+    ],
+    quoteKey: "starlight",
+    metaTitle: `Starlight headliners in Warren, MI | ${BASE_TITLE}`,
+    metaDescription: "Starlight headliners at 13417 E Eight Mile Rd in Warren. Starts at $600 for 500 stars, with RGB color changing shooting stars available. Call or text (248) 259-1617.",
+  },
+  {
+    id: "killswitch",
+    path: "/kill-switch-installation/",
+    name: "Kill switches",
+    navNote: "Ignition kill switch, GPS tracking upgrade",
+    blurb: "A relay that keeps the car from starting without your remote. $300 installed, with a GPS tracking upgrade.",
+    cardPhoto: "charger-white-side",
+    cardPos: "55% 60%",
+    eyebrow: "Kill switch installation · Warren, MI",
+    h1: "No remote.|No *start*.",
+    lead: "A kill switch is a relay that disables your car's ignition until you turn it back on with a remote you keep on your key. The standard kill switch is $300 installed, with a neutral relocation kit and a GPS tracking upgrade available.",
+    heroPhoto: "charger-white-side",
+    heroFocus: "60% 62%",
+    checksHeading: "What a kill switch does.",
+    checks: [
+      { title: "Disables the ignition", body: "The standard kill switch is a simple relay that disables the car's ignition." },
+      { title: "A remote on your key", body: "You control it with a remote you keep on your key." },
+      { title: "Harder to roll away", body: "The neutral relocation kit prevents the vehicle from being manually rolled away using the emergency release under the armrest." },
+      { title: "GPS tracking on your phone", body: "The Trackhawk kill switch lets you track your vehicle by GPS in the Trackhawk app." },
+      { title: "Shut it down from anywhere", body: "With Trackhawk you can remotely disable the ignition and cut off power from your phone." },
+      { title: "Installed prices, up front", body: "$300 for the standard kill switch and $650 for the Trackhawk kill switch, both installed. The neutral relocation kit is $250." },
+    ],
+    proofHeading: "Three ways to lock it down.",
+    proofIntro: "Start with the standard kill switch, add the neutral relocation kit for more security, or step up to GPS tracking and remote shutoff.",
+    proofRows: [
+      { k: "Standard kill switch", v: "$300 installed" },
+      { k: "Neutral relocation kit", v: "$250" },
+      { k: "Trackhawk kill switch", v: "$650 installed" },
+      { k: "Trackhawk service", v: "$16 to $22 per month" },
+      { k: "Control", v: "A remote on your key, or the Trackhawk app" },
+      REVIEWS_ROW,
+    ],
+    proofPhoto: "durango-black-rear",
+    reviewName: "Kimonike T.",
+    faqs: [
+      { q: "What is a kill switch?", a: "A simple relay that disables the car's ignition. It is controlled by a remote you keep on your key." },
+      { q: "How much does a kill switch cost?", a: "The standard kill switch is $300 installed. The neutral relocation kit is $250. The Trackhawk kill switch is $650 installed." },
+      { q: "What is the neutral relocation kit?", a: "Additional security. It prevents the vehicle from being manually rolled away using the emergency release located under the armrest." },
+      { q: "What does the Trackhawk kill switch add?", a: "It lets you track your vehicle by GPS, remotely disable the ignition and cut off power, all through the Trackhawk app on your phone." },
+      { q: "Is there a monthly fee?", a: "The Trackhawk service requires a monthly subscription of $16 to $22 for the GPS tracking and remote control features." },
+      { q: "Can you do my vehicle?", a: "Tell us the year, make and model and we will confirm what fits before you book." },
+      { q: "How do I schedule an installation?", a: "Send the form on this page, or call or text (248) 259-1617. The shop runs by appointment." },
+    ],
+    quoteKey: "killswitch",
+    metaTitle: `Kill switch installation in Warren, MI | ${BASE_TITLE}`,
+    metaDescription: "Car kill switch installation at 13417 E Eight Mile Rd in Warren. Standard kill switch $300 installed, with a neutral relocation kit and GPS tracking available. Call or text (248) 259-1617.",
   },
 ] as const;
 

@@ -46,6 +46,8 @@ const MOBILE_FOCUS = {
   "urus-grey-front": 0.5,
   "porsche-911-black": 0.55,
   "mustang-white-shop": 0.5,
+  "denali-black-front": 0.42,
+  "charger-white-side": 0.55,
 };
 
 /** Regions blurred in every rendition: a readable license plate, another business's sign behind a hero. Source pixels. */

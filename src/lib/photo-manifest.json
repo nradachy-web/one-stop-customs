@@ -141,9 +141,10 @@
     "widths": [
       480,
       800,
-      1200
+      1200,
+      1440
     ],
-    "mobile": false
+    "mobile": true
   },
   "chrysler300-black-portrait": {
     "w": 1280,
@@ -260,9 +261,10 @@
     "widths": [
       480,
       800,
-      1200
+      1200,
+      1440
     ],
-    "mobile": false
+    "mobile": true
   },
   "denali-black-wide": {
     "w": 1440,

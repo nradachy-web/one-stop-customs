@@ -7,6 +7,7 @@ import QuoteForm from "@/components/quote/QuoteForm";
 import { BRAND, CITIES, REVIEW_SUMMARY, STEPS, cityPath, reviewBy, type City, type FaqItem } from "@/lib/constants";
 import { photo } from "@/lib/photos";
 import { SERVICE_LIST, type Service } from "@/lib/services";
+import { STAR_ART } from "@/lib/stars";
 import { cn } from "@/lib/utils";
 
 /* ============================================================================
@@ -22,7 +23,12 @@ export function ServiceCards({ services = SERVICE_LIST, className }: { services?
         <li key={s.id}>
           <Link href={s.path} className="card">
             <div className="card__media">
-              <Pic id={s.cardPhoto} bare alt="" pos={s.cardPos} sizes="(min-width: 1024px) 384px, (min-width: 640px) 46vw, 34vw" />
+              {s.cardPhoto ? (
+                <Pic id={s.cardPhoto} bare alt="" pos={s.cardPos} sizes="(min-width: 1024px) 384px, (min-width: 640px) 46vw, 34vw" />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={STAR_ART.card.src} width={STAR_ART.card.w} height={STAR_ART.card.h} alt="" loading="lazy" decoding="async" />
+              )}
             </div>
             <div className="card__body">
               <span className="card__num">{String(i + 1).padStart(2, "0")}</span>
@@ -67,6 +73,60 @@ export function Ticks({ items }: { items: readonly string[] }) {
         <li key={t}>
           <CheckIcon />
           <span>{t}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export interface PriceItem {
+  name: string;
+  /** "$175", "+ $500". */
+  price: string;
+  /** The small label over the price: "Starting at", "Installed", "Add on". */
+  kicker?: string;
+  /** Printed beside the price: "car", "installed", "per month". */
+  unit?: string;
+  /** A second price line under the first: "SUV or truck $210". */
+  sub?: string;
+  body?: string;
+  ticks?: readonly string[];
+  tag?: string;
+  pick?: boolean;
+}
+
+/** Priced options as tiles: a package, a coverage level, a setup. Only prices the shop gave us. */
+export function PriceTiles({ items, cols = 3, className }: { items: readonly PriceItem[]; cols?: 2 | 3; className?: string }) {
+  return (
+    <ul className={cn("tiles", `tiles--${cols}`, className)}>
+      {items.map((p) => (
+        <li key={p.name}>
+          <div className={cn("tile tile--price", p.pick && "tile--pick")}>
+            {p.tag ? <span className="tile__tag">{p.tag}</span> : null}
+            <h3 className="tile__title">{p.name}</h3>
+            <p className="price">
+              {p.kicker ? <span className="price__kicker">{p.kicker}</span> : null}
+              <strong className="price__num">{p.price}</strong>
+              {p.unit ? <span className="price__unit">{p.unit}</span> : null}
+            </p>
+            {p.sub ? <p className="price__sub">{p.sub}</p> : null}
+            {p.body ? <p className="tile__text">{p.body}</p> : null}
+            {p.ticks ? <Ticks items={p.ticks} /> : null}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Add ons and extras: a name and its price on a hairline. */
+export function PriceList({ items, className }: { items: readonly { name: string; price: string }[]; className?: string }) {
+  return (
+    <ul className={cn("pricelist", className)}>
+      {items.map((p) => (
+        <li key={p.name}>
+          <span>{p.name}</span>
+          <strong>{p.price}</strong>
         </li>
       ))}
     </ul>

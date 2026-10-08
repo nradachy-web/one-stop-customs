@@ -85,8 +85,32 @@ make a visitor who has seen both think they came from one template.
    turnaround per the 2024 notes). Photo of the process exists.
 8. **Other wrapping**. Helmets, appliances, cabinets, walls (a wall wrap and a kitchen wrap photo
    exist). Keep this to a short list on the wraps page, not its own page.
-9. Detailing and car wash appear on Instagram's service list ("DETAILING / CAR WASH"). Mention
-   "wash and detail add-ons" in one line only; it is not a headline service.
+9. **Auto detailing** (added October 7, 2026, from the menu Ricky texted for the site; this
+   replaces the earlier "one line only" note). Starting prices, car then SUV or truck: quick
+   wash $25 and $25+, wash and interior refresh $50 and $50+, interior detail $125 and $150,
+   exterior detail $100 and $150, full detail inside and out $175 and $210 (marked most
+   popular), premium full detail $250 and $300. Add ons: pet hair removal $40+, heavy stain
+   removal $40+, headliner cleaning $35+, odor treatment $50+, engine bay cleaning $50, clay
+   bar and sealant $75, headlight restoration $100+, seat shampoo $40+, sand removal $30+,
+   excessive dirt fee $25 to $75+, biohazard cleanup $100+. Mobile and shop service, Metro
+   Detroit, flexible scheduling, cars, trucks, SUVs, vans and fleets. The source is a flyer
+   branded Pull From Under LLC Auto Detailing (313-930-0142, @pull.from.underllc); the site
+   does not print that name or number until Ricky says how he wants it handled.
+10. **Kill switches** (added October 7, 2026, Ricky's text). Standard kill switch $300
+   installed: a simple relay that disables the ignition, controlled by a remote kept on the
+   key. Neutral relocation kit $250: prevents the vehicle from being manually rolled away
+   using the emergency release under the armrest. Trackhawk kill switch $650 installed: GPS
+   tracking, remote ignition disable and power cutoff through the Trackhawk app, with a
+   subscription of $16 to $22 a month.
+11. **Starlight headliners** (added October 7, 2026, Ricky's text). Starts at $600 for 500
+   stars, $1 per star after that depending on how full the customer wants it; 700 stars adds
+   $200, 1,000 stars adds $500; RGB color changing shooting stars add $200.
+
+Paint protection film prices (added October 7, 2026, Ricky's One Stop Customs flyer): full
+front end in gloss film $1,900 (front bumper, front fenders, side mirrors, full hood), full
+body in gloss film starting at $3,900, matte film adds $500, colored film adds $1,000, free
+consultations, "final pricing may vary depending on the vehicle size, body style and film
+selection".
 
 ## 3. Assets
 
@@ -121,7 +145,8 @@ not put the Google rating in JSON-LD).
 ## 5. Non-negotiable rules (from Nick's standing feedback)
 
 - No em dashes or en dashes anywhere in copy or code comments. Commas, periods, parentheses.
-- No fabricated facts: no prices, no years in business, no counts ("thousands of cars"), no
+- No fabricated facts: no prices except the ones Ricky sent for the site (section 2, items 4
+  and 9 to 11), no years in business, no counts ("thousands of cars"), no
   guarantees, no invented reviews, no "family owned", no "award winning". Every fact comes from
   section 1 and 2 of this brief and lives in `src/lib/constants.ts`.
 - Footer credit exactly: "Website & marketing by Modern Apex Strategies" linked to

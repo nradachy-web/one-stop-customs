@@ -9,7 +9,7 @@ import { fontClassName } from "@/lib/fonts";
 import { HOME_TITLE, ROBOTS_PREVIEW } from "@/lib/meta";
 
 const DESCRIPTION =
-  "Vinyl wraps, window tint, XPEL paint protection film and powder coating at 13417 E Eight Mile Rd in Warren, by appointment. Free quotes. Call or text (248) 259-1617.";
+  "Vinyl wraps, window tint, XPEL paint protection film, detailing, starlight headliners and kill switches at 13417 E Eight Mile Rd in Warren, by appointment. Free quotes. Call or text (248) 259-1617.";
 
 const OG_IMAGE = { url: "/og-image.jpg", width: 1200, height: 630, alt: BRAND.legalName };
 
