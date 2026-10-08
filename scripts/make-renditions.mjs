@@ -47,6 +47,7 @@ const MOBILE_FOCUS = {
   "porsche-911-black": 0.55,
   "mustang-white-shop": 0.5,
   "denali-black-front": 0.42,
+  "corvette-black-front": 0.5,
   "charger-white-side": 0.55,
 };
 

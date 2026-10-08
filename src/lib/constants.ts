@@ -1,8 +1,8 @@
 // ============================================================
 // One Stop Customs by Ricky Wraps. Site facts (single source of truth)
 // 13417 E Eight Mile Rd, Warren, Michigan. Vinyl wraps, window tint,
-// paint protection film, powder coating, detailing, starlight headliners
-// and kill switches. By appointment.
+// paint protection film, powder coating, detailing, ceramic coating, paint
+// correction, starlight headliners and kill switches. By appointment.
 //
 // Rules baked in (docs/BRIEF.md sections 1, 2 and 5): every fact traces to
 // the brief; no prices except the ones Ricky sent for the site (paint
@@ -12,7 +12,7 @@
 // voice: get a free quote, tell us about your vehicle, fast, no pressure,
 // book your spot.
 //
-// Photos live in photos.ts, the nine service pages in services.ts.
+// Photos live in photos.ts, the eleven service pages in services.ts.
 // ============================================================
 
 import { REVIEWS, type Review } from "@/lib/reviews";
@@ -100,7 +100,7 @@ export const BRAND = {
 } as const;
 
 export const BUSINESS_DESCRIPTION =
-  "One Stop Customs, by Ricky Wraps, is a by appointment vinyl wrap, window tint, paint protection film and powder coating shop at 13417 E Eight Mile Rd in Warren, Michigan. Avery Dennison and 3M films, XPEL paint protection film, commercial and fleet wraps, window film for storefronts, offices and homes, powder coated wheels, auto detailing, starlight headliners and kill switch installation. Serving Warren, Detroit and Metro Detroit across Macomb, Oakland and Wayne counties.";
+  "One Stop Customs, by Ricky Wraps, is a by appointment vinyl wrap, window tint, paint protection film and powder coating shop at 13417 E Eight Mile Rd in Warren, Michigan. Avery Dennison and 3M films, XPEL paint protection film, commercial and fleet wraps, window film for storefronts, offices and homes, powder coated wheels, auto detailing, ceramic coating, paint correction, starlight headliners and kill switch installation. Serving Warren, Detroit and Metro Detroit across Macomb, Oakland and Wayne counties.";
 
 /** The one action label, everywhere. */
 export const QUOTE_CTA = "Get a free quote";
@@ -194,6 +194,8 @@ export const QUOTE_SERVICES: readonly { id: string; label: string }[] = [
   { id: "ppf", label: "Paint protection film" },
   { id: "powder", label: "Powder coating" },
   { id: "detailing", label: "Auto detailing" },
+  { id: "ceramic", label: "Ceramic coating" },
+  { id: "correction", label: "Paint correction" },
   { id: "starlight", label: "Starlight headliner" },
   { id: "killswitch", label: "Kill switch" },
   { id: "buildings", label: "Home or business tint" },
@@ -229,7 +231,7 @@ export const ABOUT = {
   lead: "One Stop Customs is the shop you know as Ricky Wraps, on Eight Mile in Warren.",
   paragraphs: [
     "Carlton Spencer, known as Ricky, owns and runs the shop. The name on the sign is new. The work, the phone number and the people are the same.",
-    "The shop wraps and tints cars, lays XPEL paint protection film, prints and installs commercial wraps, puts window film on storefronts, offices and homes, and powder coats wheels. It also details cars, builds starlight headliners and installs kill switches. The vinyl is Avery Dennison and 3M, with hundreds of colors in stock and the graphic design done in house.",
+    "The shop wraps and tints cars, lays XPEL paint protection film, prints and installs commercial wraps, puts window film on storefronts, offices and homes, and powder coats wheels. It also details cars, corrects and ceramic coats paint, builds starlight headliners and installs kill switches. The vinyl is Avery Dennison and 3M, with hundreds of colors in stock and the graphic design done in house.",
     "Everything runs by appointment and every job starts with a free quote. Tell us about your vehicle, pick a day, and bring it to Eight Mile.",
   ],
   facts: [

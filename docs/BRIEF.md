@@ -106,6 +106,12 @@ make a visitor who has seen both think they came from one template.
    stars, $1 per star after that depending on how full the customer wants it; 700 stars adds
    $200, 1,000 stars adds $500; RGB color changing shooting stars add $200.
 
+12. **Ceramic coating** and 13. **Paint correction** (added October 7, 2026: Ricky asked Nick
+   in person for the ceramic coating water panel and the scratch panel built for Jake's Car
+   Detailing, and the soap bubbles from Bubbles Auto Spa on the detailing page). He has given
+   no product, price, durability, cure time or warranty for either, so both pages carry
+   general, accurate knowledge only and a free quote. Do not add specifics until he does.
+
 Paint protection film prices (added October 7, 2026, Ricky's One Stop Customs flyer): full
 front end in gloss film $1,900 (front bumper, front fenders, side mirrors, full hood), full
 body in gloss film starting at $3,900, matte film adds $500, colored film adds $1,000, free

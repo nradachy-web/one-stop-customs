@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Suds from "@/components/fx/Suds";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import LandingHero, { plain } from "@/components/landing/LandingHero";
 import { Checks, Faq, QuoteClose, ReviewQuote, Steps, TownChips } from "@/components/landing/blocks";
@@ -14,7 +15,7 @@ import { STAR_ART } from "@/lib/stars";
 /* ============================================================================
    THE SERVICE PAGE
 
-   One template behind all nine services. Six bands, in this order, the
+   One template behind all eleven services. Six bands, in this order, the
    planes alternating so each band reads as its own thought:
 
      1  hero          photo, one heading, one paragraph, two actions, trust row
@@ -48,6 +49,7 @@ export default function ServiceLanding({ service: s, detail, detailLabel }: Serv
       <LandingHero
         photoId={s.heroPhoto}
         art={s.heroPhoto ? undefined : STAR_ART.hero}
+        fx={s.heroFx === "suds" ? <Suds className="hero__fx" /> : undefined}
         photoIdMobile={s.heroPhotoMobile}
         focus={s.heroFocus}
         heavy={s.heroHeavy}

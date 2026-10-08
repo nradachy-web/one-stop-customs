@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import PageHead from "@/components/landing/PageHead";
-import { QuoteClose, RatingLine, ReviewQuote, ServiceCards } from "@/components/landing/blocks";
+import { QuoteClose, RatingLine, ReviewQuote, SERVICE_COUNT_LINE, ServiceCards } from "@/components/landing/blocks";
 import Pic from "@/components/ui/Pic";
 import { KeyValues, Section, SectionHead } from "@/components/ui/Section";
 import { ABOUT } from "@/lib/constants";
@@ -52,7 +52,7 @@ export default function AboutPage() {
       </Section>
 
       <Section plane="light" label="Services">
-        <SectionHead align="split" title="One shop. Nine services." intro="Wrap it, tint it, protect it, detail it. Free quotes, fast, no pressure." />
+        <SectionHead align="split" title={SERVICE_COUNT_LINE} intro="Wrap it, tint it, protect it, detail it. Free quotes, fast, no pressure." />
         <ServiceCards className="mt-8 lg:mt-12" />
       </Section>
 

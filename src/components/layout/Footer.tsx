@@ -15,7 +15,7 @@ export default function Footer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={asset("/logo-transparent.png")} width={1024} height={1024} alt={`${BRAND.name} Auto Spa logo`} className="footer__logo" loading="lazy" decoding="async" />
             <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed">
-              Wraps, window tint, paint protection film, detailing and custom work. One shop, on Eight Mile in Warren, by appointment.
+              Wraps, window tint, paint protection film, ceramic coating, detailing and custom work. One shop, on Eight Mile in Warren, by appointment.
             </p>
             <dl className="kv mt-6 max-w-sm">
               <div className="kv__row">

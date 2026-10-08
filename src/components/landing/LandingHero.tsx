@@ -100,6 +100,8 @@ export interface LandingHeroProps {
   photoId?: string;
   /** A drawing in place of the photograph. */
   art?: { src: string; w: number; h: number };
+  /** A canvas effect laid over the scrim and under the copy. */
+  fx?: ReactNode;
   /** A different frame for phones. Defaults to photoId. */
   photoIdMobile?: string;
   /** object-position at 768 and up, "x% y%". */
@@ -118,6 +120,7 @@ export interface LandingHeroProps {
 export default function LandingHero({
   photoId,
   art,
+  fx,
   photoIdMobile,
   focus,
   heavy,
@@ -145,6 +148,7 @@ export default function LandingHero({
         </div>
       )}
       <div className="hero__scrim" aria-hidden="true" />
+      {fx}
 
       <div className="hero__body wrap">
         <div className="hero__copy">

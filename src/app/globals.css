@@ -503,7 +503,7 @@
     align-items: center;
     gap: 0.375rem;
     height: var(--header-h);
-    padding: 0 0.75rem;
+    padding: 0 0.5625rem;
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1;
@@ -711,6 +711,10 @@
     inset: 0;
     z-index: -1;
     background: linear-gradient(180deg, rgba(11, 12, 13, 0.62) 0%, rgba(11, 12, 13, 0.72) 45%, rgba(11, 12, 13, 0.95) 100%);
+  }
+  /* A canvas effect (the suds): over the scrim, under the copy. It ignores the pointer itself. */
+  .hero__fx {
+    z-index: -1;
   }
   .hero__body {
     display: flex;
@@ -974,6 +978,35 @@
       display: inline;
       margin-left: 0.375rem;
       vertical-align: -0.2rem;
+    }
+  }
+
+  /* The last tile in the services grid: the way to a quote for anyone who is not sure. */
+  .card--cta {
+    justify-content: center;
+    background: #0b0c0d;
+    border-color: #0b0c0d;
+  }
+  .card--cta .card__body {
+    flex: none;
+    padding: 1.75rem 1.5rem;
+  }
+  .card--cta .card__title {
+    font-size: 1.625rem;
+    letter-spacing: -0.02em;
+  }
+  .card--cta .card__text {
+    margin-bottom: 1.25rem;
+  }
+  .card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+  @media (max-width: 39.99rem) {
+    .cards--rows .card--cta .card__body {
+      padding: 1.5rem 1.25rem;
     }
   }
 
@@ -1645,6 +1678,48 @@
     }
     .viz__controls {
       padding: 1.75rem 2rem 2rem;
+    }
+  }
+
+  /* ---------- the paint panels: water on a coating, swirls under a light ---------- */
+  .paintstage {
+    aspect-ratio: 4 / 3;
+    background: #0b0c0d;
+  }
+  .paintstage canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: pan-y;
+    cursor: crosshair;
+  }
+  .paint__chips {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* Three lines are held open so the panel does not jump when the note changes. */
+  .paint__note {
+    max-width: 44rem;
+    min-height: 4.8em;
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  @media (min-width: 48rem) {
+    .paintstage {
+      aspect-ratio: 16 / 9;
+    }
+    .paint__note {
+      min-height: 3.2em;
+    }
+  }
+  /* On a laptop the panel and its controls have to share one screen. */
+  @media (min-width: 64rem) {
+    .paintstage {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      max-height: min(62svh, 620px);
     }
   }
 

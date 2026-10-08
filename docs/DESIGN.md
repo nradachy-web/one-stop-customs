@@ -42,11 +42,11 @@ everything else. Sentence case everywhere. Labels are Inter 600 at 12px, upperca
 Home: hero, services (light), why this shop and the work (dark), how it works plus the towns
 plus the form (light), footer (dark).
 
-Service page (`src/components/landing/ServiceLanding.tsx`, one template for all nine): hero,
+Service page (`src/components/landing/ServiceLanding.tsx`, one template for all eleven): hero,
 what you get (light), why here with facts, a photo and one review (dark), the service's own
 detail (light), how it works plus questions plus towns (dark), the form (light).
 
-City page (`src/app/wraps-and-tint/[city]/page.tsx`): hero, the nine services (light), why
+City page (`src/app/wraps-and-tint/[city]/page.tsx`): hero, the eleven services (light), why
 this shop (dark), getting here plus how it works (light), questions (dark), the form (light).
 
 Gallery, about and contact open with a dark title band (`PageHead`) instead of a photo hero.
@@ -86,9 +86,25 @@ Gallery, about and contact open with a dark title band (`PageHead`) instead of a
   sent a photo of a finished headliner yet. A service record with `art: "stars"` and no
   `heroPhoto` gets it. Replace it with a real photo as soon as one arrives.
 
+- **Paint panels** (`fx/BeadDemo.tsx`, `fx/SwirlDemo.tsx` over `fx/PaintPanel.tsx`): brought
+  over from the Jake's Car Detailing site at Ricky's request (October 7). The bead panel, on
+  the ceramic coating page, rinses a black panel and shows water sheeting on bare paint and
+  beading on a coating; drag to spray it. The swirl panel, on the paint correction page,
+  puts an inspection light on black paint and steps from swirled to corrected; move the
+  pointer to move the light. Both are canvas, recolored from Jake's blue to this site's
+  neutral blacks, set in the tint preview's frame and captioned as illustrations.
+- **Suds** (`fx/Suds.tsx`): brought over from the Bubbles Auto Spa site at Ricky's request.
+  Soap bubbles drift up the detailing hero, move away from the pointer and pop when tapped.
+  Detailing hero only (`heroFx: "suds"` on the record), over the scrim and under the copy,
+  and nothing at all under reduced motion.
+- **Quote tile**: the last cell of the services grid is a dark tile to the quote form, so
+  eleven services fill a three column grid.
+
 Radii are 8px on controls and 12px on cards and photos. Hairlines only; one soft shadow, on
-the navigation menu. Motion is hover only (card photo scale, arrow nudge, menu fade). Nothing
-is hidden until scroll and everything reads with JavaScript off.
+the navigation menu. Motion is hover (card photo scale, arrow nudge, menu fade) plus the
+four previews the visitor drives (tint, starlight, the two paint panels) and the suds on the
+detailing hero, all of them requested by Nick or Ricky. Nothing is hidden until scroll and
+everything reads with JavaScript off.
 
 ## 6. Voice
 
@@ -119,6 +135,9 @@ businesses' signage; the gallery shows every photo as it is.
   own phone number (313-930-0142) and Instagram. The page presents the packages as One Stop
   Customs detailing and routes to the shop's number and form. Ricky to confirm that is right,
   or whether Pull From Under should be named and detailing calls sent to that number.
+- Ceramic coating and paint correction: Ricky asked for the two panels, but has sent no
+  product, prices, durability, cure time or warranty for either service. Both pages are
+  general knowledge and a free quote until he does.
 - Photos: no photo exists yet of a starlight headliner, a kill switch install or a detail in
   progress. The starlight page runs on a drawing; the other two use the shop's own vehicle
   photos. Ask Ricky for real ones.

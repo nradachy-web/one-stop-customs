@@ -1,10 +1,10 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { ArrowLink } from "@/components/ui/Button";
+import Button, { ArrowLink } from "@/components/ui/Button";
 import { ArrowIcon, CheckIcon } from "@/components/ui/Icons";
 import Pic from "@/components/ui/Pic";
 import QuoteForm from "@/components/quote/QuoteForm";
-import { BRAND, CITIES, REVIEW_SUMMARY, STEPS, cityPath, reviewBy, type City, type FaqItem } from "@/lib/constants";
+import { BRAND, CITIES, QUOTE_CTA, REVIEW_SUMMARY, STEPS, cityPath, reviewBy, type City, type FaqItem } from "@/lib/constants";
 import { photo } from "@/lib/photos";
 import { SERVICE_LIST, type Service } from "@/lib/services";
 import { STAR_ART } from "@/lib/stars";
@@ -15,7 +15,16 @@ import { cn } from "@/lib/utils";
    from the plane it sits on, and needs no JavaScript to be read.
    ========================================================================== */
 
-/** The services on the shop's own photography. Each card is one link to its page. */
+const COUNT_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+
+/** "Eleven services", from the list itself so the heading cannot drift from the cards. */
+export const SERVICE_COUNT_LINE = `One shop. ${COUNT_WORDS[SERVICE_LIST.length] ?? SERVICE_LIST.length} services.`;
+
+/**
+ * The services on the shop's own photography. Each card is one link to its
+ * page, and the last tile is the way to a quote for anyone who is not sure
+ * which one they need. Every page that shows the cards has a #quote form.
+ */
 export function ServiceCards({ services = SERVICE_LIST, className }: { services?: readonly Service[]; className?: string }) {
   return (
     <ul className={cn("cards cards--rows", className)}>
@@ -42,6 +51,23 @@ export function ServiceCards({ services = SERVICE_LIST, className }: { services?
           </Link>
         </li>
       ))}
+      <li>
+        <div className="card card--cta plane-dark">
+          <div className="card__body">
+            <span className="card__num">Not sure?</span>
+            <h3 className="card__title">Tell us about the car.</h3>
+            <p className="card__text">Say what you drive and what you want it to look like. We will point you to the right service with a free quote.</p>
+            <div className="card__actions">
+              <Button href="#quote" size="sm">
+                {QUOTE_CTA}
+              </Button>
+              <a href={BRAND.phoneHref} className="link num">
+                {BRAND.phoneDisplay}
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
     </ul>
   );
 }

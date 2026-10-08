@@ -1,7 +1,7 @@
 import { BASE_TITLE, REVIEW_SUMMARY, type FaqItem } from "@/lib/constants";
 
 /**
- * The nine service pages, one record each. ServiceLanding.tsx renders every
+ * The eleven service pages, one record each. ServiceLanding.tsx renders every
  * one of them from this file, so new service copy goes here and never in a
  * page file. A heading may carry one *starred* word, which the hero prints
  * in the accent green.
@@ -9,9 +9,26 @@ import { BASE_TITLE, REVIEW_SUMMARY, type FaqItem } from "@/lib/constants";
  * Prices: only the ones Ricky sent for the site on October 7, 2026 (paint
  * protection film, kill switches, starlight headliners, detailing). Every
  * other service is still quoted per vehicle.
+ *
+ * Ceramic coating and paint correction were added the same day at Ricky's
+ * request, with the two panels first built for the Jake's Car Detailing
+ * site. He has not sent a product, prices, durability or a warranty for
+ * either, so both pages are general, accurate knowledge and a free quote.
+ * Add specifics only when he confirms them.
  */
 
-export type ServiceId = "wraps" | "tint" | "ppf" | "commercial" | "buildings" | "powder" | "detailing" | "starlight" | "killswitch";
+export type ServiceId =
+  | "wraps"
+  | "tint"
+  | "ppf"
+  | "commercial"
+  | "buildings"
+  | "powder"
+  | "detailing"
+  | "ceramic"
+  | "correction"
+  | "starlight"
+  | "killswitch";
 
 /** A drawn stand in for a service with no photo of its own yet. Files in public/stars, from scripts/make-stars.mjs. */
 export type ServiceArt = "stars";
@@ -39,6 +56,8 @@ export interface Service {
   heroFocus?: string;
   /** Low resolution or busy frames run under a deeper scrim. */
   heroHeavy?: boolean;
+  /** A canvas effect over the hero photo. "suds" is the soap bubbles on the detailing page. */
+  heroFx?: "suds";
   checksHeading: string;
   checks: readonly { title: string; body: string }[];
   proofHeading: string;
@@ -358,6 +377,7 @@ export const SERVICE_LIST: readonly Service[] = [
     lead: "Six detailing packages, from a quick wash to a premium full detail, for cars, trucks, SUVs, vans and fleets. Mobile and shop service is available across Metro Detroit. Prices start at $25.",
     heroPhoto: "denali-black-front",
     heroFocus: "50% 58%",
+    heroFx: "suds",
     checksHeading: "What detailing gets you.",
     checks: [
       { title: "Six packages with a starting price", body: "Quick wash, wash and interior refresh, interior detail, exterior detail, full detail and premium full detail. Every one is listed below with what it covers." },
@@ -391,6 +411,97 @@ export const SERVICE_LIST: readonly Service[] = [
     quoteKey: "detailing",
     metaTitle: `Auto detailing in Warren and Metro Detroit | ${BASE_TITLE}`,
     metaDescription: "Auto detailing from a $25 quick wash to a premium full detail. Mobile and shop service across Metro Detroit for cars, trucks, SUVs, vans and fleets. Call or text (248) 259-1617.",
+  },
+  {
+    id: "ceramic",
+    path: "/ceramic-coating/",
+    name: "Ceramic coating",
+    navNote: "Water beads off, washing gets easier",
+    blurb: "A hard, slick layer over your paint that sheds water and makes every wash easier.",
+    cardPhoto: "porsche-911-black",
+    cardPos: "50% 55%",
+    eyebrow: "Ceramic coating · Warren, MI",
+    h1: "Water beads.|Dirt lets *go*.",
+    lead: "A ceramic coating is a hard, slick layer over your paint that sheds water and makes every wash easier. Tell us about your vehicle and get a free quote.",
+    heroPhoto: "porsche-911-black",
+    heroFocus: "50% 60%",
+    heroHeavy: true,
+    checksHeading: "What a coating does.",
+    checks: [
+      { title: "Makes water bead and run off", body: "Rain and rinse water leave the panel instead of sitting on it." },
+      { title: "Makes washing easier", body: "Salt, dirt and road film have less to cling to, so they come off with less work." },
+      { title: "Adds gloss and depth", body: "Over corrected paint, a coating gives a wet, glassy look." },
+      { title: "Puts a layer over your clear coat", body: "The weather meets the coating first, and the paint second." },
+      { title: "Starts with the paint done right", body: "Swirls and haze are polished out first, because a coating keeps whatever finish is under it." },
+      { title: "A free quote first", body: "Tell us the vehicle and the shape the paint is in, and we will price it before you book." },
+    ],
+    proofHeading: "Straight answers about coatings.",
+    proofIntro: "A coating is real protection, and it is also oversold. Here is the plain version of what it will not do.",
+    proofRows: [
+      { k: "Rock chips and dents", v: "It will not stop them. It is a thin layer, not armor. Paint protection film is the answer for chips." },
+      { k: "Scratches", v: "Careless washing will still mark a coated car." },
+      { k: "Washing", v: "The car still gets dirty. It just cleans up faster." },
+      { k: "Swirls", v: "A coating does not hide them. The fix for swirls is paint correction." },
+      REVIEWS_ROW,
+    ],
+    proofPhoto: "chrysler300-black-portrait",
+    reviewName: "Kimonike T.",
+    faqs: [
+      { q: "What is a ceramic coating?", a: "A liquid that is wiped onto clean paint and cures into a thin, hard, very slick layer on top of the clear coat. Wax sits on the surface and washes away. A coating bonds to it." },
+      { q: "Does my car need paint correction first?", a: "Usually some. A coating sits on top of whatever is there, so swirls and haze are polished out before it goes on. A new or well kept car may need very little. Paint correction is checked and covered in the same free quote." },
+      { q: "How long does a ceramic coating last?", a: "It depends on the coating and on how the car is washed and stored. Ask when you get your free quote." },
+      { q: "Ceramic coating or paint protection film?", a: "They do different jobs. Film is a thick layer that takes rock chips and scratches. A coating is a thin, slick layer that sheds water and makes washing easier. The two can be used together, and we will help you pick." },
+      { q: "How do I wash a coated car?", a: "By hand, with a gentle soap and a clean mitt. It takes less effort than before, because dirt has less to hold on to. Brush tunnels put swirls into any paint, coated or not." },
+      { q: "How much does a ceramic coating cost?", a: PRICE_ANSWER },
+    ],
+    quoteKey: "ceramic",
+    metaTitle: `Ceramic coating in Warren, MI | ${BASE_TITLE}`,
+    metaDescription: "A ceramic coating makes water bead and makes dirt and road film easier to wash off. Ceramic coating at 13417 E Eight Mile Rd in Warren. Free quotes. Call or text (248) 259-1617.",
+  },
+  {
+    id: "correction",
+    path: "/paint-correction/",
+    name: "Paint correction",
+    navNote: "Swirls and light scratches polished out",
+    blurb: "Machine polishing that takes out swirl marks and light scratches and brings the gloss back.",
+    cardPhoto: "corvette-black-front",
+    cardPos: "50% 62%",
+    eyebrow: "Paint correction · Warren, MI",
+    h1: "Swirls out.|Gloss *back*.",
+    lead: "Machine polishing that takes out swirl marks and light scratches and brings the depth and gloss back. Tell us about your vehicle and get a free quote.",
+    heroPhoto: "corvette-black-front",
+    heroFocus: "50% 62%",
+    heroHeavy: true,
+    checksHeading: "What correction does.",
+    checks: [
+      { title: "Removes swirl marks", body: "The rings and cobwebs that show around a light or the sun." },
+      { title: "Takes out light wash scratches", body: "Marks from brushes, dirty mitts and drying towels." },
+      { title: "Clears haze and dullness", body: "So the color looks deep again and reflections come back sharp." },
+      { title: "Prepares the paint for protection", body: "A coating bonds best to clean, corrected paint, so correction comes before it." },
+      { title: "Only as far as the paint needs", body: "Polishing removes a very thin layer of clear coat each time, so it is done carefully." },
+      { title: "A free quote first", body: "Tell us the vehicle and what you are seeing in the paint, and we will price it before you book." },
+    ],
+    proofHeading: "Straight answers about polishing.",
+    proofIntro: "Polishing is what actually removes swirl marks. It also has limits, and it is better to know them before you book.",
+    proofRows: [
+      { k: "Deep scratches", v: "If you can catch it with a fingernail, polishing can soften how it looks but will not remove it." },
+      { k: "Chips and dents", v: "Chips, dents and peeling clear coat need a body shop, not a polisher." },
+      { k: "New swirls", v: "How the car is washed afterwards decides that. Hand washing keeps the finish. Brush tunnels undo it." },
+      REVIEWS_ROW,
+    ],
+    proofPhoto: "porsche-911-black-front",
+    reviewName: "Kimonike T.",
+    faqs: [
+      { q: "What is paint correction?", a: "Machine polishing. A polisher and an abrasive polish level a very thin layer of the clear coat until the surface is flat again. A flat surface reflects light cleanly, and that is where depth and gloss come from." },
+      { q: "Will it remove every scratch?", a: "No. Polishing removes marks that sit in the clear coat, which covers swirls, haze and most wash scratches. A scratch that goes through the clear coat cannot be polished out, though it can usually be made less obvious." },
+      { q: "How long does it take?", a: "It depends on the size of the vehicle, the color and how marked the paint is. Ask when you get your free quote." },
+      { q: "Do I need a ceramic coating after?", a: "You do not have to, but corrected paint has nothing on it, so it is the best time to protect it. A ceramic coating makes the car easier to wash, and gentle washing is what keeps swirls from coming back." },
+      { q: "Is a daily driver worth correcting?", a: "Often it is the car that changes the most, because it has been through the most washes. If the paint looks dull or swirled in the sun, there is usually a lot to gain." },
+      { q: "How much does paint correction cost?", a: PRICE_ANSWER },
+    ],
+    quoteKey: "correction",
+    metaTitle: `Paint correction in Warren, MI | ${BASE_TITLE}`,
+    metaDescription: "Machine polishing that removes swirl marks and light scratches and brings back depth and gloss. Paint correction at 13417 E Eight Mile Rd in Warren. Free quotes. Call or text (248) 259-1617.",
   },
   {
     id: "starlight",

@@ -10,7 +10,7 @@ export interface NavItem {
 
 const sub = (id: keyof typeof SERVICES) => ({ label: SERVICES[id].name, note: SERVICES[id].navNote, href: SERVICES[id].path });
 
-/** The header navigation. Four groups open a menu; the rest are plain links. */
+/** The header navigation. Five groups open a menu; the rest are plain links. */
 export const NAV: readonly NavItem[] = [
   {
     label: "Wraps",
@@ -27,8 +27,8 @@ export const NAV: readonly NavItem[] = [
   {
     label: "Protection",
     href: SERVICES.ppf.path,
-    match: [SERVICES.ppf.path, SERVICES.killswitch.path],
-    menu: [sub("ppf"), sub("killswitch")],
+    match: [SERVICES.ppf.path, SERVICES.ceramic.path, SERVICES.killswitch.path],
+    menu: [sub("ppf"), sub("ceramic"), sub("killswitch")],
   },
   {
     label: "Custom",
@@ -36,7 +36,12 @@ export const NAV: readonly NavItem[] = [
     match: [SERVICES.starlight.path, SERVICES.powder.path],
     menu: [sub("starlight"), sub("powder")],
   },
-  { label: "Detailing", href: SERVICES.detailing.path },
+  {
+    label: "Detailing",
+    href: SERVICES.detailing.path,
+    match: [SERVICES.detailing.path, SERVICES.correction.path],
+    menu: [sub("detailing"), sub("correction")],
+  },
   { label: "Our work", href: "/gallery/" },
   { label: "About", href: "/about/" },
 ] as const;
@@ -47,6 +52,8 @@ export const MENU_LINKS: readonly { label: string; href: string }[] = [
   { label: SERVICES.tint.name, href: SERVICES.tint.path },
   { label: SERVICES.ppf.name, href: SERVICES.ppf.path },
   { label: SERVICES.detailing.name, href: SERVICES.detailing.path },
+  { label: SERVICES.ceramic.name, href: SERVICES.ceramic.path },
+  { label: SERVICES.correction.name, href: SERVICES.correction.path },
   { label: SERVICES.starlight.name, href: SERVICES.starlight.path },
   { label: SERVICES.killswitch.name, href: SERVICES.killswitch.path },
   { label: SERVICES.commercial.name, href: SERVICES.commercial.path },

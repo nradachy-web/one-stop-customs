@@ -11,7 +11,7 @@ import { pageMeta } from "@/lib/seo";
 
 /* ============================================================================
    THE CITY PAGE, one template behind all twelve towns. The same bands as a
-   service page, with the nine services where the checks would be and the
+   service page, with the services where the checks would be and the
    way to the shop where the service detail would be.
    ========================================================================== */
 
