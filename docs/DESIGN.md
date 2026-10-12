@@ -147,8 +147,9 @@ businesses' signage; the gallery shows every photo as it is.
   test submission confirmed as received.
 - Domain: the preview is `nradachy-web.github.io/one-stop-customs/` (noindex). Canonicals
   still point at rickywrapsllc.com until a One Stop Customs domain is chosen.
-- Ricky to confirm the Warren address, whether Royal Oak is still a location, and the tint
-  warranty terms.
+- Location: settled. Ricky confirmed on October 11, 2026 that Eight Mile is the only
+  location, so Royal Oak stays a service area page and nothing more.
+- Ricky to confirm the tint warranty terms.
 - Detailing: the menu Ricky sent is a flyer for Pull From Under LLC Auto Detailing with its
   own phone number (313-930-0142) and Instagram. The page presents the packages as One Stop
   Customs detailing and routes to the shop's number and form. Ricky to confirm that is right,

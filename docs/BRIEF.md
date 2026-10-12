@@ -208,8 +208,10 @@ not put the Google rating in JSON-LD).
 
 - Web3Forms access key for the quote form (repo variable `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`).
 - Domain cutover from carrd to GitHub Pages (rickywrapsllc.com is in Nick's Namecheap).
-- Confirmation from Ricky of the current shop address and whether Royal Oak (1219 E 11 Mile Rd,
-  used in 2025) is still a location, and of the tint tier warranty terms.
+- Location is settled: Ricky confirmed on October 11, 2026 that Eight Mile is the only
+  location. Royal Oak (1219 E 11 Mile Rd, used in 2025) is closed; it stays on the site only
+  as one of the twelve service area pages.
+- Confirmation from Ricky of the tint tier warranty terms.
 
 ## 7. Repo state
 
