@@ -71,3 +71,11 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
     </Svg>
   );
 }
+
+export function PlayIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Svg fill="currentColor" strokeWidth="1.5" {...props}>
+      <path d="M8 5.5v13l10.5-6.5z" />
+    </Svg>
+  );
+}

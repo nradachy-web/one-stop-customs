@@ -107,11 +107,15 @@ export interface LandingHeroProps {
   /** object-position at 768 and up, "x% y%". */
   focus?: string;
   heavy?: boolean;
+  /** For a portrait photo: it takes the right side of the hero at 1024 and up. */
+  side?: boolean;
   eyebrow: string;
   /** May carry one *starred* word. */
   title: string;
   lead: string;
   ctaHref?: string;
+  /** Adds the online tint booking button between the quote and the call. Home and the tint page. */
+  booking?: boolean;
   /** xl for the home page, lg everywhere else. */
   size?: "xl" | "lg";
   ariaLabel: string;
@@ -124,10 +128,12 @@ export default function LandingHero({
   photoIdMobile,
   focus,
   heavy,
+  side,
   eyebrow,
   title,
   lead,
   ctaHref = "#quote",
+  booking,
   size = "lg",
   ariaLabel,
 }: LandingHeroProps) {
@@ -135,7 +141,7 @@ export default function LandingHero({
 
   return (
     <section
-      className={cn("hero plane-dark", size === "lg" && "hero--page", heavy && "hero--heavy", !photoId && "hero--art")}
+      className={cn("hero plane-dark", size === "lg" && "hero--page", heavy && "hero--heavy", side && "hero--side", !photoId && "hero--art")}
       style={focus ? ({ "--hero-focus": focus } as CSSProperties) : undefined}
       aria-label={ariaLabel}
     >
@@ -155,9 +161,14 @@ export default function LandingHero({
           <p className="hero__eyebrow">{eyebrow}</p>
           <h1 className={`display display-${size} hero__title`}>{emphasise(title)}</h1>
           <p className="hero__lead">{lead}</p>
-          <div className="hero__actions">
+          <div className={cn("hero__actions", booking && "hero__actions--3")}>
             <Button href={ctaHref}>{QUOTE_CTA}</Button>
-            <Button href={BRAND.phoneHref} tone="ghost">
+            {booking ? (
+              <Button href={BRAND.bookingUrl} tone="ghost">
+                {BRAND.bookingLabel}
+              </Button>
+            ) : null}
+            <Button href={BRAND.phoneHref} tone="ghost" className="hero__call">
               <span>
                 Call <span className="num">{BRAND.phoneDisplay}</span>
               </span>

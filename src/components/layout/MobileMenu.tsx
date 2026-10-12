@@ -41,6 +41,9 @@ export default function MobileMenu() {
           <Link href="/contact/" className="btn btn--primary btn--block" onClick={close}>
             {QUOTE_CTA}
           </Link>
+          <a href={BRAND.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn--ghost btn--block">
+            {BRAND.bookingLabel}
+          </a>
           <div className="grid grid-cols-2 gap-3">
             <a href={BRAND.phoneHref} className="btn btn--ghost">
               Call

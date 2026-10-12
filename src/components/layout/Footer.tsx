@@ -90,7 +90,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href={BRAND.bookingUrl} target="_blank" rel="noopener noreferrer">
-                  Book online
+                  {BRAND.bookingLabel}
                 </a>
               </li>
               <li>

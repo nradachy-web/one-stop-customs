@@ -431,6 +431,10 @@
     .topbar a:hover {
       color: #ffffff;
     }
+    .topbar a.topbar__book {
+      color: #5bd66f;
+      font-weight: 600;
+    }
   }
   .site-header {
     position: sticky;
@@ -759,6 +763,12 @@
   .hero__trust {
     border-top: 1px solid rgba(255, 255, 255, 0.16);
   }
+  /* With the booking button there are three actions. Phones drop the call, which the bar at the bottom already carries. */
+  @media (max-width: 63.99rem) {
+    .hero__actions--3 .hero__call {
+      display: none;
+    }
+  }
   @media (min-width: 40rem) {
     .hero__actions {
       flex-direction: row;
@@ -791,6 +801,18 @@
     }
     .hero__lead {
       font-size: 1.1875rem;
+    }
+  }
+
+  /* A portrait photograph: it takes the right side of the frame, so the whole car shows, and fades into the ground behind the copy. */
+  @media (min-width: 64rem) {
+    .hero--side .hero__media {
+      left: max(44%, calc(100% - 56rem));
+    }
+    .hero--side .hero__scrim {
+      background:
+        linear-gradient(90deg, #0b0c0d 0%, #0b0c0d max(44%, calc(100% - 56rem)), rgba(11, 12, 13, 0.55) calc(max(44%, calc(100% - 56rem)) + 9%), rgba(11, 12, 13, 0.06) calc(max(44%, calc(100% - 56rem)) + 24%), rgba(11, 12, 13, 0) 100%),
+        linear-gradient(180deg, rgba(11, 12, 13, 0.3) 0%, rgba(11, 12, 13, 0) 24%, rgba(11, 12, 13, 0) 62%, rgba(11, 12, 13, 0.88) 100%);
     }
   }
 
@@ -1183,6 +1205,244 @@
     .work--4 {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
+  }
+
+  /* ---------- before and after: the same glass, twice ---------- */
+  .ba {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ba figure {
+    margin: 0;
+  }
+  .ba__pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    overflow: hidden;
+    border-radius: var(--r-card);
+  }
+  .ba__side {
+    position: relative;
+  }
+  .ba__side .pic {
+    border-radius: 0;
+  }
+  .ba__tag {
+    position: absolute;
+    left: 0.625rem;
+    top: 0.625rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(11, 12, 13, 0.78);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: #f5f6f7;
+  }
+  .ba__tag--after {
+    background: #32c246;
+    color: #06140a;
+  }
+  @media (min-width: 48rem) {
+    .ba {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+    }
+  }
+
+  /* ---------- a link out to one of the shop's reels ---------- */
+  .reel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 34rem;
+    padding: 1rem 1.25rem;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+    transition: border-color 0.18s var(--ease);
+  }
+  .reel:hover {
+    border-color: var(--accent);
+  }
+  .reel__play {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    background: #32c246;
+    color: #06140a;
+  }
+  .reel__play svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-left: 2px;
+  }
+  .reel__title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--heading);
+  }
+  .reel__note {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--key);
+  }
+  .reel > svg {
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-left: auto;
+    color: var(--link);
+    transition: transform 0.22s var(--ease);
+  }
+  .reel:hover > svg {
+    transform: translateX(4px);
+  }
+
+  /* ---------- the way to the online tint booking page ---------- */
+  .bookband {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    padding: 1.75rem;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .bookband__title {
+    margin-top: 0.625rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    color: var(--heading);
+  }
+  .bookband__text {
+    max-width: 36rem;
+    margin-top: 0.625rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--body);
+  }
+  .bookband__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  @media (min-width: 64rem) {
+    .bookband {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 3rem;
+      align-items: center;
+      padding: 2.25rem 2.5rem;
+    }
+  }
+
+  /* ---------- the two ways to a flat glass quote ---------- */
+  .way {
+    display: flex;
+    flex-direction: column;
+  }
+  .way .tile__tag {
+    align-self: flex-start;
+  }
+  .way .tile__title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .way__num {
+    flex: none;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--link);
+    font-variant-numeric: tabular-nums;
+  }
+  .way__num::after {
+    content: ".";
+  }
+  .way__cta {
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+
+  /* ---------- a film specification table ---------- */
+  .spec {
+    overflow-x: auto;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+  }
+  .spec table {
+    width: 100%;
+    min-width: 40rem;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .spec th,
+  .spec td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .spec thead th {
+    border-bottom: 1px solid var(--rule);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    white-space: normal;
+    color: var(--key);
+  }
+  .spec tbody tr + tr > * {
+    border-top: 1px solid var(--rule);
+  }
+  .spec tbody th {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--heading);
+  }
+  .spec td {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--heading);
+  }
+  @media (min-width: 48rem) {
+    .spec__hint {
+      display: none;
+    }
+  }
+  .spec__swatch {
+    display: inline-block;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-right: 0.75rem;
+    border-radius: 4px;
+    background: #0b0c0d;
+    vertical-align: -0.15rem;
   }
 
   /* ---------- steps: how it works ---------- */

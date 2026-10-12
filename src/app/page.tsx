@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import LandingHero from "@/components/landing/LandingHero";
-import { QuoteClose, RatingLine, ReviewQuote, SERVICE_COUNT_LINE, ServiceCards, Steps, TownChips, WorkGrid } from "@/components/landing/blocks";
+import { BookingBand, QuoteClose, RatingLine, ReviewQuote, SERVICE_COUNT_LINE, ServiceCards, Steps, TownChips, WorkGrid } from "@/components/landing/blocks";
 import Button, { ArrowLink } from "@/components/ui/Button";
 import { KeyValues, RuleLabel, Section, SectionHead } from "@/components/ui/Section";
 import { BRAND, HOME_TITLE, REVIEW_SUMMARY } from "@/lib/constants";
@@ -9,8 +9,9 @@ import { pageMeta } from "@/lib/seo";
 /* ============================================================================
    THE HOME PAGE, four bands:
 
-     1  hero     one photo, one heading, one paragraph, two actions
-     2  light    every service, on the shop's own photography
+     1  hero     one photo, one heading, one paragraph, the actions
+     2  light    every service, on the shop's own photography, then the
+                 way to book window tint online
      3  dark     why this shop: the facts, one review, the work
      4  light    how it works, the towns, and the form itself
    ========================================================================== */
@@ -29,14 +30,16 @@ const FACTS = [
   { k: "Shop", v: `${BRAND.address.full}, by appointment` },
 ];
 
-const WORK = ["trx-yellow-front", "rangerover-purple", "modely-satin-grey", "bmw-camo-blue", "audi-rosegold-front", "commercial-tesla-homes-front"];
+/** Six of the cars Ricky sent as his recent work (October 8, 2026). */
+const WORK = ["charger-blue-carbon-shop", "escalade-white-snow-front", "durango-red-stripes-shop", "bronco-pink-front", "chevelle-black-orange-front", "rangerover-sport-black-front"];
 
 export default function HomePage() {
   return (
     <>
       <LandingHero
-        photoId="charger-red-stripes"
-        focus="50% 78%"
+        photoId="escalade-blue-jeep-srt"
+        focus="50% 52%"
+        booking
         eyebrow="Vinyl wraps · Window tint · Paint protection film"
         title="Wrap it. Tint it.|*Protect it.*"
         lead="One Stop Customs is the shop you know as Ricky Wraps, on Eight Mile in Warren. Color change wraps, window tint, XPEL paint protection film, ceramic coating, detailing and custom work, all by appointment. Get a free quote for your vehicle."
@@ -47,6 +50,7 @@ export default function HomePage() {
       <Section plane="light" label="Services">
         <SectionHead align="split" title={SERVICE_COUNT_LINE} intro="Wrap it, tint it, protect it, detail it. Free quotes, fast, no pressure." />
         <ServiceCards className="mt-8 lg:mt-12" />
+        <BookingBand className="mt-10 lg:mt-14" showTintLink />
       </Section>
 
       <Section plane="dark" label={`Why ${BRAND.name}`}>
@@ -85,7 +89,7 @@ export default function HomePage() {
 
         <RuleLabel className="subrule">Free quote</RuleLabel>
         <div id="quote" className="scroll-mt-28">
-          <QuoteClose source="/" />
+          <QuoteClose source="/" booking />
         </div>
       </Section>
     </>

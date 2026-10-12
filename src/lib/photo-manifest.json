@@ -50,6 +50,16 @@
     ],
     "mobile": false
   },
+  "bronco-pink-front": {
+    "w": 1309,
+    "h": 1600,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
   "camaro-black-rear": {
     "w": 1440,
     "h": 1080,
@@ -91,6 +101,15 @@
     ],
     "mobile": true
   },
+  "casket-wrap-wide": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
   "challenger-blue": {
     "w": 1440,
     "h": 1080,
@@ -101,6 +120,57 @@
       1440
     ],
     "mobile": true
+  },
+  "challenger-red-stripes-front": {
+    "w": 1320,
+    "h": 1471,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "charger-black-blue-front": {
+    "w": 1320,
+    "h": 1380,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "charger-black-blue-nose": {
+    "w": 1320,
+    "h": 1341,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "charger-blue-carbon-front": {
+    "w": 1320,
+    "h": 1499,
+    "widths": [
+      480,
+      800,
+      1200,
+      1320
+    ],
+    "mobile": true
+  },
+  "charger-blue-carbon-shop": {
+    "w": 1320,
+    "h": 1489,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
   },
   "charger-pink": {
     "w": 1440,
@@ -145,6 +215,16 @@
       1440
     ],
     "mobile": true
+  },
+  "chevelle-black-orange-front": {
+    "w": 1320,
+    "h": 1496,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
   },
   "chrysler300-black-portrait": {
     "w": 1280,
@@ -195,6 +275,53 @@
       480,
       800,
       1200
+    ],
+    "mobile": false
+  },
+  "commercial-trailer-treats-front": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
+  "commercial-trailer-treats-side": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
+  "commercial-van-blue-side": {
+    "w": 1203,
+    "h": 1600,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "commercial-van-choir-front": {
+    "w": 1203,
+    "h": 1600,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "commercial-van-maxwell-front": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
     ],
     "mobile": false
   },
@@ -297,6 +424,26 @@
     ],
     "mobile": false
   },
+  "durango-red-stripes-front": {
+    "w": 1320,
+    "h": 1489,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "durango-red-stripes-shop": {
+    "w": 1320,
+    "h": 1464,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
   "escalade-black-window": {
     "w": 1440,
     "h": 1082,
@@ -308,9 +455,139 @@
     ],
     "mobile": true
   },
+  "escalade-blue-jeep-srt": {
+    "w": 1320,
+    "h": 1040,
+    "widths": [
+      480,
+      800,
+      1200,
+      1320
+    ],
+    "mobile": true
+  },
+  "escalade-blue-shop": {
+    "w": 1200,
+    "h": 1600,
+    "widths": [
+      480,
+      800
+    ],
+    "mobile": false
+  },
   "escalade-white-front": {
     "w": 1440,
     "h": 1083,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "escalade-white-snow-front": {
+    "w": 1320,
+    "h": 1487,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-house-after": {
+    "w": 1290,
+    "h": 744,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-house-before": {
+    "w": 1290,
+    "h": 767,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-interior-after": {
+    "w": 1290,
+    "h": 770,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-interior-before": {
+    "w": 1290,
+    "h": 770,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-salon-after": {
+    "w": 1290,
+    "h": 1328,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-salon-before": {
+    "w": 1290,
+    "h": 1319,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-storefront-after": {
+    "w": 1290,
+    "h": 742,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "flatglass-storefront-before": {
+    "w": 984,
+    "h": 638,
+    "widths": [
+      480,
+      800,
+      984
+    ],
+    "mobile": false
+  },
+  "grandcherokee-black-front": {
+    "w": 1320,
+    "h": 1352,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "grandcherokee-black-side": {
+    "w": 1320,
+    "h": 1333,
     "widths": [
       480,
       800,
@@ -327,6 +604,27 @@
       1200
     ],
     "mobile": false
+  },
+  "home-brick-film-angle": {
+    "w": 1600,
+    "h": 1345,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "home-brick-film-front": {
+    "w": 1600,
+    "h": 1067,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "mobile": true
   },
   "home-deck-tint": {
     "w": 1248,
@@ -400,6 +698,16 @@
     ],
     "mobile": true
   },
+  "mustang-white-front": {
+    "w": 1320,
+    "h": 836,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
   "mustang-white-shop": {
     "w": 1200,
     "h": 1600,
@@ -453,9 +761,39 @@
     ],
     "mobile": true
   },
+  "ram-purple-front": {
+    "w": 1320,
+    "h": 862,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
   "rangerover-purple": {
     "w": 1206,
     "h": 1080,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "rangerover-sport-black-front": {
+    "w": 1320,
+    "h": 1473,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "rangerover-sport-black-side": {
+    "w": 1320,
+    "h": 1488,
     "widths": [
       480,
       800,
@@ -487,6 +825,16 @@
   "silverado-black": {
     "w": 1440,
     "h": 1082,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "suburban-green-front": {
+    "w": 1600,
+    "h": 1200,
     "widths": [
       480,
       800,
@@ -591,6 +939,16 @@
   "wall-wrap": {
     "w": 1290,
     "h": 746,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "mobile": false
+  },
+  "wrangler-pink-front": {
+    "w": 1320,
+    "h": 1482,
     "widths": [
       480,
       800,

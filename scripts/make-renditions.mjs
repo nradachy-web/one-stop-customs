@@ -49,6 +49,9 @@ const MOBILE_FOCUS = {
   "denali-black-front": 0.42,
   "corvette-black-front": 0.5,
   "charger-white-side": 0.55,
+  "escalade-blue-jeep-srt": 0.64,
+  "charger-blue-carbon-front": 0.5,
+  "home-brick-film-front": 0.5,
 };
 
 /** Regions blurred in every rendition: a readable license plate, another business's sign behind a hero. Source pixels. */

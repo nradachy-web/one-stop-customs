@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import ServiceLanding from "@/components/landing/ServiceLanding";
-import { Ticks } from "@/components/landing/blocks";
+import { GalleryLine } from "@/components/landing/ServiceLanding";
+import { Ticks, WorkGrid } from "@/components/landing/blocks";
 import Button from "@/components/ui/Button";
 import Pic from "@/components/ui/Pic";
-import { SectionHead } from "@/components/ui/Section";
+import { RuleLabel, SectionHead } from "@/components/ui/Section";
 import { QUOTE_CTA } from "@/lib/constants";
 import { photo } from "@/lib/photos";
 import { pageMeta } from "@/lib/seo";
@@ -20,21 +21,31 @@ const SEND = [
   "How many vehicles, and when you need them on the road",
 ] as const;
 
+/** Work vehicles Ricky sent on October 8, 2026. */
+const FLEET = ["commercial-trailer-treats-front", "commercial-van-choir-front", "commercial-van-maxwell-front", "commercial-trailer-treats-side", "commercial-van-blue-side", "commercial-blazer-pink"] as const;
+
 function Detail() {
   return (
-    <div className="split split--center">
-      <div>
-        <SectionHead title="What to send us." intro="Four things get your quote moving. If all you have is the logo, start there and we will work out the rest together." />
-        <Ticks items={SEND} />
-        <div className="mt-8">
-          <Button href="#quote">{QUOTE_CTA}</Button>
+    <>
+      <div className="split split--center">
+        <div>
+          <SectionHead title="What to send us." intro="Four things get your quote moving. If all you have is the logo, start there and we will work out the rest together." />
+          <Ticks items={SEND} />
+          <div className="mt-8">
+            <Button href="#quote">{QUOTE_CTA}</Button>
+          </div>
         </div>
+        <figure>
+          <Pic id="commercial-tesla-homes" ratio="4 / 3" sizes="(min-width: 1024px) 560px, 100vw" />
+          <figcaption className="caption">{photo("commercial-tesla-homes").caption}</figcaption>
+        </figure>
       </div>
-      <figure>
-        <Pic id="commercial-tesla-homes" ratio="4 / 3" sizes="(min-width: 1024px) 560px, 100vw" />
-        <figcaption className="caption">{photo("commercial-tesla-homes").caption}</figcaption>
-      </figure>
-    </div>
+
+      <RuleLabel className="subrule">On the road</RuleLabel>
+      <SectionHead align="split" title="Vans, trailers and cars." intro="Printed wraps and cut lettering on work vehicles that came through the shop." />
+      <WorkGrid ids={FLEET} className="mt-8 lg:mt-12" />
+      <GalleryLine>See all the work</GalleryLine>
+    </>
   );
 }
 

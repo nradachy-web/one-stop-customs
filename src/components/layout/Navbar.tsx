@@ -20,6 +20,9 @@ export default function Navbar() {
               {BRAND.address.full}
             </a>
             <span>{BRAND.hoursShort}</span>
+            <a href={BRAND.bookingUrl} target="_blank" rel="noopener noreferrer" className="topbar__book">
+              {BRAND.bookingLabel}
+            </a>
             <a href={BRAND.phoneHref} className="num">
               {BRAND.phoneDisplay}
             </a>

@@ -57,7 +57,11 @@ Gallery, about and contact open with a dark title band (`PageHead`) instead of a
   heading with one green word (`*starred*` in the string, `|` forces a line break), one
   paragraph, a solid quote button and an outline call button, the trust row on the bottom
   edge. Phones get a 720px portrait cut of the frame. `heavy` deepens the scrim for bright or
-  low resolution photos.
+  low resolution photos. `side` is for a portrait photo (the vinyl wraps cover Ricky chose):
+  from 1024 up the photo takes the right side of the frame and fades into the ground behind
+  the copy, so the whole car shows. `booking` adds the "Book window tint online" button
+  between the quote and the call (home and the tint page); with three actions, phones and
+  tablets drop the call button, which the bottom bar already carries.
 - **Section** (`ui/Section.tsx`): a plane, an optional rule label (small caps label over a
   hairline with a green tick), then content. `SectionHead` sets a title with an optional intro
   beside it. Two bands on the same plane in a row drop the second one's top padding.
@@ -99,6 +103,20 @@ Gallery, about and contact open with a dark title band (`PageHead`) instead of a
   and nothing at all under reduced motion.
 - **Quote tile**: the last cell of the services grid is a dark tile to the quote form, so
   eleven services fill a three column grid.
+- **Booking** (`BookingBand` in `landing/blocks.tsx`, `BRAND.bookingUrl` and
+  `BRAND.bookingLabel`): Ricky asked for his window tint booking page through the home page
+  and on the tint page (October 8). It is in both heroes, a band under the home services
+  grid and under the three films, the close on both pages, the top bar, the phone menu and
+  the footer. Always the same words: "Book window tint online".
+- **Before and after** (`BeforeAfter`): the same glass twice, side by side, each with a small
+  tag. Home and business tint only. The label banners baked into Ricky's originals were
+  cropped off so the tags are ours.
+- **Film figures** (`.spec` table on the home and business tint page): the dual reflective
+  sheet Ricky sent, five columns, figure for figure. It scrolls sideways on a phone.
+- **Reel link** (`ReelLink`): a plain link out to one of the shop's own Instagram reels (the
+  mirror tint at night, the casket wrap). No embed, so nothing loads from Instagram.
+- **Flat glass steps**: a service record can carry its own `steps`; home and business tint
+  does, because its quote starts with a picture and measurements, not a vehicle.
 
 Radii are 8px on controls and 12px on cards and photos. Hairlines only; one soft shadow, on
 the navigation menu. Motion is hover (card photo scale, arrow nudge, menu fade) plus the
@@ -143,3 +161,9 @@ businesses' signage; the gallery shows every photo as it is.
   photos. Ask Ricky for real ones.
 - Ricky to confirm the shades he stocks. The tint preview shows the common ones (50, 35, 20,
   15 and 5 percent); trim the list in `TintVisualizer.tsx` if his differ.
+- The casket wrap photo shows a family's memorial artwork. It is there at Ricky's request;
+  Nick to confirm with him that the family is fine with it on the website.
+- Which dual reflective shades he stocks, and whether the DR OptiTune names in the second
+  image he sent should be on the page (that image is a distributor's, watermarked, unused).
+- Rear view photos with readable plates were left out of the October 8 batch. Blur the plate
+  in `scripts/make-renditions.mjs` (`REDACT`) if he wants them in.

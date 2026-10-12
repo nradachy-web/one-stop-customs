@@ -118,6 +118,34 @@ body in gloss film starting at $3,900, matte film adds $500, colored film adds $
 consultations, "final pricing may vary depending on the vehicle size, body style and film
 selection".
 
+October 8, 2026, Ricky's texts (chat 14, 10:41 to 11:01 am), the content for the round built
+October 11:
+
+- **Home and business tint, how a flat glass quote works** (his words): "1.) Send me a picture
+  of the window, and get measurements width and length so I can give you a quote 2.) if its
+  alot of windows for you to do that we can set a consultation appointment to come out and
+  get measurements and show samples". Reel to link there: instagram.com/reel/DcMAZ5ASrIC
+  ("How does the mirror tint look at night?").
+- **Dual reflective film figures**: the manufacturer's "Architecture Dual Reflective
+  Specification" sheet he sent, four shades (DR 05, 15, 25, 35). The page prints five of its
+  columns exactly as the sheet has them. He also sent a distributor's shade comparison image
+  (DR OptiTune 05i to 40i) that carries a Metro Restyling watermark; it is NOT on the site.
+  Ask him which shades he stocks before adding the OptiTune names.
+- **Flat glass photos**: four before and after pairs (a storefront from outside and inside, a
+  salon storefront, a home's front window) and two frames of a two story brick home.
+- **Cover photos**: the blue Escalade beside the blue Jeep SRT for the home page ("Actually
+  put this on home page", replacing his first pick, the white Escalade in the snow) and the
+  blue Charger with forged carbon stripes for vinyl wraps.
+- **Recent cars**: 31 frames of recent work. Twenty are on the site; rear views with a
+  readable license plate, the door jamb close up, the "before" Ram and the frame shot at
+  another business were left out.
+- **Casket wrap**, "in vinyl wrap section", with reel instagram.com/reel/DavTnEvSvIT. One
+  frame is used, the one with no bystanders in it.
+- **Commercial wrap pictures**: a dessert trailer, a Detroit Youth Choir van, a Maxwell
+  Building Services van and a van in blue printed graphics.
+- **Tint booking**: "Add the window Tint Booking Site buttons Through out the site home page
+  .. And on the Window Tint Page", rickywraps.square.site.
+
 ## 3. Assets
 
 - `public/photos/*.webp`: 60 photos, every one the owner's own. `docs/PHOTOS.md` lists each

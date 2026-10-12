@@ -84,6 +84,13 @@ export const BRAND = {
   ],
   byAppointment: "By appointment",
   bookingUrl: "https://rickywraps.square.site/",
+  /** The label on every button to the booking page. Ricky calls it the window tint booking site (October 8, 2026). */
+  bookingLabel: "Book window tint online",
+  /** Two of the shop's own Instagram reels, linked where Ricky asked for them. */
+  reels: {
+    mirrorTintAtNight: "https://www.instagram.com/reel/DcMAZ5ASrIC/",
+    casketWrap: "https://www.instagram.com/reel/DavTnEvSvIT/",
+  },
   reviewUrl: "https://maps.google.com/?cid=7698645542302137521",
   googlePlaceId: "ChIJoalNF4PJJIgRsTyQ4FQV12o",
   social: {
@@ -182,7 +189,7 @@ export const FAQ: readonly FaqItem[] = [
   { q: "Which window film should I pick?", a: "Standard is the dyed film with a 1 year warranty. Black carbon rejects about 60 percent of heat and 99 percent of UV with a 3 year warranty. Ceramic rejects about 80 percent of heat with a 5 year warranty. We will help you pick the one that fits the car and the budget." },
   { q: "How dark can I tint my windows?", a: "Michigan sets a limit for each window. We will tell you what is allowed on yours before any film goes on." },
   { q: "Do you come to me?", a: "Mobile tint is available by appointment, and detailing is offered mobile or at the shop. Ask when you book. Wraps, paint protection film and powder coating are done at the shop." },
-  { q: "Do you tint homes and businesses?", a: "Yes. Dual reflective, colored, blackout, decorative and privacy film for storefronts, offices and homes." },
+  { q: "Do you tint homes and businesses?", a: "Yes. Dual reflective, colored, blackout, decorative and privacy film for storefronts, offices and homes. Send a picture of the window with its measurements for a quote, or book a consultation and we will come out to measure." },
 ] as const;
 
 // ---------------- Quote form ----------------

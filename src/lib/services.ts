@@ -10,6 +10,11 @@ import { BASE_TITLE, REVIEW_SUMMARY, type FaqItem } from "@/lib/constants";
  * protection film, kill switches, starlight headliners, detailing). Every
  * other service is still quoted per vehicle.
  *
+ * October 8, 2026: Ricky sent the flat glass quote process, the dual
+ * reflective film figures and the flat glass photos for the home and
+ * business tint page, new cover photos for the home page and vinyl wraps,
+ * and asked for the online tint booking page on the tint page.
+ *
  * Ceramic coating and paint correction were added the same day at Ricky's
  * request, with the two panels first built for the Jake's Car Detailing
  * site. He has not sent a product, prices, durability or a warranty for
@@ -56,8 +61,14 @@ export interface Service {
   heroFocus?: string;
   /** Low resolution or busy frames run under a deeper scrim. */
   heroHeavy?: boolean;
+  /** A portrait frame: from 1024 up the photo takes the right side of the hero, so the whole car shows instead of a band cut across it. */
+  heroSide?: boolean;
   /** A canvas effect over the hero photo. "suds" is the soap bubbles on the detailing page. */
   heroFx?: "suds";
+  /** Puts the online booking page in the hero and the close. Window tint only: that is what Ricky's booking page takes. */
+  bookOnline?: boolean;
+  /** The three steps, for a service that does not start with a vehicle. Defaults to STEPS. */
+  steps?: readonly { title: string; body: string }[];
   checksHeading: string;
   checks: readonly { title: string; body: string }[];
   proofHeading: string;
@@ -83,13 +94,14 @@ export const SERVICE_LIST: readonly Service[] = [
     name: "Vinyl wraps",
     navNote: "Color changes, partials, stripes, printed",
     blurb: "Full color changes, partial wraps, stripes and printed designs in Avery Dennison and 3M film.",
-    cardPhoto: "charger-pink",
+    cardPhoto: "charger-blue-carbon-front",
+    cardPos: "50% 62%",
     eyebrow: "Vinyl wraps · Warren, MI",
     h1: "Change the color.|Keep the *paint*.",
     lead: "Full color change wraps, partial wraps, stripes and printed designs in Avery Dennison and 3M film. Gloss, satin, matte, metallic, chrome and color flip, with hundreds of colors in stock. Get a free quote for your vehicle.",
-    heroPhoto: "trx-yellow-side",
-    heroFocus: "50% 70%",
-    heroHeavy: true,
+    heroPhoto: "charger-blue-carbon-front",
+    heroFocus: "50% 58%",
+    heroSide: true,
     checksHeading: "What a wrap gets you.",
     checks: [
       { title: "A new color without a repaint", body: "Film goes over the paint you have. Pick the color and the finish, and the car leaves looking like a different car." },
@@ -137,6 +149,7 @@ export const SERVICE_LIST: readonly Service[] = [
     lead: "Standard, black carbon and ceramic window film, cut and laid by hand in our Warren shop. Windshield and sunroof film, tint removal, and mobile tint by appointment. Get a free quote for your vehicle.",
     heroPhoto: "tint-hands",
     heroFocus: "70% 50%",
+    bookOnline: true,
     checksHeading: "What tint does for you.",
     checks: [
       { title: "A cooler cabin", body: "Ceramic film rejects about 80 percent of heat and black carbon about 60 percent, so the car is easier to get into in July." },
@@ -166,6 +179,7 @@ export const SERVICE_LIST: readonly Service[] = [
       { q: "Can you remove old tint?", a: "Yes. Tint removal is its own job, purple and bubbled film included." },
       { q: "Do you tint windshields and sunroofs?", a: "Yes. Windshield and sunroof film are available, along with colored film." },
       { q: "Do you come to me?", a: "Mobile tint is available by appointment. Ask when you book." },
+      { q: "Can I book my tint online?", a: "Yes. Pick a time on our online booking page, linked on this page, or call or text (248) 259-1617 to set it up." },
       { q: "How much does tint cost?", a: PRICE_ANSWER },
     ],
     quoteKey: "tint",
@@ -278,13 +292,17 @@ export const SERVICE_LIST: readonly Service[] = [
     name: "Home and business tint",
     navNote: "Film for storefronts, offices and homes",
     blurb: "Privacy, heat and glare film for storefronts, offices and homes across Metro Detroit.",
-    cardPhoto: "home-front-tint",
+    cardPhoto: "home-brick-film-front",
     eyebrow: "Home and business window tinting · Metro Detroit",
     h1: "Cut the heat.|Keep the *daylight*.",
-    lead: "Window film for storefronts, offices and homes across Metro Detroit. Dual reflective, colored, blackout, decorative and privacy film, quoted for your glass. Get a free quote.",
-    heroPhoto: "home-deck-tint",
-    heroFocus: "50% 50%",
-    heroHeavy: true,
+    lead: "Window film for storefronts, offices and homes across Metro Detroit. Dual reflective, colored, blackout, decorative and privacy film. Send a picture of the window with its measurements for a free quote, or book a consultation and we will come out to measure.",
+    heroPhoto: "home-brick-film-front",
+    heroFocus: "50% 45%",
+    steps: [
+      { title: "Send a picture and the measurements", body: "Take a picture of the window and measure its width and length. Send both and we will quote it from there." },
+      { title: "A lot of windows? Book a consultation", body: "We set an appointment, come out, take the measurements ourselves and show you film samples." },
+      { title: "Get your free quote and pick a day", body: "The quote is free and there is no pressure. When you are ready, pick a day that works and we install the film." },
+    ],
     checksHeading: "What film does for a building.",
     checks: [
       { title: "Less heat and glare", body: "Film takes the edge off sun soaked rooms and storefronts without giving up the daylight." },
@@ -292,7 +310,7 @@ export const SERVICE_LIST: readonly Service[] = [
       { title: "Privacy during the day", body: "Dual reflective film reads as a mirror from outside in daylight while the view out stays clear." },
       { title: "Blackout where you need it", body: "Blocks the view and the light entirely, for meeting rooms, storage and any room that needs to be private." },
       { title: "Decorative and colored film", body: "Decorative, privacy and colored film for glass that needs a look instead of a shade." },
-      { title: "Quoted for your glass", body: "Tell us how many windows, roughly how big, and which way they face. The quote is free." },
+      { title: "Quoted from a picture, or in person", body: "Send a picture of the window with its width and length for a free quote. For a lot of windows, we come out to measure and bring samples." },
     ],
     proofHeading: "Film for buildings, from a film shop.",
     proofIntro: "Window film is what this shop does every day. The same care goes onto a storefront or a sliding glass door.",
@@ -300,10 +318,11 @@ export const SERVICE_LIST: readonly Service[] = [
       { k: "Storefronts and offices", v: "Dual reflective, colored, blackout, decorative and privacy film" },
       { k: "Homes", v: "Heat, glare and UV reduction, privacy, dual reflective and blackout film" },
       { k: "Area", v: "Warren, Detroit and Metro Detroit" },
-      { k: "Quotes", v: "Free, by the job" },
+      { k: "Quotes", v: "Free, from a picture and measurements" },
+      { k: "Consultations", v: "On site, with measurements and film samples" },
       REVIEWS_ROW,
     ],
-    proofPhoto: "home-front-tint",
+    proofPhoto: "home-brick-film-angle",
     reviewName: "Donielle H.",
     faqs: [
       { q: "What can window film do for a storefront or office?", a: "Cut the heat and glare, add privacy during the day, and slow the fading of furniture and displays that sit in the sun." },
@@ -311,7 +330,8 @@ export const SERVICE_LIST: readonly Service[] = [
       { q: "What is blackout film?", a: "Film that blocks the view and the light entirely, for meeting rooms, storage, and any room that needs to be dark or private." },
       { q: "Do you do homes?", a: "Yes. Heat, glare and UV reduction, privacy, dual reflective and blackout film for houses." },
       { q: "Do you offer colored or decorative film?", a: "Yes. Colored film in a range of shades, and decorative and privacy film for glass that wants a pattern instead of a shade." },
-      { q: "How is it quoted?", a: "By the job, and the quote is free. Tell us the number and rough size of the windows and which way they face." },
+      { q: "How do I get a quote?", a: "There are two ways. Send a picture of the window along with its width and length, and we will quote it from that. If there are a lot of windows, we can set a consultation appointment to come out, take the measurements and show you samples." },
+      { q: "What does a consultation cover?", a: "We come out to the home or the business, measure the glass and show you film samples, so you can see the options before you choose." },
     ],
     quoteKey: "buildings",
     metaTitle: `Home and business window tinting in Metro Detroit | ${BASE_TITLE}`,

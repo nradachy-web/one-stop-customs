@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ServiceLanding from "@/components/landing/ServiceLanding";
-import { Ticks } from "@/components/landing/blocks";
+import { BookingBand, Ticks } from "@/components/landing/blocks";
 import TintVisualizer from "@/components/tint/TintVisualizer";
 import { RuleLabel, SectionHead } from "@/components/ui/Section";
 import { pageMeta } from "@/lib/seo";
@@ -41,6 +41,7 @@ function Detail() {
         ))}
       </ul>
       <p className="caption">Warranty terms are confirmed with your quote.</p>
+      <BookingBand className="mt-10 lg:mt-12" title="Picked your film? Book your tint online." />
 
       <RuleLabel className="subrule">Shades</RuleLabel>
       <SectionHead

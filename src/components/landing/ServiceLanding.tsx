@@ -53,6 +53,8 @@ export default function ServiceLanding({ service: s, detail, detailLabel }: Serv
         photoIdMobile={s.heroPhotoMobile}
         focus={s.heroFocus}
         heavy={s.heroHeavy}
+        side={s.heroSide}
+        booking={s.bookOnline}
         eyebrow={s.eyebrow}
         title={s.h1}
         lead={s.lead}
@@ -87,7 +89,7 @@ export default function ServiceLanding({ service: s, detail, detailLabel }: Serv
       </Section>
 
       <Section plane="dark" label="How it works">
-        <Steps />
+        <Steps items={s.steps} />
 
         <RuleLabel className="subrule">Questions</RuleLabel>
         <div className="split split--48">
@@ -112,7 +114,7 @@ export default function ServiceLanding({ service: s, detail, detailLabel }: Serv
       </Section>
 
       <Section plane="light" label="Free quote" id="quote">
-        <QuoteClose service={s.quoteKey} source={s.path} />
+        <QuoteClose service={s.quoteKey} source={s.path} booking={s.bookOnline} />
       </Section>
     </>
   );

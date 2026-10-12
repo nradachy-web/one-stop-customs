@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import Button, { ArrowLink } from "@/components/ui/Button";
-import { ArrowIcon, CheckIcon } from "@/components/ui/Icons";
+import { ArrowIcon, CheckIcon, PlayIcon } from "@/components/ui/Icons";
 import Pic from "@/components/ui/Pic";
 import QuoteForm from "@/components/quote/QuoteForm";
 import { BRAND, CITIES, QUOTE_CTA, REVIEW_SUMMARY, STEPS, cityPath, reviewBy, type City, type FaqItem } from "@/lib/constants";
@@ -221,6 +221,70 @@ export function WorkGrid({ ids, four, ratio = "4 / 3", className }: { ids: reado
   );
 }
 
+/**
+ * The same glass before and after the film, side by side. Flat glass only:
+ * the pairs Ricky sent for the home and business tint page.
+ */
+export function BeforeAfter({ pairs, className }: { pairs: readonly { before: string; after: string; caption: string }[]; className?: string }) {
+  return (
+    <ul className={cn("ba", className)}>
+      {pairs.map((p) => (
+        <li key={p.before}>
+          <figure>
+            <div className="ba__pair">
+              <div className="ba__side">
+                <Pic id={p.before} ratio="4 / 3" sizes="(min-width: 768px) 24vw, 46vw" />
+                <span className="ba__tag">Before</span>
+              </div>
+              <div className="ba__side">
+                <Pic id={p.after} ratio="4 / 3" sizes="(min-width: 768px) 24vw, 46vw" />
+                <span className="ba__tag ba__tag--after">After</span>
+              </div>
+            </div>
+            <figcaption className="caption">{p.caption}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** A link out to one of the shop's own Instagram reels. A plain link, so nothing loads from Instagram until it is followed. */
+export function ReelLink({ href, title, note = "Watch the video on Instagram", className }: { href: string; title: string; note?: string; className?: string }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={cn("reel", className)}>
+      <span className="reel__play" aria-hidden="true">
+        <PlayIcon />
+      </span>
+      <span className="min-w-0">
+        <span className="reel__title">{title}</span>
+        <span className="reel__note">{note}</span>
+      </span>
+      <ArrowIcon />
+    </a>
+  );
+}
+
+/**
+ * The way to the online booking page, for window tint. Ricky asked for it
+ * through the home page and on the tint page (October 8, 2026).
+ */
+export function BookingBand({ title = "Know your shade? Book your tint online.", showTintLink, className }: { title?: string; showTintLink?: boolean; className?: string }) {
+  return (
+    <div className={cn("bookband", className)}>
+      <div className="min-w-0">
+        <p className="label">Window tint</p>
+        <h3 className="bookband__title">{title}</h3>
+        <p className="bookband__text">Pick a time on our booking page and bring the car in. Not sure which film you want yet? Get a free quote first and we will help you choose.</p>
+      </div>
+      <div className="bookband__actions">
+        <Button href={BRAND.bookingUrl}>{BRAND.bookingLabel}</Button>
+        {showTintLink ? <ArrowLink href="/window-tinting/">See the films and shades</ArrowLink> : <ArrowLink href="#quote">{QUOTE_CTA}</ArrowLink>}
+      </div>
+    </div>
+  );
+}
+
 /** The towns the shop serves, each a link to its page. */
 export function TownChips({ except }: { except?: City }) {
   return (
@@ -238,7 +302,7 @@ export function TownChips({ except }: { except?: City }) {
 }
 
 /** The close: the phone beside the form. Sits at the end of every landing page. */
-export function QuoteClose({ service, source }: { service?: string; source: string }) {
+export function QuoteClose({ service, source, booking }: { service?: string; source: string; booking?: boolean }) {
   return (
     <div className="split split--57">
       <div className="close__aside">
@@ -258,9 +322,17 @@ export function QuoteClose({ service, source }: { service?: string; source: stri
           <br />
           {BRAND.address.full}
         </p>
-        <p className="mt-3">
-          <ArrowLink href={BRAND.bookingUrl}>Know what you want? Book online</ArrowLink>
-        </p>
+        {booking ? (
+          <p className="mt-5">
+            <Button href={BRAND.bookingUrl} tone="ghost">
+              {BRAND.bookingLabel}
+            </Button>
+          </p>
+        ) : (
+          <p className="mt-3">
+            <ArrowLink href={BRAND.bookingUrl}>Know what you want? Book online</ArrowLink>
+          </p>
+        )}
       </div>
       <div>
         <QuoteForm service={service} source={source} />

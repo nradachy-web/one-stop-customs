@@ -11,7 +11,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: titleFor("Our work"),
-  description: "Wraps, stripes, printed commercial wraps, tint, paint protection film and powder coated wheels. Every photo is the shop's own work in Warren.",
+  description: "Wraps, stripes, printed commercial wraps, car tint, home and business window film, paint protection film and powder coated wheels. Every photo is the shop's own work.",
   path: "/gallery/",
 });
 

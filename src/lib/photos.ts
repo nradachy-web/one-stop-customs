@@ -12,7 +12,7 @@ import manifest from "@/lib/photo-manifest.json";
  * shop" (the outdoor frames stand at three different buildings).
  */
 
-export type PhotoGroup = "wraps" | "mono" | "commercial" | "tint" | "buildings" | "ppf" | "powder" | "other";
+export type PhotoGroup = "recent" | "wraps" | "mono" | "commercial" | "tint" | "buildings" | "before" | "ppf" | "powder" | "other";
 
 export interface Photo {
   id: string;
@@ -32,6 +32,27 @@ export interface Photo {
 type Entry = [id: string, group: PhotoGroup, caption: string, alt: string, pos?: string];
 
 const ENTRIES: Entry[] = [
+  // Recent work, texted in by Ricky on October 8, 2026
+  ["escalade-blue-jeep-srt", "recent", "Cadillac Escalade and Jeep Grand Cherokee SRT in blue and white", "Blue Cadillac Escalade with a white top beside a blue Jeep Grand Cherokee SRT with white stripes"],
+  ["charger-blue-carbon-front", "recent", "Dodge Charger in blue with forged carbon stripes", "Blue Dodge Charger with forged carbon stripes on a checkered floor, front three quarter view", "50% 62%"],
+  ["charger-blue-carbon-shop", "recent", "Dodge Charger in blue with forged carbon stripes", "Blue Dodge Charger with forged carbon stripes on a checkered floor, front view", "50% 62%"],
+  ["escalade-white-snow-front", "recent", "Cadillac Escalade in white", "White Cadillac Escalade parked in the snow, front three quarter view", "50% 62%"],
+  ["durango-red-stripes-shop", "recent", "Dodge Durango in red with black stripes", "Red Dodge Durango with black stripes under hexagon lights inside the shop", "50% 66%"],
+  ["durango-red-stripes-front", "recent", "Dodge Durango in red with black stripes", "Red Dodge Durango with black stripes in the snow, front three quarter view", "50% 62%"],
+  ["challenger-red-stripes-front", "recent", "Dodge Challenger in red with black stripes", "Red Dodge Challenger with black stripes, front three quarter view", "50% 66%"],
+  ["bronco-pink-front", "recent", "Ford Bronco in pink with a white top", "Pink Ford Bronco with a white grille and a white top, front three quarter view", "50% 62%"],
+  ["wrangler-pink-front", "recent", "Jeep Wrangler in pink", "Pink Jeep Wrangler, front three quarter view", "50% 66%"],
+  ["chevelle-black-orange-front", "recent", "Chevy Chevelle in matte black with orange stripes", "Matte black Chevy Chevelle with orange stripes and orange wheels, front three quarter view", "50% 66%"],
+  ["rangerover-sport-black-front", "recent", "Range Rover Sport in matte black", "Matte black Range Rover Sport, front three quarter view", "50% 66%"],
+  ["rangerover-sport-black-side", "recent", "Range Rover Sport in matte black", "Matte black Range Rover Sport, side view", "50% 70%"],
+  ["charger-black-blue-front", "recent", "Dodge Charger in matte black with blue stripes", "Matte black Dodge Charger with blue stripes, front three quarter view", "50% 60%"],
+  ["charger-black-blue-nose", "recent", "Dodge Charger in matte black with blue stripes", "Matte black Dodge Charger with blue stripes, front view", "50% 55%"],
+  ["grandcherokee-black-front", "recent", "Jeep Grand Cherokee in matte black", "Matte black Jeep Grand Cherokee, front three quarter view", "50% 62%"],
+  ["grandcherokee-black-side", "recent", "Jeep Grand Cherokee in matte black", "Matte black Jeep Grand Cherokee, side view", "50% 60%"],
+  ["suburban-green-front", "recent", "Chevy Suburban in matte green", "Matte green Chevy Suburban, front three quarter view"],
+  ["escalade-blue-shop", "recent", "Cadillac Escalade in blue with a white top", "Blue Cadillac Escalade with a white top inside the shop, front three quarter view", "50% 62%"],
+  ["mustang-white-front", "recent", "Ford Mustang in white", "White Ford Mustang with black wheels, front three quarter view"],
+  ["ram-purple-front", "recent", "Ram 1500 in purple with a black hood", "Purple Ram 1500 pickup with a black hood, front three quarter view on the street"],
   // Color changes
   ["trx-yellow-side", "wraps", "Ram TRX in gloss yellow with a black hood", "Yellow Ram TRX with a black hood, side view under a blue sky"],
   ["trx-yellow-front", "wraps", "Ram TRX in gloss yellow with a black hood", "Yellow Ram TRX with a black hood, front view"],
@@ -89,17 +110,34 @@ const ENTRIES: Entry[] = [
   ["commercial-tesla-homes-front", "commercial", "Tesla Model 3, printed wrap for Homes.com", "Tesla Model 3 in a white and orange Homes.com printed wrap, front three quarter view inside the shop"],
   ["commercial-tesla-homes", "commercial", "Tesla Model 3, printed wrap for Homes.com", "Tesla Model 3 in a white and orange Homes.com printed wrap inside the shop"],
   ["commercial-blazer-pink", "commercial", "Chevy Blazer EV, printed wrap for WeDriveFor", "Pink Chevy Blazer EV in a WeDriveFor printed wrap inside the shop"],
+  ["commercial-trailer-treats-side", "commercial", "Dessert trailer in a full printed wrap", "Enclosed trailer in a pink printed dessert wrap, side view", "50% 58%"],
+  ["commercial-trailer-treats-front", "commercial", "Dessert trailer in a full printed wrap", "Enclosed trailer in a pink printed dessert wrap, front three quarter view", "50% 58%"],
+  ["commercial-van-choir-front", "commercial", "Ford Transit, printed wrap for the Detroit Youth Choir", "Ford Transit van in a black and gold Detroit Youth Choir printed wrap, front three quarter view", "50% 62%"],
+  ["commercial-van-maxwell-front", "commercial", "Ram ProMaster lettered for Maxwell Building Services", "White Ram ProMaster van with black Maxwell Building Services lettering, front three quarter view", "50% 70%"],
+  ["commercial-van-blue-side", "commercial", "Ram ProMaster in printed graphics", "White Ram ProMaster van with blue printed graphics, side view", "50% 45%"],
   // Tint
   ["escalade-black-window", "tint", "Tinted glass on a GMC Denali", "Tinted rear door glass on a black GMC Denali pickup, close up", "55% 50%"],
   ["tint-hands", "tint", "Window film trimmed by hand", "Window film being trimmed by hand on a door glass, close up"],
   // Buildings
+  ["home-brick-film-front", "buildings", "Window film on a two story brick home", "Two story brick home with window film on the front windows"],
+  ["home-brick-film-angle", "buildings", "Window film on a two story brick home", "Two story brick home with window film on the front windows, seen from the side"],
+  ["flatglass-storefront-after", "buildings", "Storefront glass after film", "Storefront windows after window film, reflecting the parking lot"],
+  ["flatglass-salon-after", "buildings", "Salon storefront after film", "Salon storefront windows after window film, reflecting the sky"],
+  ["flatglass-house-after", "buildings", "A home's front window after film", "Brick house with window film on the front window, reflecting the street"],
+  ["flatglass-interior-after", "buildings", "Storefront glass after film, from inside", "Storefront windows after window film, seen from inside"],
   ["home-deck-tint", "buildings", "Window film on sliding glass doors", "Sliding glass doors with window film on a back deck"],
   ["home-front-tint", "buildings", "Window film on a home's front windows", "House with film on the front windows"],
+  // The same glass before the film went on. Shown beside its "after" on the home and business tint page, not in the gallery.
+  ["flatglass-storefront-before", "before", "Storefront glass before film", "Storefront windows before window film"],
+  ["flatglass-salon-before", "before", "Salon storefront before film", "Salon storefront windows before window film"],
+  ["flatglass-house-before", "before", "A home's front window before film", "Brick house front window before window film"],
+  ["flatglass-interior-before", "before", "Storefront glass before film, from inside", "Storefront windows before window film, seen from inside"],
   // Paint protection film, powder coating, other
   ["ppf-headlight-wide", "ppf", "Paint protection film going onto a headlight", "Paint protection film being laid over a headlight, close up", "22% 50%"],
   ["powdercoat-wheel-spray", "powder", "A wheel in the powder booth", "Powder coating gun spraying a wheel in a cloud of blue powder", "32% 50%"],
   ["kitchen-wrap", "other", "Kitchen cabinets in a wood grain wrap", "Kitchen cabinets wrapped in a wood grain vinyl"],
   ["wall-wrap", "other", "Hallway wall in a printed floral wrap", "Blue floral printed vinyl wall wrap in a hallway"],
+  ["casket-wrap-wide", "other", "Memorial casket in a custom printed wrap", "Casket in a custom printed memorial wrap at the front of a chapel", "50% 55%"],
 ];
 
 type ManifestEntry = { w: number; h: number; widths: number[]; mobile: boolean };
@@ -127,6 +165,12 @@ const idsIn = (...groups: PhotoGroup[]) => ENTRIES.filter((e) => groups.includes
 
 export const GALLERY_GROUPS: readonly { id: string; title: string; blurb: string; photoIds: string[] }[] = [
   {
+    id: "recent",
+    title: "Fresh out of the shop",
+    blurb: "The latest cars and trucks through the bay.",
+    photoIds: idsIn("recent"),
+  },
+  {
     id: "wraps",
     title: "Color changes and stripes",
     blurb: "Gloss, satin, matte and printed film, full cars and single panels.",
@@ -141,19 +185,25 @@ export const GALLERY_GROUPS: readonly { id: string; title: string; blurb: string
   {
     id: "commercial",
     title: "Commercial wraps",
-    blurb: "Printed graphics designed in house.",
+    blurb: "Printed wraps and lettering on cars, vans and trailers, designed in house.",
     photoIds: idsIn("commercial"),
   },
   {
     id: "tint",
     title: "Tint, film and powder coat",
-    blurb: "Window film on cars and buildings, paint protection film and powder coated wheels.",
-    photoIds: idsIn("tint", "buildings", "ppf", "powder"),
+    blurb: "Window film on cars, paint protection film and powder coated wheels.",
+    photoIds: idsIn("tint", "ppf", "powder"),
+  },
+  {
+    id: "buildings",
+    title: "Home and business tint",
+    blurb: "Window film on houses, storefronts and offices.",
+    photoIds: idsIn("buildings"),
   },
   {
     id: "other",
     title: "More than cars",
-    blurb: "Cabinets, walls and whatever else film sticks to.",
+    blurb: "Cabinets, walls, a memorial casket and whatever else film sticks to.",
     photoIds: idsIn("other"),
   },
 ];

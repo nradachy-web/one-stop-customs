@@ -2,6 +2,8 @@
 
 October 2026: the sources now live in `photos-src/*.webp` (1600px long side max) and are never deployed. `node scripts/make-renditions.mjs` writes what the site serves into `public/photos/` (AVIF and WebP at 480, 800, 1200 and, for hero photos, the native width, plus 720 by 900 phone cuts) and `src/lib/photo-manifest.json`. Captions and alt text are in `src/lib/photos.ts`. The script also blurs a readable license plate (the purple Range Rover) and another business's sign behind the yellow TRX hero.
 
+October 11, 2026: 36 photos Ricky texted on October 8 were added (20 recent cars, 5 commercial vehicles, 4 flat glass before and after pairs, 2 frames of a brick home, 1 memorial casket wrap). They came out of Messages at their original size, were cropped where a phone screenshot carried interface chrome (the home cover lost an Instagram counter and mute icon, two vans lost their black bars) or a label banner (the before and after frames), and saved at 1600px on the long side. Most of the car frames are 1320px wide Instagram saves, so they are used in grids and, for the two covers Ricky picked, as heroes under the scrim. Ids, captions and alt text are in `src/lib/photos.ts`; the "before" frames sit in their own group so they show on the home and business tint page and not in the gallery.
+
 All sources are `photos-src/*.webp`. Every photo is the owner's own (supplied for the 2024 site or texted to Nick). Alt text must describe the vehicle and setting, never claim which service was performed unless obvious (stripes, printed wrap, film in hand).
 
 | file | size | source px | KB | description |
