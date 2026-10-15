@@ -34,10 +34,9 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ vars.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY }}
-          # Project-page preview at https://nradachy-web.github.io/one-stop-customs/ (noindex).
-          # Domain cutover: remove this line, add public/CNAME (rickywrapsllc.com) and set the
-          # custom domain through the Pages API, as done for Bubbles.
-          NEXT_PUBLIC_BASE_PATH: "/one-stop-customs"
+          # Live at https://rickywrapsllc.com (public/CNAME, custom domain set through the Pages
+          # API). To rebuild the noindex project-page preview instead, set
+          # NEXT_PUBLIC_BASE_PATH: "/one-stop-customs" here and drop public/CNAME.
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
