@@ -39,8 +39,9 @@ make a visitor who has seen both think they came from one template.
   https://maps.google.com/?cid=7698645542302137521 . Place ID ChIJoalNF4PJJIgRsTyQ4FQV12o.
   Real reviews (verbatim, from the Places API) are in `docs/REVIEWS.json`. Only 5 star ones go on
   the site, quoted verbatim, first name and last initial, attributed to Google, with the "as of" date.
-- Social: Instagram https://www.instagram.com/rickywraps (22K followers, 1,284 posts),
-  TikTok https://www.tiktok.com/@rickywraps, Facebook https://www.facebook.com/Rickywraps1 .
+- Social: Instagram https://www.instagram.com/rickywraps (22K followers, 1,284 posts) and
+  TikTok https://www.tiktok.com/@rickywraps (bio points to the Instagram). Ricky, October 12,
+  2026: "Instagram and TikTok that's it", so Facebook is not linked anywhere on the site.
 - Booking: Square site https://rickywraps.square.site/ (live, returns 200). "Book online" goes
   there. The quote form is separate (Web3Forms, key not yet issued, see gates).
 - Domain: rickywrapsllc.com (Namecheap, registered 2024-09-27 by Nick, expires 2027-09-27). It
@@ -72,7 +73,8 @@ make a visitor who has seen both think they came from one template.
    99 percent UV, 3 year warranty; Ceramic film, about 80 percent heat rejection, 5 year warranty.
    Also windshield and sunroof film, tint removal, colored film. State law shade limits apply.
    The old site printed the carbon and ceramic price premiums ($70 to 100 and $100 to 150 over
-   standard). Do NOT print prices; "quoted per vehicle".
+   standard). Those stay off. Since October 12, 2026 the site prints Ricky's own tint price
+   sheet instead (see "Window tint prices" below); black carbon is still quoted per vehicle.
 4. **Paint protection film (PPF)**. Clear, matte and coloured PPF. Front end (bumper, hood,
    fenders, mirrors) or full body. Self healing, up to 10 years per the old site (say "long term"
    rather than a number unless the tier copy needs it).
@@ -117,6 +119,23 @@ front end in gloss film $1,900 (front bumper, front fenders, side mirrors, full 
 body in gloss film starting at $3,900, matte film adds $500, colored film adds $1,000, free
 consultations, "final pricing may vary depending on the vehicle size, body style and film
 selection".
+
+Window tint prices (Ricky's texts, October 12, 2026, chat 14, 10:00 to 10:03 am; regular
+price, then his sale price). Built into the price tool on /window-tinting/ from TINT_PRICES in
+src/lib/constants.ts.
+
+| Vehicle | Sides and back, standard | Sides and back, ceramic | All windows with windshield, standard | All windows, ceramic |
+| --- | --- | --- | --- | --- |
+| Sedan | $220, sale $187 | $340, sale $289 | $290, sale $255 | $450, sale $360 |
+| SUV | $250, sale $220 | $370, sale $299 | $325, sale $280 | $500, sale $399 |
+| Pickup truck | $220, sale $187 | $340, sale $289 | $290, sale $255 | $450, sale $360 |
+| Coupe | $170 | $290, sale $240 | $250 | $400, sale $320 |
+| Vans and big trucks | Call for quote | | | |
+
+Same day he asked for: the flow "What style car do you have", "Which windows do you want
+tinted", then the price with the booking site right next to it; a wrap color visualizer on the
+vinyl wraps page; the flat glass "Book a consultation" button pointed at the Square booking
+site (it takes consultations); Instagram and TikTok links.
 
 October 8, 2026, Ricky's texts (chat 14, 10:41 to 11:01 am), the content for the round built
 October 11:

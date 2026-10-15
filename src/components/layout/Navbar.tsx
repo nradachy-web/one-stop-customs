@@ -1,12 +1,14 @@
 import Link from "next/link";
 import MobileMenu from "@/components/layout/MobileMenu";
 import NavLinks from "@/components/layout/NavLinks";
+import Social from "@/components/ui/Social";
 import { asset } from "@/lib/asset";
 import { BRAND, QUOTE_CTA } from "@/lib/constants";
 
 /**
  * The shell's top: a slim bar of shop facts that scrolls away (large screens
- * only), then the sticky header with the shop's own logo mark, the
+ * only, with the Instagram and TikTok icons at its end), then the sticky
+ * header with the shop's own logo mark, the
  * navigation, the phone number and the quote button.
  */
 export default function Navbar() {
@@ -26,6 +28,7 @@ export default function Navbar() {
             <a href={BRAND.phoneHref} className="num">
               {BRAND.phoneDisplay}
             </a>
+            <Social />
           </div>
         </div>
       </div>

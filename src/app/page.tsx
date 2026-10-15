@@ -75,6 +75,7 @@ export default function HomePage() {
             See all the work
           </Button>
           <ArrowLink href={BRAND.social.instagram}>Follow {BRAND.social.instagramHandle} on Instagram</ArrowLink>
+          <ArrowLink href={BRAND.social.tiktok}>Watch on TikTok</ArrowLink>
         </div>
       </Section>
 

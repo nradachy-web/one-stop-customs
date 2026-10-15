@@ -1,4 +1,4 @@
-import { BASE_TITLE, REVIEW_SUMMARY, type FaqItem } from "@/lib/constants";
+import { BASE_TITLE, BRAND, REVIEW_SUMMARY, TINT_FROM, type FaqItem } from "@/lib/constants";
 
 /**
  * The eleven service pages, one record each. ServiceLanding.tsx renders every
@@ -7,7 +7,8 @@ import { BASE_TITLE, REVIEW_SUMMARY, type FaqItem } from "@/lib/constants";
  * in the accent green.
  *
  * Prices: only the ones Ricky sent for the site on October 7, 2026 (paint
- * protection film, kill switches, starlight headliners, detailing). Every
+ * protection film, kill switches, starlight headliners, detailing) and his
+ * window tint sheet of October 12 (TINT_PRICES in constants.ts). Every
  * other service is still quoted per vehicle.
  *
  * October 8, 2026: Ricky sent the flat glass quote process, the dual
@@ -146,7 +147,7 @@ export const SERVICE_LIST: readonly Service[] = [
     cardPos: "40% 55%",
     eyebrow: "Window tinting · Warren, MI",
     h1: "Less heat. Less glare.|More *privacy*.",
-    lead: "Standard, black carbon and ceramic window film, cut and laid by hand in our Warren shop. Windshield and sunroof film, tint removal, and mobile tint by appointment. Get a free quote for your vehicle.",
+    lead: `Standard, black carbon and ceramic window film, cut and laid by hand in our Warren shop, from $${TINT_FROM}. Windshield and sunroof film, tint removal, and mobile tint by appointment. See your price below and book online.`,
     heroPhoto: "tint-hands",
     heroFocus: "70% 50%",
     bookOnline: true,
@@ -180,11 +181,14 @@ export const SERVICE_LIST: readonly Service[] = [
       { q: "Do you tint windshields and sunroofs?", a: "Yes. Windshield and sunroof film are available, along with colored film." },
       { q: "Do you come to me?", a: "Mobile tint is available by appointment. Ask when you book." },
       { q: "Can I book my tint online?", a: "Yes. Pick a time on our online booking page, linked on this page, or call or text (248) 259-1617 to set it up." },
-      { q: "How much does tint cost?", a: PRICE_ANSWER },
+      {
+        q: "How much does tint cost?",
+        a: `Use the price tool on this page: pick what you drive and the windows you want done, and your price shows up with a button to book. Tint starts at $${TINT_FROM}. Vans and big trucks are priced by the vehicle, so call or text ${BRAND.phoneDisplay}.`,
+      },
     ],
     quoteKey: "tint",
     metaTitle: `Window tinting in Warren, MI | ${BASE_TITLE}`,
-    metaDescription: "Standard, black carbon and ceramic window tint, windshield film and tint removal at 13417 E Eight Mile Rd in Warren. Free quotes. Call or text (248) 259-1617.",
+    metaDescription: `Window tint from $${TINT_FROM}, priced online for your vehicle and booked in the same step. Standard, black carbon and ceramic film at 13417 E Eight Mile Rd in Warren.`,
   },
   {
     id: "ppf",
@@ -300,7 +304,7 @@ export const SERVICE_LIST: readonly Service[] = [
     heroFocus: "50% 45%",
     steps: [
       { title: "Send a picture and the measurements", body: "Take a picture of the window and measure its width and length. Send both and we will quote it from there." },
-      { title: "A lot of windows? Book a consultation", body: "We set an appointment, come out, take the measurements ourselves and show you film samples." },
+      { title: "A lot of windows? Book a consultation", body: "Book it online. We come out, take the measurements ourselves and show you film samples." },
       { title: "Get your free quote and pick a day", body: "The quote is free and there is no pressure. When you are ready, pick a day that works and we install the film." },
     ],
     checksHeading: "What film does for a building.",
@@ -330,7 +334,7 @@ export const SERVICE_LIST: readonly Service[] = [
       { q: "What is blackout film?", a: "Film that blocks the view and the light entirely, for meeting rooms, storage, and any room that needs to be dark or private." },
       { q: "Do you do homes?", a: "Yes. Heat, glare and UV reduction, privacy, dual reflective and blackout film for houses." },
       { q: "Do you offer colored or decorative film?", a: "Yes. Colored film in a range of shades, and decorative and privacy film for glass that wants a pattern instead of a shade." },
-      { q: "How do I get a quote?", a: "There are two ways. Send a picture of the window along with its width and length, and we will quote it from that. If there are a lot of windows, we can set a consultation appointment to come out, take the measurements and show you samples." },
+      { q: "How do I get a quote?", a: "There are two ways. Send a picture of the window along with its width and length, and we will quote it from that. If there are a lot of windows, book a consultation on our online booking page and we will come out, take the measurements and show you samples." },
       { q: "What does a consultation cover?", a: "We come out to the home or the business, measure the glass and show you film samples, so you can see the options before you choose." },
     ],
     quoteKey: "buildings",

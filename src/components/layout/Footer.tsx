@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Social from "@/components/ui/Social";
 import { asset } from "@/lib/asset";
 import { BRAND, CITIES, CREDIT, QUOTE_CTA, cityPath } from "@/lib/constants";
 import { SERVICE_LIST } from "@/lib/services";
@@ -43,6 +44,7 @@ export default function Footer() {
                 </div>
               ))}
             </dl>
+            <Social labels className="mt-6" />
           </div>
 
           <div>
@@ -91,21 +93,6 @@ export default function Footer() {
               <li>
                 <a href={BRAND.bookingUrl} target="_blank" rel="noopener noreferrer">
                   {BRAND.bookingLabel}
-                </a>
-              </li>
-              <li>
-                <a href={BRAND.social.instagram} target="_blank" rel="noopener noreferrer">
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a href={BRAND.social.tiktok} target="_blank" rel="noopener noreferrer">
-                  TikTok
-                </a>
-              </li>
-              <li>
-                <a href={BRAND.social.facebook} target="_blank" rel="noopener noreferrer">
-                  Facebook
                 </a>
               </li>
             </ul>

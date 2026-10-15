@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ServiceLanding from "@/components/landing/ServiceLanding";
 import { BookingBand, Ticks } from "@/components/landing/blocks";
+import TintQuote from "@/components/tint/TintQuote";
 import TintVisualizer from "@/components/tint/TintVisualizer";
 import { RuleLabel, SectionHead } from "@/components/ui/Section";
 import { pageMeta } from "@/lib/seo";
@@ -11,7 +12,7 @@ const s = SERVICES.tint;
 
 export const metadata: Metadata = pageMeta({ title: s.metaTitle, description: s.metaDescription, path: s.path });
 
-/** The three films the shop sells, with the shop's own figures. No prices. */
+/** The three films the shop sells, with the shop's own figures. Prices are in the price tool above them. */
 const FILMS = [
   { name: "Standard", body: "Dyed film for the classic tinted look.", ticks: ["Dyed film", "1 year warranty"], pick: false },
   { name: "Black carbon", body: "A true black film that keeps more heat and UV out.", ticks: ["About 60 percent heat rejection", "99 percent UV protection", "3 year warranty"], pick: false },
@@ -23,6 +24,18 @@ const ALSO = ["Windshield film", "Sunroof film", "Tint removal", "Colored film",
 function Detail() {
   return (
     <>
+      <div id="price" className="scroll-mt-28">
+        <SectionHead
+          align="split"
+          title="Price your tint."
+          intro="Pick what you drive and the windows you want done. Your price shows up right away, with the booking button beside it."
+        />
+        <div className="mt-8 lg:mt-12">
+          <TintQuote />
+        </div>
+      </div>
+
+      <RuleLabel className="subrule">Films</RuleLabel>
       <SectionHead
         align="split"
         title="Three films. Pick what fits."
@@ -66,5 +79,5 @@ function Detail() {
 }
 
 export default function Page() {
-  return <ServiceLanding service={s} detail={<Detail />} detailLabel="Films" />;
+  return <ServiceLanding service={s} detail={<Detail />} detailLabel="Prices" />;
 }

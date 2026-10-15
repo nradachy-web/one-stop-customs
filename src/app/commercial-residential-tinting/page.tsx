@@ -28,8 +28,9 @@ const QUOTE_WAYS = [
   {
     tag: "A lot of windows",
     name: "Book a consultation",
-    body: "If there are too many windows to measure yourself, we set a consultation appointment, come out, take the measurements and show you film samples.",
-    cta: { href: "#quote", label: "Ask for a consultation" },
+    body: "If there are too many windows to measure yourself, book a consultation online. We come out, take the measurements and show you film samples.",
+    /** Ricky's booking page takes consultations too (October 12, 2026). */
+    cta: { href: BRAND.bookingUrl, label: "Book a consultation" },
     pick: false,
   },
 ] as const;

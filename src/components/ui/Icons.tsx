@@ -72,6 +72,25 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function InstagramIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Svg {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <path d="M17.5 6.5h.01" />
+    </Svg>
+  );
+}
+
+/** The TikTok note, drawn filled so it reads at 16px. */
+export function TikTokIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Svg fill="currentColor" stroke="none" {...props}>
+      <path d="M16.6 3c.3 2.2 1.6 3.7 3.9 3.9v3a7.3 7.3 0 0 1-3.8-1.2v6.1a5.8 5.8 0 1 1-5.8-5.8c.3 0 .6 0 .9.1v3.1a2.7 2.7 0 1 0 1.9 2.6V3z" />
+    </Svg>
+  );
+}
+
 export function PlayIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <Svg fill="currentColor" strokeWidth="1.5" {...props}>

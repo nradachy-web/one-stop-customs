@@ -1941,6 +1941,333 @@
     }
   }
 
+  /* ---------- the tint price tool: vehicle, windows, then the price beside the booking button ---------- */
+  .tq__steps {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .tq__step {
+    min-width: 0;
+  }
+  .tq__ask {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--heading);
+  }
+  .tq__n {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.625rem;
+    height: 1.625rem;
+    border-radius: 999px;
+    background: var(--accent);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  .tq__chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0.875rem;
+  }
+  .tq__step--vehicle .viz__chip:last-child {
+    grid-column: 1 / -1;
+  }
+  .tq__step--off {
+    opacity: 0.4;
+  }
+  .tq__step--off .viz__chip {
+    cursor: not-allowed;
+  }
+  .tq__result {
+    padding: 1.25rem 1.25rem 1.5rem;
+    border-top: 1px solid var(--rule);
+    background: var(--panel-2);
+  }
+  .tq__films {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.875rem;
+  }
+  .tq__film {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: 0.875rem 1rem;
+    padding: 1rem 1.125rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-ui);
+    background: var(--panel);
+  }
+  .tq__film--pick {
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  .tq__film .btn {
+    grid-column: 1 / -1;
+  }
+  .tq__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--heading);
+  }
+  .tq__name .tile__tag {
+    margin: 0;
+  }
+  .tq__note {
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--key);
+  }
+  .tq__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.5rem;
+  }
+  .tq__price strong {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+  }
+  .tq__was {
+    font-size: 0.9375rem;
+    color: var(--key);
+    font-variant-numeric: tabular-nums;
+  }
+  .tq__sale {
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    background: #d92d20;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff;
+    align-self: center;
+  }
+  .tq__call {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem 1.125rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-ui);
+    background: var(--panel);
+  }
+  .tq__call-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+  @media (min-width: 40rem) {
+    .tq__chips {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .tq__step--vehicle .viz__chip:last-child {
+      grid-column: auto;
+    }
+    .tq__step--windows .tq__chips {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .tq__film {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 1.5rem;
+    }
+    .tq__price {
+      justify-content: flex-end;
+    }
+    .tq__film .btn {
+      grid-column: auto;
+    }
+    .tq__call {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+  }
+  @media (min-width: 48rem) {
+    .tq__steps {
+      padding: 1.75rem 2rem 2rem;
+    }
+    .tq__result {
+      padding: 1.5rem 2rem 2rem;
+    }
+  }
+  @media (min-width: 64rem) {
+    .tq__steps {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 2.4fr);
+      gap: 2rem;
+    }
+    .tq__step--windows .tq__chips {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ---------- the wrap preview: one studio render, its paint recolored in the browser ---------- */
+  /* The layers are exactly 2:1, so the stage is too and nothing is cropped out of register. */
+  .viz__stage.wrapviz__stage {
+    aspect-ratio: 2 / 1;
+    isolation: isolate;
+    background: #cbcbcb;
+  }
+  .viz__stage.wrapviz__stage img {
+    object-position: 50% 50%;
+  }
+  .wrapviz__paint,
+  .wrapviz__lift {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  .wrapviz__paint {
+    background-color: var(--wrap);
+    mix-blend-mode: multiply;
+    transition: background-color 0.45s var(--ease);
+  }
+  .wrapviz__lift {
+    background-color: #1c1c1c;
+    mix-blend-mode: screen;
+    transition: opacity 0.45s var(--ease);
+  }
+  .wrapviz__sheen {
+    mix-blend-mode: screen;
+    transition: opacity 0.45s var(--ease);
+  }
+  .wrapviz__swatches {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.625rem;
+    margin-top: 0.75rem;
+  }
+  .swatch {
+    position: relative;
+    width: 100%;
+    max-width: 2.75rem;
+    aspect-ratio: 1;
+    border: 1px solid rgba(11, 12, 13, 0.2);
+    border-radius: 999px;
+    background: var(--sw);
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.28), inset 0 -3px 5px rgba(0, 0, 0, 0.22);
+    cursor: pointer;
+    transition: transform 0.16s var(--ease);
+  }
+  .swatch:hover {
+    transform: scale(1.06);
+  }
+  .swatch[aria-pressed="true"],
+  .swatch--on {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .swatch--custom {
+    background: conic-gradient(#ff3b30, #ffcc00, #34c759, #00c7be, #007aff, #af52de, #ff3b30);
+  }
+  .swatch--custom input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .swatch--custom:focus-within {
+    outline: 2px solid var(--heading);
+    outline-offset: 3px;
+  }
+  .wrapviz__finishes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 0.75rem;
+  }
+  @media (min-width: 40rem) {
+    .wrapviz__swatches {
+      grid-template-columns: repeat(14, minmax(0, 1fr));
+    }
+    .wrapviz__finishes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 30rem;
+    }
+  }
+  @media (min-width: 48rem) {
+    .viz__stage.wrapviz__stage {
+      aspect-ratio: 2 / 1;
+    }
+    .viz__stage.wrapviz__stage img {
+      object-position: 50% 50%;
+    }
+  }
+
+  /* ---------- the two socials ---------- */
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.875rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .social__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .social__link svg {
+    flex: none;
+    width: 0.9375rem;
+    height: 0.9375rem;
+  }
+  .social--labels {
+    gap: 0.625rem;
+  }
+  .social--labels .social__link {
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem 0.5rem 0.875rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    color: var(--heading);
+    transition: border-color 0.16s var(--ease);
+  }
+  .social--labels .social__link:hover {
+    border-color: var(--heading);
+  }
+  .social--labels .social__link svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  .social__name {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .social__handle {
+    margin-left: 0.375rem;
+    font-size: 0.8125rem;
+    color: var(--key);
+  }
+  .social--center {
+    justify-content: center;
+  }
+
   /* ---------- the paint panels: water on a coating, swirls under a light ---------- */
   .paintstage {
     aspect-ratio: 4 / 3;

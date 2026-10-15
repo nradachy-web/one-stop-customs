@@ -6,7 +6,8 @@
 //
 // Rules baked in (docs/BRIEF.md sections 1, 2 and 5): every fact traces to
 // the brief; no prices except the ones Ricky sent for the site (paint
-// protection film, kill switches, starlight headliners, detailing), no
+// protection film, kill switches, starlight headliners, detailing, and
+// window tint on October 12), no
 // years in business, no counts of cars, no guarantees, no invented reviews;
 // no em or en dashes anywhere; sentence case. Quote copy uses the free quote
 // voice: get a free quote, tell us about your vehicle, fast, no pressure,
@@ -93,11 +94,12 @@ export const BRAND = {
   },
   reviewUrl: "https://maps.google.com/?cid=7698645542302137521",
   googlePlaceId: "ChIJoalNF4PJJIgRsTyQ4FQV12o",
+  /** Instagram and TikTok only, Ricky's call (October 12, 2026). The TikTok bio points back to the Instagram. */
   social: {
     instagram: "https://www.instagram.com/rickywraps",
     instagramHandle: "@rickywraps",
     tiktok: "https://www.tiktok.com/@rickywraps",
-    facebook: "https://www.facebook.com/Rickywraps1",
+    tiktokHandle: "@rickywraps",
     google: "https://maps.google.com/?cid=7698645542302137521",
   },
   serviceArea: "Warren, Detroit and Metro Detroit",
@@ -191,6 +193,68 @@ export const FAQ: readonly FaqItem[] = [
   { q: "Do you come to me?", a: "Mobile tint is available by appointment, and detailing is offered mobile or at the shop. Ask when you book. Wraps, paint protection film and powder coating are done at the shop." },
   { q: "Do you tint homes and businesses?", a: "Yes. Dual reflective, colored, blackout, decorative and privacy film for storefronts, offices and homes. Send a picture of the window with its measurements for a quote, or book a consultation and we will come out to measure." },
 ] as const;
+
+// ---------------- Window tint prices ----------------
+
+export type TintVehicleId = "coupe" | "sedan" | "suv" | "truck" | "van";
+export type TintCoverageId = "sides" | "all";
+export type TintFilmId = "standard" | "ceramic";
+
+/** One film's price: the regular price, and the sale price when there is one. */
+export interface TintPrice {
+  regular: number;
+  sale?: number;
+}
+
+/**
+ * Ricky's window tint price sheet, texted October 12, 2026, figure for
+ * figure, sale prices included. His sheet prices pickup trucks the same as
+ * sedans, puts vans and big trucks on call for a quote, and has no black
+ * carbon line, so black carbon stays quoted per vehicle.
+ */
+export const TINT_PRICES = {
+  asOf: "October 2026",
+  vehicles: [
+    { id: "coupe", label: "Coupe" },
+    { id: "sedan", label: "Sedan" },
+    { id: "suv", label: "SUV" },
+    { id: "truck", label: "Pickup truck" },
+    { id: "van", label: "Van or big truck", note: "Call for a quote" },
+  ] as readonly { id: TintVehicleId; label: string; note?: string }[],
+  coverage: [
+    { id: "sides", label: "Sides and back", note: "Every window but the windshield" },
+    { id: "all", label: "All windows", note: "Windshield included" },
+  ] as readonly { id: TintCoverageId; label: string; note: string }[],
+  films: [
+    { id: "standard", name: "Standard", note: "Dyed film, 1 year warranty" },
+    { id: "ceramic", name: "Ceramic", note: "About 80 percent heat rejection, 5 year warranty", tag: "Best quality" },
+  ] as readonly { id: TintFilmId; name: string; note: string; tag?: string }[],
+  prices: {
+    coupe: {
+      sides: { standard: { regular: 170 }, ceramic: { regular: 290, sale: 240 } },
+      all: { standard: { regular: 250 }, ceramic: { regular: 400, sale: 320 } },
+    },
+    sedan: {
+      sides: { standard: { regular: 220, sale: 187 }, ceramic: { regular: 340, sale: 289 } },
+      all: { standard: { regular: 290, sale: 255 }, ceramic: { regular: 450, sale: 360 } },
+    },
+    suv: {
+      sides: { standard: { regular: 250, sale: 220 }, ceramic: { regular: 370, sale: 299 } },
+      all: { standard: { regular: 325, sale: 280 }, ceramic: { regular: 500, sale: 399 } },
+    },
+    truck: {
+      sides: { standard: { regular: 220, sale: 187 }, ceramic: { regular: 340, sale: 289 } },
+      all: { standard: { regular: 290, sale: 255 }, ceramic: { regular: 450, sale: 360 } },
+    },
+  } as Readonly<Record<Exclude<TintVehicleId, "van">, Record<TintCoverageId, Record<TintFilmId, TintPrice>>>>,
+} as const;
+
+/** The lowest price on the sheet, for copy that says "from". */
+export const TINT_FROM = Math.min(
+  ...Object.values(TINT_PRICES.prices).flatMap((byCoverage) =>
+    Object.values(byCoverage).flatMap((byFilm) => Object.values(byFilm).map((p) => p.sale ?? p.regular)),
+  ),
+);
 
 // ---------------- Quote form ----------------
 

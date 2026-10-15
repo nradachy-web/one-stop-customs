@@ -7,6 +7,7 @@ import { FaqSchema } from "@/components/seo/JsonLd";
 import Button, { ArrowLink } from "@/components/ui/Button";
 import { ArrowIcon } from "@/components/ui/Icons";
 import { KeyValues, Section } from "@/components/ui/Section";
+import Social from "@/components/ui/Social";
 import { BRAND, FAQ } from "@/lib/constants";
 import { titleFor } from "@/lib/meta";
 import { pageMeta } from "@/lib/seo";
@@ -65,6 +66,8 @@ export default function ContactPage() {
             <p className="mt-4">
               <ArrowLink href={BRAND.address.mapUrl}>Get directions</ArrowLink>
             </p>
+            <p className="label mt-8">Follow the work</p>
+            <Social labels className="mt-3" />
           </div>
           <QuoteForm source="/contact/" />
         </div>

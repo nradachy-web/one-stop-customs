@@ -3,6 +3,7 @@ import ServiceLanding, { GalleryLine } from "@/components/landing/ServiceLanding
 import { ReelLink, WorkGrid } from "@/components/landing/blocks";
 import Pic from "@/components/ui/Pic";
 import { RuleLabel, SectionHead } from "@/components/ui/Section";
+import WrapVisualizer from "@/components/wrap/WrapVisualizer";
 import { BRAND } from "@/lib/constants";
 import { photo } from "@/lib/photos";
 import { pageMeta } from "@/lib/seo";
@@ -28,10 +29,22 @@ const RECENT = ["escalade-blue-jeep-srt", "chevelle-black-orange-front", "bronco
 function Detail() {
   return (
     <>
+      <div id="colors" className="scroll-mt-28">
+        <SectionHead
+          align="split"
+          title="Try a color on."
+          intro="Pick a color and a finish to see the look on a studio car. Then come see the real thing: hundreds of colors in stock, plus metallic, chrome and color flip."
+        />
+        <div className="mt-8 lg:mt-12">
+          <WrapVisualizer />
+        </div>
+      </div>
+
+      <RuleLabel className="subrule">Finishes</RuleLabel>
       <SectionHead
         align="split"
-        title="Pick a finish."
-        intro="Six looks, each on a car that came through the shop. Metallic, chrome and color flip are in stock too, so ask to see the swatches."
+        title="Six finishes, on real cars."
+        intro="Each one on a car that came through the shop. Metallic, chrome and color flip are in stock too, so ask to see the swatches."
       />
       <ul className="cards mt-8 lg:mt-12">
         {FINISHES.map((f) => (
@@ -81,5 +94,5 @@ function Detail() {
 }
 
 export default function Page() {
-  return <ServiceLanding service={s} detail={<Detail />} detailLabel="Finishes" />;
+  return <ServiceLanding service={s} detail={<Detail />} detailLabel="Colors" />;
 }

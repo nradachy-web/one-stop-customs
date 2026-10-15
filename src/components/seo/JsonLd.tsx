@@ -46,7 +46,7 @@ export default function JsonLd() {
           opens: h.opens,
           closes: h.closes,
         })),
-        sameAs: [BRAND.social.instagram, BRAND.social.tiktok, BRAND.social.facebook, BRAND.social.google],
+        sameAs: [BRAND.social.instagram, BRAND.social.tiktok, BRAND.social.google],
         areaServed: [
           ...CITIES.map((c) => ({ "@type": "City", name: c.name })),
           ...BRAND.counties.map((c) => ({ "@type": "AdministrativeArea", name: `${c} County, Michigan` })),

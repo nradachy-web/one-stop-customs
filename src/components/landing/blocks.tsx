@@ -279,7 +279,7 @@ export function BookingBand({ title = "Know your shade? Book your tint online.",
       </div>
       <div className="bookband__actions">
         <Button href={BRAND.bookingUrl}>{BRAND.bookingLabel}</Button>
-        {showTintLink ? <ArrowLink href="/window-tinting/">See the films and shades</ArrowLink> : <ArrowLink href="#quote">{QUOTE_CTA}</ArrowLink>}
+        {showTintLink ? <ArrowLink href="/window-tinting/#price">See your tint price</ArrowLink> : <ArrowLink href="#quote">{QUOTE_CTA}</ArrowLink>}
       </div>
     </div>
   );

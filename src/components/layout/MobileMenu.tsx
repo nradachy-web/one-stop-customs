@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { ArrowIcon, CloseIcon, MenuIcon } from "@/components/ui/Icons";
 import { MENU_LINKS } from "@/components/layout/nav";
+import Social from "@/components/ui/Social";
 import { BRAND, QUOTE_CTA } from "@/lib/constants";
 
 /**
@@ -57,6 +58,7 @@ export default function MobileMenu() {
             <br />
             {BRAND.hoursShort}, by appointment
           </p>
+          <Social labels className="social--center" />
         </div>
       </div>
     </details>
